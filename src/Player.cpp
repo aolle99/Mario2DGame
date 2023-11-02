@@ -19,9 +19,12 @@ void Player::init(glm::vec2 &startPos, ShaderProgram &shaderProgram)
 {
 	bJumping = false;
 	bLeft = false;
+	bDying = false;
+	bDead = false;
 	speed = 2;
 	star = 0.f;
 	hp = 1;
+	currentTime = 0;
 	posPlayer = startPos;
 	this->shaderProgram = shaderProgram;
 	this->changeToMario();
@@ -53,6 +56,9 @@ void Player::changeToMario() {
 
 	sprite->setAnimationSpeed(SHIFT, 0);
 	sprite->addKeyframe(SHIFT, glm::vec2(0.0625f * 6, 0.75f));
+
+	sprite->setAnimationSpeed(DIE, 8);
+	sprite->addKeyframe(DIE, glm::vec2(0.0625f * 6, 0.75f));
 }
 
 void Player::changeToSuperMario() {
@@ -191,42 +197,51 @@ bool Player::checkJumping()
 	return false;
 }
 
-
 void Player::update(int deltaTime)
 {
 	sprite->update(deltaTime);
-	int textureChanged = 3;
-	if (Game::instance().getSpecialKey(GLUT_KEY_LEFT)) this->move(false);
-	else if (Game::instance().getSpecialKey(GLUT_KEY_RIGHT)) this->move(true);
-	else textureChanged -= 1;
+	currentTime += deltaTime;
 
-	if (Game::instance().getSpecialKey(GLUT_KEY_UP)) this->jump();
-	else if (Game::instance().getSpecialKey(GLUT_KEY_DOWN)) this->bend();
-	else if (Game::instance().getKey('z')) this->run();
+	if (bDying) {
+		sprite->changeAnimation(DIE);
+
+		if (currentTime > 10) {
+			posPlayer.y += 1;
+			currentTime = 0;
+		}
+		
+	}
 	else {
-		textureChanged -= 1;
-		speed = 2;
-		sprite->setAnimationSpeed(MOVE, 7);
-	}
+		int textureChanged = 3;
+		if (Game::instance().getSpecialKey(GLUT_KEY_LEFT)) this->move(false);
+		else if (Game::instance().getSpecialKey(GLUT_KEY_RIGHT)) this->move(true);
+		else textureChanged -= 1;
 
-	if (Game::instance().getKey('g')) {
-		this->giveStar();
-	}
+		if (Game::instance().getSpecialKey(GLUT_KEY_UP)) this->jump();
+		else if (Game::instance().getSpecialKey(GLUT_KEY_DOWN)) this->bend();
+		else if (Game::instance().getKey('z')) this->run();
+		else {
+			textureChanged -= 1;
+			speed = 2;
+			sprite->setAnimationSpeed(MOVE, 7);
+		}
 
-	
+		if (Game::instance().getKey('g')) {
+			this->giveStar();
+		}
 
-	if (!this->checkJumping())  textureChanged -= 1;
-	if (star > 0) {
-		// Restar 1 cada segundo
-		star -= 0.01;
-	}
+		if (!this->checkJumping())  textureChanged -= 1;
+		if (star > 0) {
+			// Restar 1 cada segundo
+			star -= 0.01;
+		}
 
-	if (Game::instance().getKey('m')) {
-		this->giveMushroom();
-	}
+		if (Game::instance().getKey('m')) {
+			this->giveMushroom();
+		}
 
-
-	if (!textureChanged) sprite->changeAnimation(STAND);
+		if (!textureChanged) sprite->changeAnimation(STAND);
+	}	
 
 	sprite->setPosition(posPlayer);
 }
@@ -247,7 +262,7 @@ void Player::setPosition(const glm::vec2 &pos)
 	sprite->setPosition(posPlayer);
 }
 
-bool Player::collisionDown(const glm::ivec2& object_pos, const glm::ivec2& object_size, int object_type)
+bool Player::collisionDown(const glm::ivec2& object_pos, const glm::ivec2& object_size)
 {
 	int player_bottom = posPlayer.y + size.y;
 	int object_top = object_pos.y;
@@ -261,7 +276,7 @@ bool Player::collisionDown(const glm::ivec2& object_pos, const glm::ivec2& objec
 	return false; // No hay colisión hacia abajo
 }
 
-bool Player::collisionUp(const glm::ivec2& object_pos, const glm::ivec2& object_size, int object_type)
+bool Player::collisionUp(const glm::ivec2& object_pos, const glm::ivec2& object_size)
 {
 	int player_top = posPlayer.y;
 	int object_bottom = object_pos.y + object_size.y;
@@ -275,12 +290,12 @@ bool Player::collisionUp(const glm::ivec2& object_pos, const glm::ivec2& object_
 	return false; // No hay colisión hacia arriba
 }
 
-bool Player::collisionLeft(const glm::ivec2& object_pos, const glm::ivec2& object_size, int object_type)
+bool Player::collisionLeft(const glm::ivec2& object_pos, const glm::ivec2& object_size)
 {
 	int player_left = posPlayer.x;
 	int object_right = object_pos.x + object_size.x;
 
-	if (player_left <= object_right &&
+	if (player_left == object_right &&
 		posPlayer.y + hitbox.y >= object_pos.y &&
 		posPlayer.y <= object_pos.y + object_size.y) {
 		return true; // Colisión hacia la izquierda
@@ -289,12 +304,12 @@ bool Player::collisionLeft(const glm::ivec2& object_pos, const glm::ivec2& objec
 	return false; // No hay colisión hacia la izquierda
 }
 
-bool Player::collisionRight(const glm::ivec2& object_pos, const glm::ivec2& object_size, int object_type)
+bool Player::collisionRight(const glm::ivec2& object_pos, const glm::ivec2& object_size)
 {
 	int player_right = posPlayer.x + size.x;
 	int object_left = object_pos.x;
 
-	if (player_right >= object_left &&
+	if (player_right == object_left &&
 		posPlayer.y + hitbox.y >= object_pos.y &&
 		posPlayer.y <= object_pos.y + object_size.y) {
 		return true; // Colisión hacia la derecha
@@ -314,6 +329,7 @@ glm::ivec2 Player::getSize() {
 void Player::damagePlayer() {
 	if (star > 0) return;
 	if (hp == 1) {
+		hp = 0;
 		this->die();
 	}
 	else if (hp == 2) {
@@ -333,6 +349,15 @@ void Player::giveMushroom() {
 
 bool Player::isMarioStar() {
 	return star > 0;
+}
+
+int Player::getHp() {
+	return hp;
+}
+
+void Player::setDying(bool dying)
+{
+	bDying = dying;
 }
 
 

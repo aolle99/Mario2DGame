@@ -29,13 +29,13 @@ public:
 	void setTileMap(TileMap *tileMap);
 	void setPosition(const glm::vec2 &pos);
 
-	bool collisionDown(const glm::ivec2& pos, const glm::ivec2& size, int object_type);
+	bool collisionDown(const glm::ivec2& pos, const glm::ivec2& size);
 
-	bool collisionUp(const glm::ivec2& object_pos, const glm::ivec2& object_size, int object_type);
+	bool collisionUp(const glm::ivec2& object_pos, const glm::ivec2& object_size);
 
-	bool collisionLeft(const glm::ivec2& object_pos, const glm::ivec2& object_size, int object_type);
+	bool collisionLeft(const glm::ivec2& object_pos, const glm::ivec2& object_size);
 
-	bool collisionRight(const glm::ivec2& object_pos, const glm::ivec2& object_size, int object_type);
+	bool collisionRight(const glm::ivec2& object_pos, const glm::ivec2& object_size);
 
 	glm::ivec2 getPosition();
 
@@ -48,11 +48,17 @@ public:
 	void giveMushroom();
 
 	bool isMarioStar();
+
+	int getHp();
+
+	void setDying(bool dying);
 	
 private:
 	bool bJumping;
 	bool bFalling;
 	bool bLeft;
+	bool bDying;
+	bool bDead;
 	float star;
 	glm::ivec2 posPlayer;
 	glm::ivec2 size;
@@ -63,6 +69,7 @@ private:
 	Sprite *sprite;
 	TileMap *map;
 	int speed;
+	int currentTime;
 	int hp;
 
 };

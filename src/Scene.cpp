@@ -125,6 +125,7 @@ void Scene::createEntities(const Json::Value entities)
 			Goomba *goomba = new Goomba();
 			goomba->init(glm::vec2(entity["px"][0].asInt(), entity["px"][1].asInt()), texProgram);
 			goomba->setTileMap(map);
+			goomba->setPlayer(player);
 			enemies.push_back(std::unique_ptr<Enemy>(goomba));
 		}
 		else if (entity["__identifier"].asString() == "Koopa")
@@ -132,6 +133,7 @@ void Scene::createEntities(const Json::Value entities)
 			Koopa *koopa = new Koopa();
 			koopa->init(glm::vec2(entity["px"][0].asInt(), entity["px"][1].asInt()), texProgram);
 			koopa->setTileMap(map);
+			koopa->setPlayer(player);
 			enemies.push_back(std::unique_ptr<Enemy>(koopa));
 		}
 	}	

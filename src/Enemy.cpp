@@ -12,7 +12,7 @@
 
 enum EnemyAnims
 {
-	MOVE, DIE, SHELL_STOP, SHELL_MOVE
+	MOVE, DIE, STOP
 };
 
 void Enemy::move(bool direction)
@@ -40,7 +40,7 @@ void Enemy::move(bool direction)
 
 void Koopa::move_shell(bool direction)
 {
-	sprite->changeAnimation(SHELL_MOVE);
+	sprite->changeAnimation(MOVE);
 }
 
 void Enemy::die()
@@ -51,39 +51,86 @@ void Enemy::die()
 void Enemy::update(int deltaTime)
 {
 	sprite->update(deltaTime);
+	currentTime += deltaTime;
+	if (mario->getHp() == 0) {
+		mario->setDying(true);
+		return;
+	}
+	if (bDying) {
+		sprite->changeAnimation(DIE);
+
+		if (currentTime > 150) {
+			posEnemy.y += 1;
+			currentTime = 0;
+		}
+	}
+
 	this->move(bLeft);
+	if (mario->collisionRight(posEnemy, sizeEnemy) || mario->collisionLeft(posEnemy, sizeEnemy)) {
+		mario->damagePlayer();
+	}
+	else if (mario->collisionDown(posEnemy, sizeEnemy)) {
+		this->die();
+		bDying = true;
+		printf("Enemy died\n");
+	}
 
 	sprite->setPosition(posEnemy);
+}
+
+void Enemy::setPlayer(Player* player)
+{
+	this->mario = player;
 }
 
 void Koopa::update(int deltaTime)
 {
 	sprite->update(deltaTime);
-	
+	this->move(bLeft);
+	/*
+	// Koopa en modo tortuga
+	if (!bShell) {
+		this->move(bLeft);
+
+		// Mario is on top of the shell
+		if (mario.collisionDown(posEnemy, sizeEnemy)) {
+			change_to_shell();
+			bShell = true;
+			bStop = true;
+			sprite->changeAnimation(STOP);
+		}
+
+	}
+	// Koopa en modo caparazon
+	else {
+		if (!bStop) {
+			this->move(bLeft);
+			sprite->changeAnimation(MOVE);
+		}
+		if(mario.collisionLeft(posEnemy, sizeEnemy) || mario.collisionRight(posEnemy, sizeEnemy)) {
+
+		}
+
+	}*/
+	/*
+	// Mario is on the left of the shell
 	if (Game::instance().getSpecialKey(GLUT_KEY_DOWN)) {
 		bStop = false;
-		sprite->changeAnimation(SHELL_MOVE);
+		change_to_shell();
+		sprite->changeAnimation(MOVE);
 	}
+	// Mario is on top of the shell
 	else if (Game::instance().getSpecialKey(GLUT_KEY_UP)) {
 		bStop = true;
-		sprite->changeAnimation(SHELL_STOP);
+		change_to_shell();
+		sprite->changeAnimation(STOP);
 	}
+	// Modo tortuga
 	else {
 		if (!bStop) {
 			Enemy::move(bLeft);
 		}
-	}
-
-	// Check if Player collides with Koopa
-	
-	//Player* p = mario;
-	glm::vec2 playerPos = mario.getPosition();
-	glm::vec2 playerSize = mario.getSize();
-	if (playerPos.x + playerSize.x > 50) {
-		// Player dies
-		bStop = false;
-		sprite->changeAnimation(SHELL_MOVE);
-	}
+	}*/
 
 	sprite->setPosition(posEnemy);
 }
@@ -105,7 +152,11 @@ void Enemy::setPosition(const glm::vec2& pos)
 
 void Goomba::init(const glm::ivec2& tileMapPos, ShaderProgram& shaderProgram)
 {
-	this->sizeEnemy = glm::ivec2(32, 32);
+	bDying = false;
+	bDead = false;
+	currentTime = 0;
+	sizeEnemy = glm::ivec2(32, 32);
+
 	spritesheet.loadFromFile("res/textures/enemies.png", TEXTURE_PIXEL_FORMAT_RGBA);
 	sprite = Sprite::createSprite(sizeEnemy, glm::vec2(0.0625f, 0.125f), &spritesheet, &shaderProgram);
 	sprite->setNumberAnimations(4);
@@ -124,7 +175,38 @@ void Goomba::init(const glm::ivec2& tileMapPos, ShaderProgram& shaderProgram)
 
 void Koopa::init(const glm::ivec2& tileMapPos, ShaderProgram& shaderProgram)
 {
-	this->sizeEnemy = glm::ivec2(32, 48);
+	bShell = false;
+	bStop = false;
+	this->shaderProgram = shaderProgram;
+	this->change_to_turtle();
+
+	sprite->changeAnimation(0);
+	posEnemy = tileMapPos;
+	sprite->setPosition(posEnemy);
+}
+
+void Koopa::change_to_shell() {
+	sizeEnemy = glm::vec2(32, 32);
+	posEnemy.y += 16;
+
+	spritesheet.loadFromFile("res/textures/enemies.png", TEXTURE_PIXEL_FORMAT_RGBA);
+	sprite = Sprite::createSprite(sizeEnemy, glm::vec2(0.0625f, 0.125f), &spritesheet, &shaderProgram);
+	sprite->setNumberAnimations(5);
+
+	sprite->setAnimationSpeed(STOP, 8);
+	sprite->addKeyframe(STOP, glm::vec2(0.0625f * 2, 0.1875f));
+
+	sprite->setAnimationSpeed(MOVE, 10);
+	sprite->addKeyframe(MOVE, glm::vec2(0.0625f * 3, 0.1875f));
+	sprite->addKeyframe(MOVE, glm::vec2(0.0625f * 4, 0.1875f));
+	sprite->addKeyframe(MOVE, glm::vec2(0.0625f * 5, 0.1875f));
+
+}
+
+void Koopa::change_to_turtle() {
+	sizeEnemy = glm::vec2(32, 48);
+	posEnemy.y -= 16;
+
 	spritesheet.loadFromFile("res/textures/enemies.png", TEXTURE_PIXEL_FORMAT_RGBA);
 	sprite = Sprite::createSprite(sizeEnemy, glm::vec2(0.0625f, 0.1875f), &spritesheet, &shaderProgram);
 	sprite->setNumberAnimations(4);
@@ -132,19 +214,4 @@ void Koopa::init(const glm::ivec2& tileMapPos, ShaderProgram& shaderProgram)
 	sprite->setAnimationSpeed(MOVE, 7);
 	sprite->addKeyframe(MOVE, glm::vec2(0.0625f * 0, 0.125f));
 	sprite->addKeyframe(MOVE, glm::vec2(0.0625f * 1, 0.125f));
-
-	sprite->setAnimationSpeed(DIE, 8);
-	sprite->addKeyframe(DIE, glm::vec2(0.0625f * 2, 0.125f));
-
-	sprite->setAnimationSpeed(SHELL_STOP, 8);
-	sprite->addKeyframe(SHELL_STOP, glm::vec2(0.0625f * 2, 0.125f));
-
-	sprite->setAnimationSpeed(SHELL_MOVE, 10);
-	sprite->addKeyframe(SHELL_MOVE, glm::vec2(0.0625f * 3, 0.125f));
-	sprite->addKeyframe(SHELL_MOVE, glm::vec2(0.0625f * 4, 0.125f));
-	sprite->addKeyframe(SHELL_MOVE, glm::vec2(0.0625f * 5, 0.125f));
-
-	sprite->changeAnimation(0);
-	posEnemy = tileMapPos;
-	sprite->setPosition(posEnemy);
 }

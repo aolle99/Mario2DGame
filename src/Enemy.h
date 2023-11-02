@@ -16,6 +16,7 @@ public:
 	void move(bool direction);
 	void die();
 	void update(int deltaTime);
+	void setPlayer(Player* player);
 	void render();
 
 	void setTileMap(TileMap* tileMap);
@@ -24,13 +25,16 @@ public:
 protected:
 	bool bFalling;
 	bool bLeft;
-	glm::ivec2 posEnemy;
+	bool bDying;
+	bool bDead;
+	int currentTime;
+	glm::ivec2 posEnemy, sizeEnemy;
 	int jumpAngle, startY;
-	glm::vec2 sizeEnemy;
 	Texture spritesheet;
 	Sprite* sprite;
 	TileMap* map;
-	Player mario;
+	Player* mario;
+	ShaderProgram shaderProgram;
 };
 
 class Goomba : public Enemy
@@ -47,9 +51,12 @@ public:
 	void init(const glm::ivec2& tileMapPos, ShaderProgram& shaderProgram);
 	void update(int deltaTime);
 	void move_shell(bool direction);
+	void change_to_shell();
+	void change_to_turtle();
 
 protected:
 	bool bStop;
+	bool bShell;
 };
 
 
