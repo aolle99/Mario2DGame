@@ -2,8 +2,15 @@
 # Prerequisites
 *.d
 
+# Compiled Object files
+*.obj
+*.log
+*.tlog
+
 # Executables
 *.exe
 *.out
 *.app
 *.pdb
+
+src/Debug/
