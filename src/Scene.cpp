@@ -37,7 +37,7 @@ void Scene::init()
 {
 	initShaders();
 	buildLevel("res/levels/Level_0.ldtkl");
-	
+	cameraX = 0.f;
 	projection = glm::ortho(0.f, float(SCREEN_WIDTH - 1), float(SCREEN_HEIGHT - 1), 0.f);
 	
 	currentTime = 0.0f;
@@ -47,6 +47,13 @@ void Scene::update(int deltaTime)
 {
 	currentTime += deltaTime;
 	player->update(deltaTime);
+
+	if (calculateCameraPosition()) {
+		projection = glm::ortho(cameraX, float(SCREEN_WIDTH - 1) + cameraX, float(SCREEN_HEIGHT - 1), 0.f);
+		this->map->setLeftBound(cameraX);
+	}
+
+
 	
 	for (auto& enemy : enemies) {
 		enemy->update(deltaTime);
@@ -72,6 +79,24 @@ void Scene::render()
 	for (auto& enemy : enemies) {
 		enemy->render();
 	}
+}
+
+bool Scene::calculateCameraPosition()
+{
+	glm::vec2 newPosPlayer = player->getPosition();
+	if (newPosPlayer.x > playerStartPos.x && newPosPlayer.x > (SCREEN_WIDTH-1)/2) {
+		float oldCameraX = cameraX;
+		cameraX = newPosPlayer.x - (SCREEN_WIDTH - 1) / 2;
+		if ((float(SCREEN_WIDTH - 1) + cameraX) > (map->getSize().x*32))
+		{
+			cameraX = oldCameraX;
+			return false;
+		}
+		playerStartPos.x = newPosPlayer.x;
+		return true;
+	}
+	return false;
+	
 }
 
 void Scene::buildLevel(const string& levelFile)
@@ -118,6 +143,7 @@ void Scene::createEntities(const Json::Value entities)
 			player = new Player();
 			player->init(glm::vec2(entity["px"][0].asInt(), entity["px"][1].asInt()), texProgram);
 			player->setTileMap(map);
+			playerStartPos = glm::vec2(entity["px"][0].asInt(), entity["px"][1].asInt());
 		}
 		else if (entity["__identifier"].asString() == "Goomba")
 		{

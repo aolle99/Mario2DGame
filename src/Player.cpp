@@ -4,10 +4,11 @@
 #include <GL/glut.h>
 #include "Player.h"
 #include "Game.h"
+#include <cmath>
 
+#define JUMP_ANGLE_STEP 4.f
+#define FALL_STEP 8
 
-#define JUMP_ANGLE_STEP 4
-#define FALL_STEP 4
 
 
 enum PlayerAnims
@@ -99,7 +100,7 @@ void Player::move(bool direction)
 	if (direction) // right
 	{
 		bLeft = false;
-		if (map->collisionMoveRight(posPlayer, size))
+		if (map->collisionMoveRight(posPlayer, size) || map->checkOutOfBoundsRight(posPlayer.x))
 		{
 			sprite->changeAnimation(STAND);
 		}
@@ -110,7 +111,7 @@ void Player::move(bool direction)
 	else // left
 	{
 		bLeft = true;
-		if (map->collisionMoveLeft(posPlayer, size))
+		if (map->collisionMoveLeft(posPlayer, size) || map->checkOutOfBoundsLeft(posPlayer.x))
 		{
 			sprite->changeAnimation(STAND);
 		}
@@ -151,7 +152,7 @@ void Player::run() {
 
 bool Player::checkJumping()
 {
-	
+
 	if (bJumping && !bFalling)
 	{
 		jumpAngle += JUMP_ANGLE_STEP;
@@ -160,7 +161,7 @@ bool Player::checkJumping()
 			bFalling = true;
 			posPlayer.y = startY;
 		}
-		else if (map->collisionMoveUp(posPlayer, hitbox))
+		else if (map->collisionMoveUp(getHitboxPosition(), hitbox))
 		{
 			bFalling = true;
 		}
@@ -168,7 +169,7 @@ bool Player::checkJumping()
 		{
 			posPlayer.y = int(startY - 140 * sin(3.14159f * jumpAngle / 180.f));
 			if (jumpAngle > 90)
-				bJumping = !map->collisionMoveDown(posPlayer, hitbox, &posPlayer.y);
+				bJumping = !map->collisionMoveDown(getHitboxPosition(), hitbox, &posPlayer.y);
 		}
 		return true;
 	}
@@ -176,7 +177,7 @@ bool Player::checkJumping()
 	{
 		posPlayer.y += FALL_STEP;
 		sprite->changeAnimation(JUMP);
-		if (map->collisionMoveDown(posPlayer, hitbox, &posPlayer.y))
+		if (map->collisionMoveDown(getHitboxPosition(), hitbox, &posPlayer.y))
 		{
 			bFalling = false;
 			bJumping = false;
@@ -187,7 +188,7 @@ bool Player::checkJumping()
 	}
 	else {
 		posPlayer.y += FALL_STEP;
-		if (!map->collisionMoveDown(posPlayer, hitbox, &posPlayer.y)) {
+		if (!map->collisionMoveDown(getHitboxPosition(), hitbox, &posPlayer.y)) {
 			sprite->changeAnimation(JUMP);
 			bJumping = true;
 			bFalling = true;
@@ -235,7 +236,9 @@ void Player::update(int deltaTime)
 			// Restar 1 cada segundo
 			star -= 0.01;
 		}
-
+		if (map->checkOutOfBoundsDown(posPlayer.y)) {
+			this->die();
+		}
 		if (Game::instance().getKey('m')) {
 			this->giveMushroom();
 		}
@@ -361,5 +364,8 @@ void Player::setDying(bool dying)
 }
 
 
+glm::ivec2 Player::getHitboxPosition() {
+	return posPlayer + glm::ivec2(4, 0);
+}
 
 

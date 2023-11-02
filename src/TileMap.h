@@ -33,18 +33,26 @@ public:
 	void loadLeveljson(const string filename);
 	
 	int getTileSize() const { return tileSize; }
+	void setLeftBound(float leftBound);
+
+	bool checkOutOfBoundsDown(float posX);
+
+	glm::ivec2 TileMap::getSize();
 
 	bool collisionMoveLeft(const glm::ivec2 &pos, const glm::ivec2 &size) const;
 	bool collisionMoveRight(const glm::ivec2 &pos, const glm::ivec2 &size) const;
 	bool collisionMoveDown(const glm::ivec2 &pos, const glm::ivec2 &size, int *posY) const;
 
 	bool collisionMoveUp(const glm::ivec2& pos, const glm::ivec2& size) const;
+	bool checkOutOfBoundsLeft(float posX);
+
+	bool checkOutOfBoundsRight(float posX);
 	
 private:
 	bool loadLevel(const Json::Value layerMap, const glm::ivec2& mapSize);
 	void prepareArrays(ShaderProgram& program);
 
-	bool checkBounds();
+
 
 private:
 	GLuint vao;
@@ -57,6 +65,9 @@ private:
 	glm::vec2 tileTexSize;
 	bool *map;
 	vector< std::unique_ptr<Tile >> blocks;
+	float leftBound = 0.f;
+
+
 
 };
 

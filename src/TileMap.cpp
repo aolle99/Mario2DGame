@@ -81,13 +81,37 @@ void TileMap::prepareArrays( ShaderProgram& program)
 	}
 }
 
-bool TileMap::checkBounds() {
+glm::ivec2 TileMap::getSize() {
+	return mapSize;
+}
+
+bool TileMap::checkOutOfBoundsLeft(float posX) {
+	if (posX < leftBound) {
+		return true;
+	}
 	return false;
+}
+bool TileMap::checkOutOfBoundsRight(float posX) {
+	if (posX > mapSize.x * 32) {
+		return true;
+	}
+	return false;
+}
+
+bool TileMap::checkOutOfBoundsDown(float posY) {
+	return posY > mapSize.y * 32;
 }
 
 // Collision tests for axis aligned bounding boxes.
 // Method collisionMoveDown also corrects Y coordinate if the box is
 // already intersecting a tile below.
+
+void TileMap::setLeftBound(float leftBound)
+{
+	this->leftBound = leftBound;
+}
+
+
 
 bool TileMap::collisionMoveLeft(const glm::ivec2 &pos, const glm::ivec2 &size) const
 {
@@ -132,7 +156,7 @@ bool TileMap::collisionMoveDown(const glm::ivec2 &pos, const glm::ivec2 &size, i
 	{
 		if(map[y*mapSize.x+x] != 0)
 		{
-			if(*posY - tileSize * y + size.y <= 4)
+			if(*posY - tileSize * y + size.y <= 10)
 			{
 				*posY = tileSize * y - size.y;
 				return true;

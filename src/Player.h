@@ -54,6 +54,9 @@ public:
 	void setDying(bool dying);
 	
 private:
+	glm::ivec2 getHitboxPosition();
+	
+private:
 	bool bJumping;
 	bool bFalling;
 	bool bLeft;
