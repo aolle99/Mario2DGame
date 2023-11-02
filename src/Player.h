@@ -48,6 +48,9 @@ public:
 	void giveMushroom();
 
 	bool isMarioStar();
+
+private:
+	glm::ivec2 getHitboxPosition();
 	
 private:
 	bool bJumping;

@@ -27,9 +27,13 @@ public:
 	void update(int deltaTime);
 	void render();
 
+	bool calculateCameraPosition();
+
 	void buildLevel(const string& levelFile);
 
 	void createEntities(const Json::Value entities);
+
+	
 
 	
 
@@ -44,6 +48,8 @@ private:
 	ShaderProgram texProgram;
 	float currentTime;
 	glm::mat4 projection;
+	float cameraX = 0.f;
+	glm::vec2 playerStartPos;
 
 
 
