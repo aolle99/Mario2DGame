@@ -1,0 +1,9 @@
+.vs/
+# Prerequisites
+*.d
+
+# Executables
+*.exe
+*.out
+*.app
+*.pdb

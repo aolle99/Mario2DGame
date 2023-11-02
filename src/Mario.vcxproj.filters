@@ -1,0 +1,167 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Archivos de código fuente">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Archivos de encabezado">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;hm;inl;inc;xsd</Extensions>
+    </Filter>
+    <Filter Include="Archivos de recursos">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="Otros">
+    </Filter>
+    <Filter Include="Archivos de código fuente\Helpers">
+      <UniqueIdentifier>{8f514562-6015-406c-bd4d-9ab42a614e4a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Archivos de encabezado\Helpers">
+      <UniqueIdentifier>{fc70ad5a-d045-43c6-864c-8680fa190e8c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Archivos de recursos\Shaders">
+      <UniqueIdentifier>{1a2f312e-e78a-4ad1-8b5c-fd7f1c1b4b33}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Archivos de recursos\levels">
+      <UniqueIdentifier>{09377ced-d6cd-43c5-8584-1512789121be}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Archivos de recursos\images">
+      <UniqueIdentifier>{07c79fb7-a508-4a17-86f9-26526f79c176}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Game.h">
+      <Filter>Archivos de encabezado</Filter>
+    </ClInclude>
+    <ClInclude Include="Player.h">
+      <Filter>Archivos de encabezado</Filter>
+    </ClInclude>
+    <ClInclude Include="AnimKeyframes.h">
+      <Filter>Archivos de encabezado\Helpers</Filter>
+    </ClInclude>
+    <ClInclude Include="Scene.h">
+      <Filter>Archivos de encabezado\Helpers</Filter>
+    </ClInclude>
+    <ClInclude Include="Shader.h">
+      <Filter>Archivos de encabezado\Helpers</Filter>
+    </ClInclude>
+    <ClInclude Include="ShaderProgram.h">
+      <Filter>Archivos de encabezado\Helpers</Filter>
+    </ClInclude>
+    <ClInclude Include="Sprite.h">
+      <Filter>Archivos de encabezado\Helpers</Filter>
+    </ClInclude>
+    <ClInclude Include="Texture.h">
+      <Filter>Archivos de encabezado\Helpers</Filter>
+    </ClInclude>
+    <ClInclude Include="TileMap.h">
+      <Filter>Archivos de encabezado\Helpers</Filter>
+    </ClInclude>
+    <ClInclude Include="Enemy.h">
+      <Filter>Archivos de encabezado</Filter>
+    </ClInclude>
+    <ClInclude Include="Tile.h">
+      <Filter>Archivos de encabezado</Filter>
+    </ClInclude>
+    <ClInclude Include="TileMapStatic.h">
+      <Filter>Archivos de encabezado</Filter>
+    </ClInclude>
+    <ClInclude Include="MainMenu.h">
+      <Filter>Archivos de encabezado</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="Game.cpp">
+      <Filter>Archivos de código fuente</Filter>
+    </ClCompile>
+    <ClCompile Include="main.cpp">
+      <Filter>Archivos de código fuente</Filter>
+    </ClCompile>
+    <ClCompile Include="Player.cpp">
+      <Filter>Archivos de código fuente</Filter>
+    </ClCompile>
+    <ClCompile Include="TileMap.cpp">
+      <Filter>Archivos de código fuente\Helpers</Filter>
+    </ClCompile>
+    <ClCompile Include="Scene.cpp">
+      <Filter>Archivos de código fuente\Helpers</Filter>
+    </ClCompile>
+    <ClCompile Include="Shader.cpp">
+      <Filter>Archivos de código fuente\Helpers</Filter>
+    </ClCompile>
+    <ClCompile Include="ShaderProgram.cpp">
+      <Filter>Archivos de código fuente\Helpers</Filter>
+    </ClCompile>
+    <ClCompile Include="Sprite.cpp">
+      <Filter>Archivos de código fuente\Helpers</Filter>
+    </ClCompile>
+    <ClCompile Include="Texture.cpp">
+      <Filter>Archivos de código fuente\Helpers</Filter>
+    </ClCompile>
+    <ClCompile Include="Enemy.cpp">
+      <Filter>Archivos de código fuente</Filter>
+    </ClCompile>
+    <ClCompile Include="Tile.cpp">
+      <Filter>Archivos de código fuente</Filter>
+    </ClCompile>
+    <ClCompile Include="..\libs\json\dist\jsoncpp.cpp">
+      <Filter>Archivos de código fuente</Filter>
+    </ClCompile>
+    <ClCompile Include="TileMapStatic.cpp">
+      <Filter>Archivos de código fuente</Filter>
+    </ClCompile>
+    <ClCompile Include="MainMenu.cpp">
+      <Filter>Archivos de código fuente</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\README.md">
+      <Filter>Otros</Filter>
+    </None>
+    <None Include="shaders\simple.frag">
+      <Filter>Archivos de recursos\Shaders</Filter>
+    </None>
+    <None Include="shaders\simple.vert">
+      <Filter>Archivos de recursos\Shaders</Filter>
+    </None>
+    <None Include="shaders\texture.frag">
+      <Filter>Archivos de recursos\Shaders</Filter>
+    </None>
+    <None Include="shaders\texture.vert">
+      <Filter>Archivos de recursos\Shaders</Filter>
+    </None>
+    <None Include="..\.gitignore">
+      <Filter>Otros</Filter>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="res\levels\level01.txt">
+      <Filter>Archivos de recursos\levels</Filter>
+    </Text>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="res\Textures\Tiles.png">
+      <Filter>Archivos de recursos\images</Filter>
+    </Image>
+    <Image Include="res\Textures\AnimTiles.png">
+      <Filter>Archivos de recursos\images</Filter>
+    </Image>
+    <Image Include="res\Textures\Bowser.png">
+      <Filter>Archivos de recursos\images</Filter>
+    </Image>
+    <Image Include="res\Textures\Enemies.png">
+      <Filter>Archivos de recursos\images</Filter>
+    </Image>
+    <Image Include="res\Textures\Items.png">
+      <Filter>Archivos de recursos\images</Filter>
+    </Image>
+    <Image Include="res\Textures\Logo.png">
+      <Filter>Archivos de recursos\images</Filter>
+    </Image>
+    <Image Include="res\Textures\Mario.png">
+      <Filter>Archivos de recursos\images</Filter>
+    </Image>
+  </ItemGroup>
+</Project>
