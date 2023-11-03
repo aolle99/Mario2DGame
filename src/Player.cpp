@@ -22,6 +22,8 @@ void Player::init(glm::vec2 &startPos, ShaderProgram &shaderProgram)
 	bLeft = false;
 	bDying = false;
 	bDead = false;
+	bInvulnerable = false;
+	invTime = 0;
 	speed = 2;
 	star = 0.f;
 	hp = 1;
@@ -203,14 +205,20 @@ void Player::update(int deltaTime)
 	sprite->update(deltaTime);
 	currentTime += deltaTime;
 
+	if (bInvulnerable) {
+		invTime -= 1;
+		if (invTime == 0) {
+			bInvulnerable = false;
+		}
+	}
+
 	if (bDying) {
 		sprite->changeAnimation(DIE);
 
 		if (currentTime > 10) {
 			posPlayer.y += 1;
 			currentTime = 0;
-		}
-		
+		}	
 	}
 	else {
 		int textureChanged = 3;
@@ -270,7 +278,7 @@ bool Player::collisionDown(const glm::ivec2& object_pos, const glm::ivec2& objec
 	int player_bottom = posPlayer.y + size.y;
 	int object_top = object_pos.y;
 
-	if (player_bottom >= object_top &&
+	if ((player_bottom == object_top || player_bottom == object_top + 1 || player_bottom == object_top + 2) &&
 		posPlayer.x + size.x >= object_pos.x &&
 		posPlayer.x <= object_pos.x + object_size.x) {
 		return true; // Colisión hacia abajo
@@ -312,7 +320,7 @@ bool Player::collisionRight(const glm::ivec2& object_pos, const glm::ivec2& obje
 	int player_right = posPlayer.x + size.x;
 	int object_left = object_pos.x;
 
-	if (player_right == object_left &&
+	if ((player_right == object_left || player_right == object_left+1 || player_right == object_left + 2) &&
 		posPlayer.y + hitbox.y >= object_pos.y &&
 		posPlayer.y <= object_pos.y + object_size.y) {
 		return true; // Colisión hacia la derecha
@@ -336,6 +344,8 @@ void Player::damagePlayer() {
 		this->die();
 	}
 	else if (hp == 2) {
+		bInvulnerable = true;
+		invTime = 50;
 		changeToMario();
 	}
 }
@@ -352,6 +362,11 @@ void Player::giveMushroom() {
 
 bool Player::isMarioStar() {
 	return star > 0;
+}
+
+bool Player::isInvulnerable()
+{
+	return bInvulnerable;
 }
 
 int Player::getHp() {

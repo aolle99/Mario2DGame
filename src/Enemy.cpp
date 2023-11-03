@@ -52,28 +52,37 @@ void Enemy::update(int deltaTime)
 {
 	sprite->update(deltaTime);
 	currentTime += deltaTime;
-	if (mario->getHp() == 0) {
-		mario->setDying(true);
-		return;
-	}
+	
 	if (bDying) {
+		bDead = true;
 		sprite->changeAnimation(DIE);
 
-		if (currentTime > 150) {
+		if (currentTime > 10) {
 			posEnemy.y += 1;
 			currentTime = 0;
 		}
 	}
+	else
+	{
+		this->move(bLeft);
 
-	this->move(bLeft);
-	if (mario->collisionRight(posEnemy, sizeEnemy) || mario->collisionLeft(posEnemy, sizeEnemy)) {
-		mario->damagePlayer();
+		if (mario->getHp() == 0) {
+			mario->setDying(true);
+			return;
+		}
+
+		if (!bDead && !mario->isInvulnerable()) {
+			if (mario->collisionRight(posEnemy, sizeEnemy) || mario->collisionLeft(posEnemy, sizeEnemy)) {
+				mario->damagePlayer();
+			}
+			else if (mario->collisionDown(posEnemy, sizeEnemy)) {
+				this->die();
+				bDying = true;
+				printf("Enemy died\n");
+			}
+		}
 	}
-	else if (mario->collisionDown(posEnemy, sizeEnemy)) {
-		this->die();
-		bDying = true;
-		printf("Enemy died\n");
-	}
+	
 
 	sprite->setPosition(posEnemy);
 }
@@ -177,7 +186,8 @@ void Koopa::init(const glm::ivec2& tileMapPos, ShaderProgram& shaderProgram)
 {
 	bShell = false;
 	bStop = false;
-	this->shaderProgram = shaderProgram;
+	bDying = false;
+	bDead = false;
 	this->change_to_turtle();
 
 	sprite->changeAnimation(0);
@@ -192,6 +202,9 @@ void Koopa::change_to_shell() {
 	spritesheet.loadFromFile("res/textures/enemies.png", TEXTURE_PIXEL_FORMAT_RGBA);
 	sprite = Sprite::createSprite(sizeEnemy, glm::vec2(0.0625f, 0.125f), &spritesheet, &shaderProgram);
 	sprite->setNumberAnimations(5);
+
+	sprite->setAnimationSpeed(STOP, 8);
+	sprite->addKeyframe(STOP, glm::vec2(0.0625f * 2, 0.1875f));
 
 	sprite->setAnimationSpeed(STOP, 8);
 	sprite->addKeyframe(STOP, glm::vec2(0.0625f * 2, 0.1875f));

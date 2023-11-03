@@ -49,6 +49,8 @@ public:
 
 	bool isMarioStar();
 
+	bool isInvulnerable();
+
 	int getHp();
 
 	void setDying(bool dying);
@@ -62,7 +64,9 @@ private:
 	bool bLeft;
 	bool bDying;
 	bool bDead;
+	bool bInvulnerable;
 	float star;
+	int invTime;
 	glm::ivec2 posPlayer;
 	glm::ivec2 size;
 	glm::ivec2 hitbox;
