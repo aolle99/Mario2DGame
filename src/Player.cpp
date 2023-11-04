@@ -292,7 +292,7 @@ bool Player::collisionUp(const glm::ivec2& object_pos, const glm::ivec2& object_
 	int player_top = posPlayer.y;
 	int object_bottom = object_pos.y + object_size.y;
 
-	if (player_top <= object_bottom &&
+	if (player_top == object_bottom &&
 		posPlayer.x + hitbox.x >= object_pos.x &&
 		posPlayer.x <= object_pos.x + object_size.x) {
 		return true; // Colisión hacia arriba
@@ -306,7 +306,7 @@ bool Player::collisionLeft(const glm::ivec2& object_pos, const glm::ivec2& objec
 	int player_left = posPlayer.x;
 	int object_right = object_pos.x + object_size.x;
 
-	if (player_left == object_right &&
+	if ((player_left == object_right || player_left == object_right - 1 || player_left == object_right - 2) &&
 		posPlayer.y + hitbox.y >= object_pos.y &&
 		posPlayer.y <= object_pos.y + object_size.y) {
 		return true; // Colisión hacia la izquierda
@@ -341,6 +341,7 @@ void Player::damagePlayer() {
 	if (star > 0) return;
 	if (hp == 1) {
 		hp = 0;
+		bDying = true;
 		this->die();
 	}
 	else if (hp == 2) {

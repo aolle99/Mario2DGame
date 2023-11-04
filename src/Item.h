@@ -13,9 +13,9 @@ class Item
 public:
 	void move(bool direction);
 	void die();
-	void update(int deltaTime);
 	void setPlayer(Player* player);
 	void render();
+	bool isVisible();
 
 	void setTileMap(TileMap* tileMap);
 	void setPosition(const glm::vec2& pos);
@@ -23,6 +23,7 @@ public:
 protected:
 	bool bFalling;
 	bool bLeft;
+	bool bVisible;
 	int currentTime;
 	glm::ivec2 posItem, sizeItem;
 	int jumpAngle, startY;
@@ -48,7 +49,7 @@ class Star : public Item
 {
 public:
 	void init(const glm::ivec2& tileMapPos, ShaderProgram& shaderProgram);
-	//void update(int deltaTime);
+	void update(int deltaTime);
 
 protected:
 };

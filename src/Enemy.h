@@ -15,7 +15,7 @@ class Enemy
 public:
 	void move(bool direction);
 	void die();
-	void update(int deltaTime);
+	virtual void update(int deltaTime);
 	void setPlayer(Player* player);
 	void render();
 
@@ -50,7 +50,6 @@ class Koopa : public Enemy
 public:
 	void init(const glm::ivec2& tileMapPos, ShaderProgram& shaderProgram);
 	void update(int deltaTime);
-	void move_shell(bool direction);
 	void change_to_shell();
 	void change_to_turtle();
 
