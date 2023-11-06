@@ -14,6 +14,12 @@ class Player
 {
 
 public:
+	static Player& instance()
+	{
+		static Player P;
+
+		return P;
+	}
 	void init(glm::vec2& startPos, ShaderProgram &shaderProgram);
 	void changeToMario();
 	void changeToSuperMario();
@@ -60,6 +66,7 @@ public:
 	void setInvTime(int time);
 	
 private:
+	Player() {};
 	glm::ivec2 getHitboxPosition();
 	
 private:
@@ -84,7 +91,6 @@ private:
 	int speed;
 	int currentTime;
 	int hp;
-
 };
 
 

@@ -7,6 +7,7 @@
 #include <json/value.h>
 #include <fstream>
 #include "Item.h"
+#include "Player.h"
 
 
 #define SCREEN_X 32
@@ -22,7 +23,6 @@
 Scene::Scene()
 {
 	map = NULL;
-	player = NULL;
 	mushroom = NULL;
 	star = NULL;
 }
@@ -31,8 +31,6 @@ Scene::~Scene()
 {
 	if(map != NULL)
 		delete map;
-	if(player != NULL)
-		delete player;
 }
 
 
@@ -49,13 +47,11 @@ void Scene::init()
 	mushroom->init(glm::vec2(260, 416), texProgram);
 	mushroom->setPosition(glm::vec2(10 * map->getTileSize(), INIT_PLAYER_Y_TILES * map->getTileSize()));
 	mushroom->setTileMap(map);
-	mushroom->setPlayer(player);
 
 	star = new Star();
 	star->init(glm::vec2(360, 416), texProgram);
 	star->setPosition(glm::vec2(10 * map->getTileSize(), INIT_PLAYER_Y_TILES * map->getTileSize()));
 	star->setTileMap(map);
-	star->setPlayer(player);
 
 	if (!text.init("res/Fonts/arial.ttf"))
 		//if(!text.init("fonts/OpenSans-Bold.ttf"))
@@ -66,7 +62,7 @@ void Scene::init()
 void Scene::update(int deltaTime)
 {
 	currentTime += deltaTime;
-	player->update(deltaTime);
+	Player::instance().update(deltaTime);
 	mushroom->update(deltaTime);
 	star->update(deltaTime);
 
@@ -94,7 +90,7 @@ void Scene::render()
 	mapDecoration->render();
 	map->render();
 
-	player->render();
+	Player::instance().render();
 
 	if (mushroom->isVisible()) mushroom->render();
 	if (star->isVisible()) star->render();
@@ -107,7 +103,7 @@ void Scene::render()
 
 bool Scene::calculateCameraPosition()
 {
-	glm::vec2 newPosPlayer = player->getPosition();
+	glm::vec2 newPosPlayer = Player::instance().getPosition();
 	if (newPosPlayer.x > playerStartPos.x && newPosPlayer.x > (SCREEN_WIDTH-1)/2) {
 		float oldCameraX = cameraX;
 		cameraX = newPosPlayer.x - (SCREEN_WIDTH - 1) / 2;
@@ -164,9 +160,8 @@ void Scene::createEntities(const Json::Value entities)
 	{
 		if (entity["__identifier"].asString() == "Mario")
 		{
-			player = new Player();
-			player->init(glm::vec2(entity["px"][0].asInt(), entity["px"][1].asInt()), texProgram);
-			player->setTileMap(map);
+			Player::instance().init(glm::vec2(entity["px"][0].asInt(), entity["px"][1].asInt()), texProgram);
+			Player::instance().setTileMap(map);
 			playerStartPos = glm::vec2(entity["px"][0].asInt(), entity["px"][1].asInt());
 			break;
 		}
@@ -180,7 +175,6 @@ void Scene::createEntities(const Json::Value entities)
 			Goomba *goomba = new Goomba();
 			goomba->init(glm::vec2(entity["px"][0].asInt(), entity["px"][1].asInt()), texProgram);
 			goomba->setTileMap(map);
-			goomba->setPlayer(player);
 			enemies.push_back(std::unique_ptr<Enemy>(goomba));
 		}
 		else if (entity["__identifier"].asString() == "Koopa")
@@ -188,7 +182,6 @@ void Scene::createEntities(const Json::Value entities)
 			Koopa *koopa = new Koopa();
 			koopa->init(glm::vec2(entity["px"][0].asInt(), entity["px"][1].asInt()), texProgram);
 			koopa->setTileMap(map);
-			koopa->setPlayer(player);
 			enemies.push_back(std::unique_ptr<Enemy>(koopa));
 		}
 	}	

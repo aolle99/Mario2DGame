@@ -6,14 +6,12 @@
 
 #include "Sprite.h"
 #include "TileMap.h"
-#include "Player.h"
 
 class Item
 {
 public:
 	void move(bool direction);
 	void die();
-	void setPlayer(Player* player);
 	void render();
 	bool isVisible();
 
@@ -30,7 +28,6 @@ protected:
 	Texture spritesheet;
 	Sprite* sprite;
 	TileMap* map;
-	Player* mario;
 	ShaderProgram shaderProgram;
 };
 

@@ -5,7 +5,6 @@
 #include <glm/glm.hpp>
 #include "ShaderProgram.h"
 #include "TileMap.h"
-#include "Player.h"
 #include "Enemy.h"
 #include "json/json.h"
 #include "TileMapStatic.h"
@@ -45,7 +44,6 @@ private:
 private:
 	TileMap *map;
 	TileMapStatic* mapDecoration;
-	Player *player;
 	vector< std::unique_ptr<Enemy >> enemies;
 	ShaderProgram texProgram;
 	float currentTime;

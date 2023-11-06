@@ -4,6 +4,7 @@
 #include <GL/glew.h>
 #include <GL/glut.h>
 #include "Game.h"
+#include "Player.h"
 
 
 #define JUMP_ANGLE_STEP 4
@@ -42,20 +43,14 @@ void Item::die()
 {
 	sprite->changeAnimation(DIE);
 }
-
-void Item::setPlayer(Player* player)
-{
-	this->mario = player;
-}
-
 void Mushroom::update(int deltaTime)
 {
 	sprite->update(deltaTime);
 	currentTime += deltaTime;
 	this->move(bLeft);
 
-	if (mario->collisionRight(posItem, sizeItem) || mario->collisionLeft(posItem, sizeItem) || mario->collisionDown(posItem, sizeItem, true) || mario->collisionUp(posItem, sizeItem)) {
-		mario->giveMushroom();
+	if (Player::instance().collisionRight(posItem, sizeItem) || Player::instance().collisionLeft(posItem, sizeItem) || Player::instance().collisionDown(posItem, sizeItem, true) || Player::instance().collisionUp(posItem, sizeItem)) {
+		Player::instance().giveMushroom();
 		bVisible = false;	
 	}
 
@@ -68,8 +63,8 @@ void Star::update(int deltaTime)
 	currentTime += deltaTime;
 	this->move(bLeft);
 
-	if (mario->collisionRight(posItem, sizeItem) || mario->collisionLeft(posItem, sizeItem) || mario->collisionDown(posItem, sizeItem, true) || mario->collisionUp(posItem, sizeItem)) {
-		mario->giveStar();
+	if (Player::instance().collisionRight(posItem, sizeItem) || Player::instance().collisionLeft(posItem, sizeItem) || Player::instance().collisionDown(posItem, sizeItem, true) || Player::instance().collisionUp(posItem, sizeItem)) {
+		Player::instance().giveStar();
 		bVisible = false;
 	}
 
