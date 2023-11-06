@@ -14,7 +14,6 @@
 // it builds a single VBO that contains all tiles. As a result the render
 // method draws the whole map independently of what is visible.
 
-
 class TileMap
 {
 
@@ -50,6 +49,8 @@ private:
 	bool loadLevel(const Json::Value layerMap, const glm::ivec2& mapSize);
 	void prepareArrays(ShaderProgram& program);
 
+	void createTile(const glm::ivec2& pos, const glm::ivec2& texPos, int type);
+
 
 
 private:
@@ -60,13 +61,11 @@ private:
 	glm::ivec2 position, mapSize, tilesheetSize;
 	int tileSize, blockSize;
 	Texture tilesheet;
+	Texture tilesheetAnim;
 	glm::vec2 tileTexSize;
 	bool *map;
 	vector< std::unique_ptr<Tile >> blocks;
 	float leftBound = 0.f;
-
-
-
 };
 
 

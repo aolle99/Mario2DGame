@@ -30,6 +30,7 @@ void Player::init(glm::vec2 &startPos, ShaderProgram &shaderProgram)
 	star = 0.f;
 	hp = 1;
 	currentTime = 0;
+	score = 0;
 	posPlayer = startPos;
 	this->shaderProgram = shaderProgram;
 	this->changeToMario();
@@ -389,6 +390,10 @@ void Player::giveMushroom() {
 	if (hp == 1) {
 		changeToSuperMario();
 	}
+}
+
+void Player::giveCoin() {
+	this->score += 1;
 }
 
 bool Player::isMarioStar() {

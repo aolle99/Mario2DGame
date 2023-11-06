@@ -5,16 +5,19 @@
 #include "ShaderProgram.h"
 #include "Texture.h"
 #include "json/json.h"
+#include "Sprite.h"
+
+class Item;
 
 class Tile
 {
 public:
-	Tile(const glm::ivec2& tileMapPos, const glm::vec2 pos);
+	Tile(const glm::ivec2 tileMapPos, const glm::vec2 pos);
 	~Tile();
 
-	void init(ShaderProgram &shaderProgram,Texture &tilesheet);
-	void update(int deltaTime);
-	void render() const;
+	virtual void init(ShaderProgram &shaderProgram,Texture &tilesheet);
+	virtual void update(int deltaTime){};
+	virtual void render();
 
 	void free();
 
@@ -28,7 +31,7 @@ public:
 
 	bool collisionRight(const glm::ivec2& object_pos, const glm::ivec2& object_size, int object_type);
 
-private:
+protected:
 	GLuint vao;
 	GLuint vbo;
 	GLint posLocation, texCoordLocation;
@@ -37,5 +40,63 @@ private:
 	glm::ivec2 texturePos;
 };
 
+class BrickTile : public Tile
+{
+public:
+	BrickTile(const glm::ivec2& tileMapPos, const glm::vec2 pos, int item=0);
+
+	void init(ShaderProgram& shaderProgram, Texture& tilesheet);
+	void update(int deltaTime) override;
+	void render();
+
+	bool collisionDown();
+private:
+	Item* item;
+};
+
+class QuestionTile : public Tile
+{
+public:
+	QuestionTile(const glm::ivec2& tileMapPos, const glm::vec2 pos, int item = 0);
+
+	void init(ShaderProgram& shaderProgram, Texture& tilesheet);
+	void update(int deltaTime);
+	void render();
+
+	bool collisionDown();
+private:
+	Item* item;
+	Sprite* sprite;
+};
+
+class CoinTile : public Tile
+{
+public:
+	CoinTile(const glm::ivec2& tileMapPos, const glm::vec2 pos);
+
+	void init(ShaderProgram& shaderProgram, Texture& tilesheet);
+	void update(int deltaTime);
+	void render();
+
+	bool collision();
+
+private:
+	Sprite* sprite;
+};
+
+class InvisibleTile : public Tile
+{
+public:
+	InvisibleTile(const glm::ivec2& tileMapPos, const glm::vec2 pos, int item);
+
+	void init(ShaderProgram& shaderProgram, Texture& tilesheet);
+	void update(int deltaTime);
+	void render();
+
+	bool collisionDown();
+
+private:
+	Item* item;
+};
 
 #endif // _PLAYER_INCLUDE

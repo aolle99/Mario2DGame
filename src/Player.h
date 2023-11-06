@@ -53,6 +53,8 @@ public:
 
 	void giveMushroom();
 
+	void giveCoin();
+
 	bool isMarioStar();
 
 	bool isInvulnerable();
@@ -91,6 +93,7 @@ private:
 	int speed;
 	int currentTime;
 	int hp;
+	int score;
 };
 
 

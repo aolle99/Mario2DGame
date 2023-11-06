@@ -10,6 +10,8 @@
 class Item
 {
 public:
+	virtual void init(const glm::ivec2& tileMapPos, ShaderProgram& shaderProgram);
+	virtual void update(int deltaTime);
 	void move(bool direction);
 	void die();
 	void render();
@@ -48,6 +50,23 @@ public:
 	void init(const glm::ivec2& tileMapPos, ShaderProgram& shaderProgram);
 	void update(int deltaTime);
 
+protected:
+};
+
+class Coin : public Item
+{
+public:
+	void init(const glm::ivec2& tileMapPos, ShaderProgram& shaderProgram);
+	void update(int deltaTime);
+
+protected:
+};
+
+class Flag : public Item
+{
+public:
+	void init(const glm::ivec2& tileMapPos, ShaderProgram& shaderProgram);
+	void update(int deltaTime);
 protected:
 };
 
