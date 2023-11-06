@@ -94,6 +94,7 @@ void TileMapStatic::prepareArrays(ShaderProgram& program)
 		vertices.push_back(posTile.x); vertices.push_back(posTile.y + blockSize);
 		vertices.push_back(texCoordTile[0].x); vertices.push_back(texCoordTile[1].y);
 	}
+	tiles.clear();
 
 	glGenVertexArrays(1, &vao);
 	glBindVertexArray(vao);
