@@ -79,6 +79,11 @@
     </ClInclude>
     <ClInclude Include="Credits.h">
       <Filter>Archivos de encabezado</Filter>
+    <ClInclude Include="Text.h">
+      <Filter>Archivos de encabezado\Helpers</Filter>
+    </ClInclude>
+    <ClInclude Include="TexturedQuad.h">
+      <Filter>Archivos de encabezado\Helpers</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -132,6 +137,11 @@
     </ClCompile>
     <ClCompile Include="Credits.cpp">
       <Filter>Archivos de código fuente</Filter>
+    <ClCompile Include="Text.cpp">
+      <Filter>Archivos de código fuente\Helpers</Filter>
+    </ClCompile>
+    <ClCompile Include="TexturedQuad.cpp">
+      <Filter>Archivos de código fuente\Helpers</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

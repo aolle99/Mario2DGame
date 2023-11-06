@@ -56,6 +56,11 @@ void Scene::init()
 	star->setPosition(glm::vec2(10 * map->getTileSize(), INIT_PLAYER_Y_TILES * map->getTileSize()));
 	star->setTileMap(map);
 	star->setPlayer(player);
+
+	if (!text.init("res/Fonts/arial.ttf"))
+		//if(!text.init("fonts/OpenSans-Bold.ttf"))
+		//if(!text.init("fonts/DroidSerif.ttf"))
+		cout << "Could not load font!!!" << endl;
 }
 
 void Scene::update(int deltaTime)
@@ -93,10 +98,11 @@ void Scene::render()
 
 	if (mushroom->isVisible()) mushroom->render();
 	if (star->isVisible()) star->render();
-	
+
 	for (auto& enemy : enemies) {
 		if(!enemy->isDead())enemy->render();
 	}
+	text.render("Videogames!!!", glm::vec2(10, SCREEN_HEIGHT - 20), 32, glm::vec4(1, 1, 1, 1));
 }
 
 bool Scene::calculateCameraPosition()
@@ -167,7 +173,7 @@ void Scene::createEntities(const Json::Value entities)
 	}
 	for (Json::Value entity : entities)
 	{
-		
+
 		if (entity["__identifier"].asString() == "Goomba")
 		{
 

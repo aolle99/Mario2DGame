@@ -11,6 +11,7 @@
 #include "TileMapStatic.h"
 #include <memory>
 #include "Item.h"
+#include "Text.h"
 
 
 // Scene contains all the entities of our game.
@@ -51,6 +52,7 @@ private:
 	glm::mat4 projection;
 	float cameraX = 0.f;
 	glm::vec2 playerStartPos;
+	Text text;
 
 	Mushroom *mushroom;
 	Star *star;
