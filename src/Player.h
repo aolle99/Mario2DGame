@@ -29,7 +29,7 @@ public:
 	void setTileMap(TileMap *tileMap);
 	void setPosition(const glm::vec2 &pos);
 
-	bool collisionDown(const glm::ivec2& pos, const glm::ivec2& size);
+	bool collisionDown(const glm::ivec2& pos, const glm::ivec2& size, bool isItem);
 
 	bool collisionUp(const glm::ivec2& object_pos, const glm::ivec2& object_size);
 
@@ -54,6 +54,10 @@ public:
 	int getHp();
 
 	void setDying(bool dying);
+
+	void setInvulnerable(bool invulnerable);
+
+	void setInvTime(int time);
 	
 private:
 	glm::ivec2 getHitboxPosition();
@@ -65,8 +69,10 @@ private:
 	bool bDying;
 	bool bDead;
 	bool bInvulnerable;
+	bool bBounce;
 	float star;
 	int invTime;
+	int bounceTime;
 	glm::ivec2 posPlayer;
 	glm::ivec2 size;
 	glm::ivec2 hitbox;

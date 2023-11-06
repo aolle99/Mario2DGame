@@ -6,6 +6,7 @@
 #include "json/json.h"
 #include <json/value.h>
 #include <fstream>
+#include "Item.h"
 
 
 #define SCREEN_X 32
@@ -22,6 +23,8 @@ Scene::Scene()
 {
 	map = NULL;
 	player = NULL;
+	mushroom = NULL;
+	star = NULL;
 }
 
 Scene::~Scene()
@@ -41,19 +44,31 @@ void Scene::init()
 	projection = glm::ortho(0.f, float(SCREEN_WIDTH - 1), float(SCREEN_HEIGHT - 1), 0.f);
 	
 	currentTime = 0.0f;
+
+	mushroom = new Mushroom();
+	mushroom->init(glm::vec2(260, 416), texProgram);
+	mushroom->setPosition(glm::vec2(10 * map->getTileSize(), INIT_PLAYER_Y_TILES * map->getTileSize()));
+	mushroom->setTileMap(map);
+	mushroom->setPlayer(player);
+
+	star = new Star();
+	star->init(glm::vec2(360, 416), texProgram);
+	star->setPosition(glm::vec2(10 * map->getTileSize(), INIT_PLAYER_Y_TILES * map->getTileSize()));
+	star->setTileMap(map);
+	star->setPlayer(player);
 }
 
 void Scene::update(int deltaTime)
 {
 	currentTime += deltaTime;
 	player->update(deltaTime);
+	mushroom->update(deltaTime);
+	star->update(deltaTime);
 
 	if (calculateCameraPosition()) {
 		projection = glm::ortho(cameraX, float(SCREEN_WIDTH - 1) + cameraX, float(SCREEN_HEIGHT - 1), 0.f);
 		this->map->setLeftBound(cameraX);
 	}
-
-
 	
 	for (auto& enemy : enemies) {
 		enemy->update(deltaTime);
@@ -75,9 +90,12 @@ void Scene::render()
 	map->render();
 
 	player->render();
+
+	if (mushroom->isVisible()) mushroom->render();
+	if (star->isVisible()) star->render();
 	
 	for (auto& enemy : enemies) {
-		enemy->render();
+		if(!enemy->isDead())enemy->render();
 	}
 }
 

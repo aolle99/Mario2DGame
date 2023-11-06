@@ -23,6 +23,8 @@ void Player::init(glm::vec2 &startPos, ShaderProgram &shaderProgram)
 	bDying = false;
 	bDead = false;
 	bInvulnerable = false;
+	bBounce = false;
+	bounceTime = 0;
 	invTime = 0;
 	speed = 2;
 	star = 0.f;
@@ -188,7 +190,7 @@ bool Player::checkJumping()
 		}
 		return true;
 	}
-	else {
+	else if(!bBounce) {
 		posPlayer.y += FALL_STEP;
 		if (!map->collisionMoveDown(getHitboxPosition(), hitbox, &posPlayer.y)) {
 			sprite->changeAnimation(JUMP);
@@ -222,6 +224,26 @@ void Player::update(int deltaTime)
 	}
 	else {
 		int textureChanged = 3;
+
+		if (bBounce) {
+			bJumping = false;
+			if (bounceTime < 20) {
+				posPlayer.y -= 2;
+				bounceTime += 1;
+			}
+			else if (bounceTime == 20){
+				if (startY != posPlayer.y) {
+					posPlayer.y += 2;
+				}
+				else {
+					bounceTime = 20;
+					bBounce = false;
+				}
+			}
+		}
+
+		if (!this->checkJumping())  textureChanged -= 1;
+
 		if (Game::instance().getSpecialKey(GLUT_KEY_LEFT)) this->move(false);
 		else if (Game::instance().getSpecialKey(GLUT_KEY_RIGHT)) this->move(true);
 		else textureChanged -= 1;
@@ -235,23 +257,25 @@ void Player::update(int deltaTime)
 			sprite->setAnimationSpeed(MOVE, 7);
 		}
 
+		if (Game::instance().getKey('m')) {
+			this->giveMushroom();
+		}
 		if (Game::instance().getKey('g')) {
 			this->giveStar();
 		}
 
-		if (!this->checkJumping())  textureChanged -= 1;
 		if (star > 0) {
 			// Restar 1 cada segundo
 			star -= 0.01;
 		}
+
 		if (map->checkOutOfBoundsDown(posPlayer.y)) {
 			this->die();
 		}
-		if (Game::instance().getKey('m')) {
-			this->giveMushroom();
-		}
 
 		if (!textureChanged) sprite->changeAnimation(STAND);
+
+		
 	}	
 
 	sprite->setPosition(posPlayer);
@@ -273,7 +297,7 @@ void Player::setPosition(const glm::vec2 &pos)
 	sprite->setPosition(posPlayer);
 }
 
-bool Player::collisionDown(const glm::ivec2& object_pos, const glm::ivec2& object_size)
+bool Player::collisionDown(const glm::ivec2& object_pos, const glm::ivec2& object_size, bool isItem)
 {
 	int player_bottom = posPlayer.y + size.y;
 	int object_top = object_pos.y;
@@ -281,6 +305,12 @@ bool Player::collisionDown(const glm::ivec2& object_pos, const glm::ivec2& objec
 	if ((player_bottom == object_top || player_bottom == object_top + 1 || player_bottom == object_top + 2) &&
 		posPlayer.x + size.x >= object_pos.x &&
 		posPlayer.x <= object_pos.x + object_size.x) {
+		if (!isItem) {
+			bJumping = false;
+			bounceTime = 0;
+			startY = posPlayer.y + object_size.y;
+			bBounce = true;
+		}
 		return true; // Colisión hacia abajo
 	}
 
@@ -377,6 +407,16 @@ int Player::getHp() {
 void Player::setDying(bool dying)
 {
 	bDying = dying;
+}
+
+void Player::setInvulnerable(bool invulnerable)
+{
+	bInvulnerable = invulnerable;
+}
+
+void Player::setInvTime(int time)
+{
+	invTime = time;
 }
 
 

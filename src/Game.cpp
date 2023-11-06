@@ -7,12 +7,27 @@ void Game::init()
 {
 	bPlay = true;
 	glClearColor(0.5f, 0.7686f, 1.f, 1.0f);
+	currentScreen = "game";
+	mainMenu.init();
+	instructions.init();
 	scene.init();
+	credits.init();
 }
 
 bool Game::update(int deltaTime)
 {
-	scene.update(deltaTime);
+	if (currentScreen == "mainMenu") {
+		mainMenu.update(deltaTime);
+	}
+	else if (currentScreen == "instructions") {
+		instructions.update(deltaTime);
+	}
+	else if (currentScreen == "game") {
+		scene.update(deltaTime);
+	}
+	else if (currentScreen == "credits") {
+		credits.update(deltaTime);
+	}
 	
 	return bPlay;
 }
@@ -20,7 +35,18 @@ bool Game::update(int deltaTime)
 void Game::render()
 {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	scene.render();
+	if (currentScreen == "mainMenu") {
+		mainMenu.render();
+	}
+	else if (currentScreen == "instructions") {
+		instructions.render();
+	}
+	else if (currentScreen == "game") {
+		scene.render();
+	}
+	else if (currentScreen == "credits") {
+		credits.render();
+	}
 }
 
 void Game::keyPressed(int key)

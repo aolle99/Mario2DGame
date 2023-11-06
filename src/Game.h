@@ -3,6 +3,9 @@
 
 
 #include "Scene.h"
+#include "MainMenu.h"
+#include "Instructions.h"
+#include "Credits.h"
 
 
 #define SCREEN_WIDTH 1024
@@ -47,6 +50,10 @@ private:
 	Scene scene;                      // Scene to render
 	bool keys[256], specialKeys[256]; // Store key states so that 
 	                                  // we can have access at any time
+	MainMenu mainMenu;
+	Instructions instructions;
+	Credits credits;
+	string currentScreen = "0";
 
 };
 

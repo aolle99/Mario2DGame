@@ -54,7 +54,7 @@ void Mushroom::update(int deltaTime)
 	currentTime += deltaTime;
 	this->move(bLeft);
 
-	if (mario->collisionRight(posItem, sizeItem) || mario->collisionLeft(posItem, sizeItem) || mario->collisionDown(posItem, sizeItem) || mario->collisionUp(posItem, sizeItem)) {
+	if (mario->collisionRight(posItem, sizeItem) || mario->collisionLeft(posItem, sizeItem) || mario->collisionDown(posItem, sizeItem, true) || mario->collisionUp(posItem, sizeItem)) {
 		mario->giveMushroom();
 		bVisible = false;	
 	}
@@ -68,7 +68,7 @@ void Star::update(int deltaTime)
 	currentTime += deltaTime;
 	this->move(bLeft);
 
-	if (mario->collisionRight(posItem, sizeItem) || mario->collisionLeft(posItem, sizeItem) || mario->collisionDown(posItem, sizeItem) || mario->collisionUp(posItem, sizeItem)) {
+	if (mario->collisionRight(posItem, sizeItem) || mario->collisionLeft(posItem, sizeItem) || mario->collisionDown(posItem, sizeItem, true) || mario->collisionUp(posItem, sizeItem)) {
 		mario->giveStar();
 		bVisible = false;
 	}

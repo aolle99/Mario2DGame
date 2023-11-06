@@ -47,14 +47,13 @@ void Enemy::die()
 void Enemy::update(int deltaTime)
 {
 	sprite->update(deltaTime);
-	currentTime += deltaTime;
 	
 	if (bDying) {
-		bDead = true;
 		sprite->changeAnimation(DIE);
+		currentTime += 1;
 
-		if (currentTime > 10) {
-			posEnemy.y += 1;
+		if (currentTime == 20) {
+			bDead = true;
 			currentTime = 0;
 		}
 	}
@@ -72,7 +71,7 @@ void Enemy::update(int deltaTime)
 					mario->damagePlayer();
 				}
 			}
-			else if (mario->collisionDown(posEnemy, sizeEnemy)) {
+			else if (mario->collisionDown(posEnemy, sizeEnemy, false)) {
 				this->die();
 				bDying = true;
 			}
@@ -93,11 +92,11 @@ void Koopa::update(int deltaTime)
 	sprite->update(deltaTime);	
 	
 	if (bDying) { // Koopa morint
-		bDead = true;
 		sprite->changeAnimation(DIE);
+		currentTime += 1;
 
-		if (currentTime > 10) {
-			posEnemy.y += 1;
+		if (currentTime == 10) {
+			bDead = true;
 			currentTime = 0;
 		}
 	}
@@ -115,13 +114,11 @@ void Koopa::update(int deltaTime)
 						mario->damagePlayer();
 					}
 				}
-				else if (mario->collisionDown(posEnemy, sizeEnemy)) {
+				else if (mario->collisionDown(posEnemy, sizeEnemy, false)) {
 					change_to_shell();
 					bShell = true;
 					bStop = true;
 					sprite->changeAnimation(STOP);
-					// mario has to bounce from the shell
-					mario->jump();
 				}
 			}
 		}
@@ -136,12 +133,12 @@ void Koopa::update(int deltaTime)
 						this->die();
 						bDying = true;
 					}
-					else {
+					else if(!mario->isInvulnerable()){
 						mario->damagePlayer();
 					}
 				}
 				printf("Koopa en moviment\n");
-				if (mario->collisionDown(posEnemy, sizeEnemy)) {
+				if (mario->collisionDown(posEnemy, sizeEnemy, false)) {
 					bStop = true;
 					sprite->changeAnimation(STOP);
 					return;
@@ -150,9 +147,11 @@ void Koopa::update(int deltaTime)
 			if (bStop) { // Koopa parat
 				printf("Koopa parat\n");
 				
-				if (mario->collisionLeft(posEnemy, sizeEnemy) || mario->collisionRight(posEnemy, sizeEnemy) || mario->collisionDown(posEnemy, sizeEnemy)) {
+				if (mario->collisionLeft(posEnemy, sizeEnemy) || mario->collisionRight(posEnemy, sizeEnemy) || mario->collisionDown(posEnemy, sizeEnemy, false)) {
 					bStop = false;
 					sprite->changeAnimation(MOVE);
+					mario->setInvulnerable(true);
+					mario->setInvTime(50);
 				}
 
 			}
@@ -177,6 +176,11 @@ void Enemy::setTileMap(TileMap* tileMap)
 void Enemy::setPosition(const glm::vec2& pos)
 {
 	sprite->setPosition(pos);
+}
+
+bool Enemy::isDead()
+{
+	return bDead;
 }
 
 void Goomba::init(const glm::ivec2& tileMapPos, ShaderProgram& shaderProgram)

@@ -10,6 +10,7 @@
 #include "json/json.h"
 #include "TileMapStatic.h"
 #include <memory>
+#include "Item.h"
 
 
 // Scene contains all the entities of our game.
@@ -50,6 +51,9 @@ private:
 	glm::mat4 projection;
 	float cameraX = 0.f;
 	glm::vec2 playerStartPos;
+
+	Mushroom *mushroom;
+	Star *star;
 
 
 
