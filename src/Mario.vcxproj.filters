@@ -68,8 +68,11 @@
     <ClInclude Include="TileMapStatic.h">
       <Filter>Archivos de encabezado</Filter>
     </ClInclude>
-    <ClInclude Include="MainMenu.h">
-      <Filter>Archivos de encabezado</Filter>
+    <ClInclude Include="Text.h">
+      <Filter>Archivos de encabezado\Helpers</Filter>
+    </ClInclude>
+    <ClInclude Include="TexturedQuad.h">
+      <Filter>Archivos de encabezado\Helpers</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -112,8 +115,11 @@
     <ClCompile Include="TileMapStatic.cpp">
       <Filter>Archivos de código fuente</Filter>
     </ClCompile>
-    <ClCompile Include="MainMenu.cpp">
-      <Filter>Archivos de código fuente</Filter>
+    <ClCompile Include="Text.cpp">
+      <Filter>Archivos de código fuente\Helpers</Filter>
+    </ClCompile>
+    <ClCompile Include="TexturedQuad.cpp">
+      <Filter>Archivos de código fuente\Helpers</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

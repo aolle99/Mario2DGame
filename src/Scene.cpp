@@ -41,6 +41,10 @@ void Scene::init()
 	projection = glm::ortho(0.f, float(SCREEN_WIDTH - 1), float(SCREEN_HEIGHT - 1), 0.f);
 	
 	currentTime = 0.0f;
+	if (!text.init("res/Fonts/arial.ttf"))
+		//if(!text.init("fonts/OpenSans-Bold.ttf"))
+		//if(!text.init("fonts/DroidSerif.ttf"))
+		cout << "Could not load font!!!" << endl;
 }
 
 void Scene::update(int deltaTime)
@@ -79,6 +83,7 @@ void Scene::render()
 	for (auto& enemy : enemies) {
 		enemy->render();
 	}
+	text.render("Videogames!!!", glm::vec2(10, SCREEN_HEIGHT - 20), 32, glm::vec4(1, 1, 1, 1));
 }
 
 bool Scene::calculateCameraPosition()
