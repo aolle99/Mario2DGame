@@ -4,7 +4,6 @@
 
 #include "Sprite.h"
 #include "TileMap.h"
-#include "Player.h"
 
 
 // Enemy is basically a Sprite that represents an enemy. As such it has
@@ -16,7 +15,6 @@ public:
 	void move(bool direction);
 	void die();
 	virtual void update(int deltaTime);
-	void setPlayer(Player* player);
 	void render();
 
 	void setTileMap(TileMap* tileMap);
@@ -34,7 +32,6 @@ protected:
 	Texture spritesheet;
 	Sprite* sprite;
 	TileMap* map;
-	Player* mario;
 	ShaderProgram shaderProgram;
 };
 

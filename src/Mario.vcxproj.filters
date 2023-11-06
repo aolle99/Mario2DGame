@@ -41,9 +41,6 @@
     <ClInclude Include="AnimKeyframes.h">
       <Filter>Archivos de encabezado\Helpers</Filter>
     </ClInclude>
-    <ClInclude Include="Scene.h">
-      <Filter>Archivos de encabezado\Helpers</Filter>
-    </ClInclude>
     <ClInclude Include="Shader.h">
       <Filter>Archivos de encabezado\Helpers</Filter>
     </ClInclude>
@@ -54,9 +51,6 @@
       <Filter>Archivos de encabezado\Helpers</Filter>
     </ClInclude>
     <ClInclude Include="Texture.h">
-      <Filter>Archivos de encabezado\Helpers</Filter>
-    </ClInclude>
-    <ClInclude Include="TileMap.h">
       <Filter>Archivos de encabezado\Helpers</Filter>
     </ClInclude>
     <ClInclude Include="Enemy.h">
@@ -77,6 +71,12 @@
     <ClInclude Include="TexturedQuad.h">
       <Filter>Archivos de encabezado\Helpers</Filter>
     </ClInclude>
+    <ClInclude Include="TileMap.h">
+      <Filter>Archivos de encabezado</Filter>
+    </ClInclude>
+    <ClInclude Include="Scene.h">
+      <Filter>Archivos de encabezado</Filter>
+    </ClInclude>
     <ClInclude Include="Screen.h">
       <Filter>Archivos de encabezado</Filter>
     </ClInclude>
@@ -90,12 +90,6 @@
     </ClCompile>
     <ClCompile Include="Player.cpp">
       <Filter>Archivos de código fuente</Filter>
-    </ClCompile>
-    <ClCompile Include="TileMap.cpp">
-      <Filter>Archivos de código fuente\Helpers</Filter>
-    </ClCompile>
-    <ClCompile Include="Scene.cpp">
-      <Filter>Archivos de código fuente\Helpers</Filter>
     </ClCompile>
     <ClCompile Include="Shader.cpp">
       <Filter>Archivos de código fuente\Helpers</Filter>
@@ -131,6 +125,12 @@
       <Filter>Archivos de código fuente\Helpers</Filter>
     </ClCompile>
     <ClCompile Include="Screen.cpp">
+      <Filter>Archivos de código fuente</Filter>
+    </ClCompile>
+    <ClCompile Include="TileMap.cpp">
+      <Filter>Archivos de código fuente</Filter>
+    </ClCompile>
+    <ClCompile Include="Scene.cpp">
       <Filter>Archivos de código fuente</Filter>
     </ClCompile>
   </ItemGroup>

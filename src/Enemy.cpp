@@ -4,6 +4,7 @@
 #include <GL/glew.h>
 #include <GL/glut.h>
 #include "Game.h"
+#include "Player.h"
 
 
 #define JUMP_ANGLE_STEP 4
@@ -61,17 +62,17 @@ void Enemy::update(int deltaTime)
 	{
 		this->move(bLeft);
 
-		if (!bDead && !mario->isInvulnerable()) {
-			if (mario->collisionRight(posEnemy, sizeEnemy) || mario->collisionLeft(posEnemy, sizeEnemy)) {
-				if (mario->isMarioStar()) {
+		if (!bDead && !Player::instance().isInvulnerable()) {
+			if (Player::instance().collisionRight(posEnemy, sizeEnemy) || Player::instance().collisionLeft(posEnemy, sizeEnemy)) {
+				if (Player::instance().isMarioStar()) {
 					this->die();
 					bDying = true;
 				}
 				else {
-					mario->damagePlayer();
+					Player::instance().damagePlayer();
 				}
 			}
-			else if (mario->collisionDown(posEnemy, sizeEnemy, false)) {
+			else if (Player::instance().collisionDown(posEnemy, sizeEnemy, false)) {
 				this->die();
 				bDying = true;
 			}
@@ -80,11 +81,6 @@ void Enemy::update(int deltaTime)
 	
 
 	sprite->setPosition(posEnemy);
-}
-
-void Enemy::setPlayer(Player* player)
-{
-	this->mario = player;
 }
 
 void Koopa::update(int deltaTime)
@@ -104,17 +100,17 @@ void Koopa::update(int deltaTime)
 		if (!bShell) { // Koopa en modo tortuga
 			move(bLeft);
 
-			if (!bDead && !mario->isInvulnerable()) {
-				if (mario->collisionRight(posEnemy, sizeEnemy) || mario->collisionLeft(posEnemy, sizeEnemy)) {
-					if (mario->isMarioStar()) {
+			if (!bDead && !Player::instance().isInvulnerable()) {
+				if (Player::instance().collisionRight(posEnemy, sizeEnemy) || Player::instance().collisionLeft(posEnemy, sizeEnemy)) {
+					if (Player::instance().isMarioStar()) {
 						this->die();
 						bDying = true;
 					}
 					else {
-						mario->damagePlayer();
+						Player::instance().damagePlayer();
 					}
 				}
-				else if (mario->collisionDown(posEnemy, sizeEnemy, false)) {
+				else if (Player::instance().collisionDown(posEnemy, sizeEnemy, false)) {
 					change_to_shell();
 					bShell = true;
 					bStop = true;
@@ -128,17 +124,17 @@ void Koopa::update(int deltaTime)
 			if (!bStop) { // Koopa en moviment
 				this->move(bLeft);
 				
-				if (mario->collisionLeft(posEnemy, sizeEnemy) || mario->collisionRight(posEnemy, sizeEnemy)) {
-					if (mario->isMarioStar()) {
+				if (Player::instance().collisionLeft(posEnemy, sizeEnemy) || Player::instance().collisionRight(posEnemy, sizeEnemy)) {
+					if (Player::instance().isMarioStar()) {
 						this->die();
 						bDying = true;
 					}
-					else if(!mario->isInvulnerable()){
-						mario->damagePlayer();
+					else if(!Player::instance().isInvulnerable()){
+						Player::instance().damagePlayer();
 					}
 				}
 				printf("Koopa en moviment\n");
-				if (mario->collisionDown(posEnemy, sizeEnemy, false)) {
+				if (Player::instance().collisionDown(posEnemy, sizeEnemy, false)) {
 					bStop = true;
 					sprite->changeAnimation(STOP);
 					return;
@@ -147,11 +143,11 @@ void Koopa::update(int deltaTime)
 			if (bStop) { // Koopa parat
 				printf("Koopa parat\n");
 				
-				if (mario->collisionLeft(posEnemy, sizeEnemy) || mario->collisionRight(posEnemy, sizeEnemy) || mario->collisionDown(posEnemy, sizeEnemy, false)) {
+				if (Player::instance().collisionLeft(posEnemy, sizeEnemy) || Player::instance().collisionRight(posEnemy, sizeEnemy) || Player::instance().collisionDown(posEnemy, sizeEnemy, false)) {
 					bStop = false;
 					sprite->changeAnimation(MOVE);
-					mario->setInvulnerable(true);
-					mario->setInvTime(50);
+					Player::instance().setInvulnerable(true);
+					Player::instance().setInvTime(50);
 				}
 
 			}

@@ -6,14 +6,14 @@
 
 #include "Sprite.h"
 #include "TileMap.h"
-#include "Player.h"
 
 class Item
 {
 public:
+	virtual void init(const glm::ivec2& tileMapPos, ShaderProgram& shaderProgram);
+	virtual void update(int deltaTime);
 	void move(bool direction);
 	void die();
-	void setPlayer(Player* player);
 	void render();
 	bool isVisible();
 
@@ -30,7 +30,6 @@ protected:
 	Texture spritesheet;
 	Sprite* sprite;
 	TileMap* map;
-	Player* mario;
 	ShaderProgram shaderProgram;
 };
 
@@ -51,6 +50,23 @@ public:
 	void init(const glm::ivec2& tileMapPos, ShaderProgram& shaderProgram);
 	void update(int deltaTime);
 
+protected:
+};
+
+class Coin : public Item
+{
+public:
+	void init(const glm::ivec2& tileMapPos, ShaderProgram& shaderProgram);
+	void update(int deltaTime);
+
+protected:
+};
+
+class Flag : public Item
+{
+public:
+	void init(const glm::ivec2& tileMapPos, ShaderProgram& shaderProgram);
+	void update(int deltaTime);
 protected:
 };
 

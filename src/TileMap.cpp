@@ -8,6 +8,24 @@
 
 using namespace std;
 
+enum BlockTypes {
+	BRICK = 1,
+	BRICK_COIN = 2,
+	QUESTION_COIN = 10,
+	QUESTION_MUSHROOM = 11,
+	BRICK_STAR = 12,
+	INVISIBLE_COIN = 18,
+	INVISIBLE_MUSHROOM = 19,
+	BRICK_MUSHROOM = 27,
+	COIN = 24,
+};
+
+enum ItemTypes {
+	MUSHROOM = 1,
+	STAR = 2,
+	COIN_ITEM = 3,
+};
+
 
 TileMap* TileMap::createTileMap(const Json::Value& layerMap, const glm::ivec2& size, ShaderProgram &program)
 {
@@ -56,6 +74,13 @@ bool TileMap::loadLevel(const Json::Value layerMap, const glm::ivec2& mapSize)
 	tilesheet.setWrapT(GL_CLAMP_TO_EDGE);
 	tilesheet.setMinFilter(GL_NEAREST);
 	tilesheet.setMagFilter(GL_NEAREST);
+
+	tilesheetAnim.loadFromFile("res/Textures/AnimTiles.png", TEXTURE_PIXEL_FORMAT_RGBA);
+	tilesheetAnim.setWrapS(GL_CLAMP_TO_EDGE);
+	tilesheetAnim.setWrapT(GL_CLAMP_TO_EDGE);
+	tilesheetAnim.setMinFilter(GL_NEAREST);
+	tilesheetAnim.setMagFilter(GL_NEAREST);
+
 	map = new bool[mapSize.x * mapSize.y];
 
 	for (int i = 0; i < (mapSize.x * mapSize.y); i++)
@@ -66,7 +91,8 @@ bool TileMap::loadLevel(const Json::Value layerMap, const glm::ivec2& mapSize)
 	{
 		glm::ivec2 pos = glm::vec2(block["px"][0].asInt(), block["px"][1].asInt());
 		glm::ivec2 tileTextPos = glm::ivec2(block["src"][0].asInt(), block["src"][1].asInt());
-		blocks.push_back(make_unique<Tile>(tileTextPos, pos));
+		//blocks.push_back(make_unique<Tile>(tileTextPos, pos));
+		createTile(pos, tileTextPos, block["t"].asInt());
 		map[(pos.y / 32) * mapSize.x + (pos.x / 32)] = true;
 	}
 	
@@ -77,7 +103,54 @@ void TileMap::prepareArrays( ShaderProgram& program)
 {
 	for (const auto& block : blocks)
 	{
-		block->init(program, tilesheet);
+		if (typeid(*block) == typeid(BrickTile))
+		{
+			block->init(program, tilesheet);
+		}
+		else if (typeid(*block) == typeid(QuestionTile))
+		{
+			block->init(program, tilesheetAnim);
+		}
+		else
+		{
+			block->init(program, tilesheet);
+		}
+	}
+}
+
+void TileMap::createTile(const glm::ivec2& pos, const glm::ivec2& texPos, int type)
+{
+	switch (type)
+	{
+	case BlockTypes::BRICK:
+		blocks.push_back(make_unique<BrickTile>(texPos, pos));
+		break;
+	case BlockTypes::BRICK_COIN:
+		blocks.push_back(make_unique<BrickTile>(texPos, pos, ItemTypes::COIN_ITEM));
+		break;
+	case BlockTypes::QUESTION_COIN:
+		blocks.push_back(make_unique<QuestionTile>(texPos, pos, ItemTypes::COIN_ITEM));
+		break;
+	case BlockTypes::QUESTION_MUSHROOM:
+		blocks.push_back(make_unique<QuestionTile>(texPos, pos, ItemTypes::MUSHROOM));
+		break;
+	case BlockTypes::BRICK_STAR:
+		blocks.push_back(make_unique<BrickTile>(texPos, pos, ItemTypes::STAR));
+		break;
+	case BlockTypes::INVISIBLE_COIN:
+		blocks.push_back(make_unique<InvisibleTile>(texPos, pos, ItemTypes::COIN_ITEM));
+		break;
+	case BlockTypes::INVISIBLE_MUSHROOM:
+		blocks.push_back(make_unique<InvisibleTile>(texPos, pos, ItemTypes::MUSHROOM));
+		break;
+	case BlockTypes::BRICK_MUSHROOM:
+		blocks.push_back(make_unique<BrickTile>(texPos, pos, ItemTypes::MUSHROOM));
+		break;
+	case BlockTypes::COIN:
+		blocks.push_back(make_unique<CoinTile>(texPos, pos));
+		break;
+	default:
+		blocks.push_back(make_unique<Tile>(texPos, pos));
 	}
 }
 
