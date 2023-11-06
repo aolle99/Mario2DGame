@@ -29,8 +29,6 @@ public:
 
 	void render() const;
 	void free();
-
-	void loadLeveljson(const string filename);
 	
 	int getTileSize() const { return tileSize; }
 	void setLeftBound(float leftBound);

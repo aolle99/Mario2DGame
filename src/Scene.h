@@ -43,7 +43,7 @@ private:
 
 private:
 	TileMap *map;
-	TileMap* mapDecoration;
+	TileMapStatic* mapDecoration;
 	Player *player;
 	vector< std::unique_ptr<Enemy >> enemies;
 	ShaderProgram texProgram;

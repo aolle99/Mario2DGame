@@ -145,7 +145,7 @@ void Scene::buildLevel(const string& levelFile)
 	}
 
 	if (main) map = TileMap::createTileMap(main["gridTiles"], mapSize, texProgram);
-	if (decoration) mapDecoration = TileMap::createTileMap(decoration["gridTiles"], mapSize, texProgram);
+	if (decoration) mapDecoration = TileMapStatic::createTileMap(decoration["gridTiles"], mapSize, texProgram);
 	if (entities) this->createEntities(entities["entityInstances"]);
 
 

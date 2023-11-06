@@ -5,7 +5,9 @@
 #include <glm/glm.hpp>
 #include "Texture.h"
 #include "ShaderProgram.h"
-
+#include <json/json.h>
+#include "Tile.h"
+#include <memory>
 
 // Class Tilemap is capable of loading a tile map from a text file in a very
 // simple format (see level01.txt for an example). With this information
@@ -17,37 +19,31 @@ class TileMapStatic
 {
 
 private:
-	TileMapStatic(const string& levelFile, const glm::vec2& minCoords, ShaderProgram& program);
+	TileMapStatic(const Json::Value& layerMap, const glm::ivec2& size, ShaderProgram& program);
 
 public:
 	// Tile maps can only be created inside an OpenGL context
-	static TileMapStatic* createTileMap(const string& levelFile, const glm::vec2& minCoords, ShaderProgram& program);
+	static TileMapStatic* createTileMap(const Json::Value& layerMap, const glm::ivec2& size, ShaderProgram& program);
 
 	~TileMapStatic();
 
 	void render() const;
 	void free();
 
-	int getTileSize() const { return tileSize; }
-
-	bool collisionMoveLeft(const glm::ivec2& pos, const glm::ivec2& size) const;
-	bool collisionMoveRight(const glm::ivec2& pos, const glm::ivec2& size) const;
-	bool collisionMoveDown(const glm::ivec2& pos, const glm::ivec2& size, int* posY) const;
-
 private:
-	bool loadLevel(const string& levelFile);
-	void prepareArrays(const glm::vec2& minCoords, ShaderProgram& program);
+	bool loadLevel(const Json::Value layerMap, const glm::ivec2& mapSize);
+	void prepareArrays(ShaderProgram& program);
 
 private:
 	GLuint vao;
 	GLuint vbo;
 	GLint posLocation, texCoordLocation;
 	int nTiles;
-	glm::ivec2 position, mapSize, tilesheetSize;
-	int tileSize, blockSize;
+	glm::ivec2 position, tilesheetSize;
+	int blockSize;
 	Texture tilesheet;
 	glm::vec2 tileTexSize;
-	int* map;
+	vector< glm::ivec2> tiles;
 
 };
 
