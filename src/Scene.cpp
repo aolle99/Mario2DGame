@@ -57,9 +57,7 @@ void Scene::init()
 	star->setTileMap(map);
 	star->setPlayer(player);
 
-	if (!text.init("res/Fonts/arial.ttf"))
-		//if(!text.init("fonts/OpenSans-Bold.ttf"))
-		//if(!text.init("fonts/DroidSerif.ttf"))
+	if (!text.init("res/Fonts/main_font.ttf"))
 		cout << "Could not load font!!!" << endl;
 }
 
@@ -102,7 +100,12 @@ void Scene::render()
 	for (auto& enemy : enemies) {
 		if(!enemy->isDead())enemy->render();
 	}
-	text.render("Videogames!!!", glm::vec2(10, SCREEN_HEIGHT - 20), 32, glm::vec4(1, 1, 1, 1));
+	
+	text.render("SCORE: ", glm::vec2(SCREEN_WIDTH / 4 * 0 + 60, 25), 16, glm::vec4(1, 1, 1, 1));
+	text.render("COINS: x", glm::vec2(SCREEN_WIDTH / 4 * 1 + 60, 25), 16, glm::vec4(1, 1, 1, 1));
+	text.render("WORLD: 1-1", glm::vec2(SCREEN_WIDTH / 4 * 2 + 60, 25), 16, glm::vec4(1, 1, 1, 1));
+	text.render("TIME: ", glm::vec2(SCREEN_WIDTH / 4 * 3 + 60, 25), 16, glm::vec4(1, 1, 1, 1));
+
 }
 
 bool Scene::calculateCameraPosition()
