@@ -162,8 +162,13 @@ void Scene::createEntities(const Json::Value entities)
 			player->init(glm::vec2(entity["px"][0].asInt(), entity["px"][1].asInt()), texProgram);
 			player->setTileMap(map);
 			playerStartPos = glm::vec2(entity["px"][0].asInt(), entity["px"][1].asInt());
+			break;
 		}
-		else if (entity["__identifier"].asString() == "Goomba")
+	}
+	for (Json::Value entity : entities)
+	{
+		
+		if (entity["__identifier"].asString() == "Goomba")
 		{
 
 			Goomba *goomba = new Goomba();
