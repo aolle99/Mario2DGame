@@ -22,7 +22,6 @@ void Item::init(const glm::ivec2& tileMapPos, ShaderProgram& shaderProgram)
 	bVisible = true;
 	currentTime = 0;
 	sizeItem = glm::ivec2(32, 32);
-	this->shaderProgram = shaderProgram;
 	
 	spritesheet.loadFromFile("res/textures/items.png", TEXTURE_PIXEL_FORMAT_RGBA);
 	sprite = Sprite::createSprite(sizeItem, glm::vec2(0.125f, 0.125f), &spritesheet, &shaderProgram);
@@ -32,6 +31,7 @@ void Item::init(const glm::ivec2& tileMapPos, ShaderProgram& shaderProgram)
 	sprite->addKeyframe(MOVE, glm::vec2(0.125f * 4, 0.5859f)); 
 
 	sprite->changeAnimation(0);
+	
 	posItem = tileMapPos;
 	sprite->setPosition(posItem);
 
@@ -131,7 +131,6 @@ void Mushroom::init(const glm::ivec2& tileMapPos, ShaderProgram& shaderProgram)
 	bVisible = true;
 	currentTime = 0;
 	sizeItem = glm::ivec2(32, 32);
-	this->shaderProgram = shaderProgram;
 	
 	spritesheet.loadFromFile("res/textures/items.png", TEXTURE_PIXEL_FORMAT_RGBA);
 	sprite = Sprite::createSprite(sizeItem, glm::vec2(0.125f, 0.125f), &spritesheet, &shaderProgram);
@@ -152,7 +151,6 @@ void Star::init(const glm::ivec2& tileMapPos, ShaderProgram& shaderProgram)
 	bVisible = true;
 	currentTime = 0;
 	sizeItem = glm::ivec2(32, 32);
-	this->shaderProgram = shaderProgram;
 
 	spritesheet.loadFromFile("res/textures/items.png", TEXTURE_PIXEL_FORMAT_RGBA);
 	sprite = Sprite::createSprite(sizeItem, glm::vec2(0.1172f, 0.125f), &spritesheet, &shaderProgram);
@@ -172,7 +170,6 @@ void Coin::init(const glm::ivec2& tileMapPos, ShaderProgram& shaderProgram)
 	bVisible = true;
 	currentTime = 0;
 	sizeItem = glm::ivec2(32, 32);
-	this->shaderProgram = shaderProgram;
 
 	spritesheet.loadFromFile("res/textures/items.png", TEXTURE_PIXEL_FORMAT_RGBA);
 	sprite = Sprite::createSprite(sizeItem, glm::vec2(0.125f, 0.125f), &spritesheet, &shaderProgram);
@@ -206,7 +203,6 @@ void Flag::init(const glm::ivec2& tileMapPos, ShaderProgram& shaderProgram)
 	bVisible = true;
 	currentTime = 0;
 	sizeItem = glm::ivec2(32, 32);
-	this->shaderProgram = shaderProgram;
 
 	spritesheet.loadFromFile("res/textures/items.png", TEXTURE_PIXEL_FORMAT_RGBA);
 	sprite = Sprite::createSprite(sizeItem, glm::vec2(0.125f, 0.125f), &spritesheet, &shaderProgram);

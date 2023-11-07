@@ -36,6 +36,8 @@ public:
 
 	glm::ivec2 TileMap::getSize();
 
+	vector<Item*> getItems();
+
 	bool collisionMoveLeft(const glm::ivec2 &pos, const glm::ivec2 &size) const;
 	bool collisionMoveRight(const glm::ivec2 &pos, const glm::ivec2 &size) const;
 	bool collisionMoveDown(const glm::ivec2 &pos, const glm::ivec2 &size, int *posY) const;
@@ -64,8 +66,10 @@ private:
 	Texture tilesheetAnim;
 	glm::vec2 tileTexSize;
 	bool *map;
-	vector< std::unique_ptr<Tile >> blocks;
+	//vector< std::unique_ptr<Tile >> blocks;
+	vector<Tile*> blocks;
 	float leftBound = 0.f;
+	vector<Item*> items;
 };
 
 
