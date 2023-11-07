@@ -5,7 +5,7 @@ void GameManager::init()
 {
 	score = 0;
 	lives = 3;
-	time = 5;
+	time = 100;
 	level = 1;
 	coins = 0;
 	startTime = std::chrono::high_resolution_clock::now();

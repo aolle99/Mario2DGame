@@ -19,50 +19,25 @@ enum EnemyAnims
 
 void Enemy::update(int deltaTime)
 {
-	sprite->update(deltaTime);
 	
-	if (bDying) {
-		sprite->changeAnimation(DIE);
-		currentTime += 1;
-
-		if (currentTime == 20) {
-			bDead = true;
-			currentTime = 0;
-		}
-	}
-	else
-	{
-		this->move(bLeft);
-
-		if (!bDead && !Player::instance().isInvulnerable()) {
-			if (Player::instance().collisionRight(posEnemy, sizeEnemy) || Player::instance().collisionLeft(posEnemy, sizeEnemy)) {
-				if (Player::instance().isMarioStar()) {
-					this->die();
-					bDying = true;
-				}
-				else {
-					Player::instance().damagePlayer();
-				}
-			}
-			else if (Player::instance().collisionDown(posEnemy, sizeEnemy, false)) {
-				this->die();
-				bDying = true;
-			}
-		}
-	}
-	
-
-	sprite->setPosition(posEnemy);
 }
 
-void Enemy::move(bool direction)
+void Enemy::move()
 {
 	posEnemy.y += FALL_STEP;
-	if (!map->collisionMoveDown(posEnemy, sizeEnemy, &posEnemy.y))
-		return;
+	
+	if (this->isModeTurtle()) {
+		glm::vec2 hitbox = glm::vec2(posEnemy.x, posEnemy.y);
+		int aux = 0;
+		//if (bLeft) aux = 35;
+		//else aux = -35;
+		if (!map->collisionMoveDown(posEnemy, sizeEnemy + glm::ivec2(aux, 0), &posEnemy.y)) bLeft = !bLeft;
+	}
+	else if(!map->collisionMoveDown(posEnemy, sizeEnemy, &posEnemy.y)) return;
+		
 
-	if (direction) { // left
-		posEnemy.x += 2;
+	if (bLeft) { // left
+		posEnemy.x += speed;
 		if (map->collisionMoveRight(posEnemy, sizeEnemy))
 		{
 			bLeft = !bLeft;
@@ -70,7 +45,7 @@ void Enemy::move(bool direction)
 
 	}
 	else { // right
-		posEnemy.x -= 2;
+		posEnemy.x -= speed;
 		if (map->collisionMoveLeft(posEnemy, sizeEnemy)) // mira si hi ha colisio a l'esquerra
 		{
 			bLeft = !bLeft;
@@ -88,6 +63,11 @@ void Enemy::render()
 	sprite->render(bLeft);
 }
 
+void Enemy::collisionDeath()
+{
+	
+}
+
 void Enemy::setTileMap(TileMap* tileMap)
 {
 	map = tileMap;
@@ -98,16 +78,53 @@ void Enemy::setPosition(const glm::vec2& pos)
 	sprite->setPosition(pos);
 }
 
+void Enemy::changeDirection()
+{
+	bLeft = !bLeft;
+}
+
 bool Enemy::isDead()
 {
 	return bDead;
+}
+
+bool Enemy::isKoopaShellMove()
+{
+	return false;
+}
+
+bool Enemy::isModeTurtle()
+{
+	return false;
+}
+
+bool Enemy::collisionEnemies(const glm::vec2& pos2, const glm::ivec2& size2)
+{
+	// if collision between enemies	return true
+	if ((posEnemy.x + sizeEnemy.x >= pos2.x && posEnemy.x <= pos2.x + size2.x) && posEnemy.y + sizeEnemy.y >= pos2.y && posEnemy.y <= pos2.y + size2.y) {
+		return true;
+	}
+	return false;
+
+}
+
+glm::ivec2 Enemy::getPosition()
+{
+	return posEnemy;
+}
+
+glm::ivec2 Enemy::getSize()
+{
+	return sizeEnemy;
 }
 
 void Goomba::init(const glm::ivec2& tileMapPos, ShaderProgram& shaderProgram)
 {
 	bDying = false;
 	bDead = false;
+	bSmashed = false;
 	currentTime = 0;
+	speed = 2;
 	sizeEnemy = glm::ivec2(32, 32);
 
 	spritesheet.loadFromFile("res/textures/enemies.png", TEXTURE_PIXEL_FORMAT_RGBA);
@@ -126,12 +143,85 @@ void Goomba::init(const glm::ivec2& tileMapPos, ShaderProgram& shaderProgram)
 	sprite->setPosition(posEnemy);
 }
 
+void Goomba::update(int deltaTime)
+{
+	sprite->update(deltaTime);
+
+	if (bDying) {
+		if (bSmashed) {
+			this->smashedDeath();
+		}
+		else {
+			this->collisionDeath();
+		}
+	}
+	else
+	{
+		this->move();
+
+		if (!bDead && !Player::instance().isInvulnerable()) {
+			if (Player::instance().collisionRight(posEnemy, sizeEnemy) || Player::instance().collisionLeft(posEnemy, sizeEnemy)) {
+				if (Player::instance().isMarioStar()) {
+					bDying = true;
+				}
+				else {
+					Player::instance().damagePlayer();
+				}
+			}
+			else if (Player::instance().collisionDown(posEnemy, sizeEnemy, false)) {
+				bSmashed = true;
+				bDying = true;
+			}
+		}
+	}
+
+	sprite->setPosition(posEnemy);
+}
+
+void Goomba::collisionDeath()
+{
+	bDying = true;
+	if (currentTime <= 10) {
+		posEnemy.y -= 2;
+	}
+
+	if (currentTime > 10) {
+		posEnemy.y += 2;
+	}
+
+	if (posEnemy.y > 518) {
+		bDead = true;
+		bDying = false;
+		currentTime = 0;
+	}
+	currentTime += 1;
+}
+
+bool Koopa::isModeTurtle()
+{
+	if(!bShell) return true;
+	return false;
+}
+
+void Goomba::smashedDeath()
+{
+	sprite->changeAnimation(DIE);
+	currentTime += 1;
+
+	if (currentTime == 20) {
+		bDead = true;
+		currentTime = 0;
+	}
+}
+
 void Koopa::init(const glm::ivec2& tileMapPos, ShaderProgram& shaderProgram)
 {
 	bShell = false;
 	bStop = false;
 	bDying = false;
 	bDead = false;
+	speed = 2;
+	currentTime = 0;
 	this->shaderProgram = shaderProgram;
 	this->change_to_turtle();
 
@@ -140,85 +230,107 @@ void Koopa::init(const glm::ivec2& tileMapPos, ShaderProgram& shaderProgram)
 	sprite->setPosition(posEnemy);
 }
 
+void Koopa::shellMode() {
+	if (!bStop) { // Koopa en moviment
+		this->move();
+
+		if (Player::instance().collisionLeft(posEnemy, sizeEnemy) || Player::instance().collisionRight(posEnemy, sizeEnemy)) {
+			if (Player::instance().isMarioStar()) {
+				bDying = true;
+			}
+			else if (!Player::instance().isInvulnerable()) {
+				Player::instance().damagePlayer();
+			}
+		}
+
+		if (Player::instance().collisionDown(posEnemy, sizeEnemy, false)) {
+			bStop = true;
+			sprite->changeAnimation(STOP);
+			return;
+		}
+	}
+	if (bStop) { // Koopa parat
+
+		if (Player::instance().collisionLeft(posEnemy, sizeEnemy) || Player::instance().collisionRight(posEnemy, sizeEnemy) || Player::instance().collisionDown(posEnemy, sizeEnemy, false)) {
+			bStop = false;
+			sprite->changeAnimation(MOVE);
+			Player::instance().setInvulnerable(true);
+			Player::instance().setInvTime(50);
+		}
+
+	}
+}
+
+void Koopa::turtleMode()
+{
+	move();
+
+	if (!bDead && !Player::instance().isInvulnerable()) {
+		if (Player::instance().collisionRight(posEnemy, sizeEnemy) || Player::instance().collisionLeft(posEnemy, sizeEnemy)) {
+			if (Player::instance().isMarioStar()) {
+				bDying = true;
+			}
+			else {
+				Player::instance().damagePlayer();
+			}
+		}
+		else if (Player::instance().collisionDown(posEnemy, sizeEnemy, false)) {
+			change_to_shell();
+			bShell = true;
+			bStop = true;
+			sprite->changeAnimation(STOP);
+		}
+	}
+}
+
 void Koopa::update(int deltaTime)
 {
 	sprite->update(deltaTime);
 
 	if (bDying) { // Koopa morint
-		sprite->changeAnimation(DIE);
-		currentTime += 1;
-
-		if (currentTime == 10) {
-			bDead = true;
-			currentTime = 0;
-		}
+		collisionDeath();
 	}
 	else {
 		if (!bShell) { // Koopa en modo tortuga
-			move(bLeft);
-
-			if (!bDead && !Player::instance().isInvulnerable()) {
-				if (Player::instance().collisionRight(posEnemy, sizeEnemy) || Player::instance().collisionLeft(posEnemy, sizeEnemy)) {
-					if (Player::instance().isMarioStar()) {
-						this->die();
-						bDying = true;
-					}
-					else {
-						Player::instance().damagePlayer();
-					}
-				}
-				else if (Player::instance().collisionDown(posEnemy, sizeEnemy, false)) {
-					change_to_shell();
-					bShell = true;
-					bStop = true;
-					sprite->changeAnimation(STOP);
-				}
-			}
+			this->turtleMode();
 		}
 
 		else { // Koopa en modo caparazon
 
-			if (!bStop) { // Koopa en moviment
-				this->move(bLeft);
-
-				if (Player::instance().collisionLeft(posEnemy, sizeEnemy) || Player::instance().collisionRight(posEnemy, sizeEnemy)) {
-					if (Player::instance().isMarioStar()) {
-						this->die();
-						bDying = true;
-					}
-					else if (!Player::instance().isInvulnerable()) {
-						Player::instance().damagePlayer();
-					}
-				}
-				printf("Koopa en moviment\n");
-				if (Player::instance().collisionDown(posEnemy, sizeEnemy, false)) {
-					bStop = true;
-					sprite->changeAnimation(STOP);
-					return;
-				}
-			}
-			if (bStop) { // Koopa parat
-				printf("Koopa parat\n");
-
-				if (Player::instance().collisionLeft(posEnemy, sizeEnemy) || Player::instance().collisionRight(posEnemy, sizeEnemy) || Player::instance().collisionDown(posEnemy, sizeEnemy, false)) {
-					bStop = false;
-					sprite->changeAnimation(MOVE);
-					Player::instance().setInvulnerable(true);
-					Player::instance().setInvTime(50);
-				}
-
-			}
-
-
+			this->shellMode();
 		}
 	}
 
 	sprite->setPosition(posEnemy);
 }
 
+void Koopa::collisionDeath()
+{
+	sprite->changeAnimation(DIE);
+	bStop = true;
+	bDying = true;
+
+	if (currentTime <= 10) {
+		posEnemy.y -= 2;
+	}
+
+	if (currentTime > 10) {
+		posEnemy.y += 2;
+
+	}
+
+	if (posEnemy.y > 518) {
+		bDead = true;
+		bDying = false;
+		currentTime = 0;
+	}
+	currentTime += 1;
+}
+
 void Koopa::change_to_shell() {
 	sizeEnemy = glm::vec2(32, 32);
 	posEnemy.y += 16;
+	speed = 4;
 
 	spritesheet.loadFromFile("res/textures/enemies.png", TEXTURE_PIXEL_FORMAT_RGBA);
 	sprite = Sprite::createSprite(sizeEnemy, glm::vec2(0.0625f, 0.125f), &spritesheet, &shaderProgram);
@@ -240,6 +352,7 @@ void Koopa::change_to_shell() {
 void Koopa::change_to_turtle() {
 	sizeEnemy = glm::vec2(32, 48);
 	posEnemy.y -= 16;
+	speed = 2;
 
 	spritesheet.loadFromFile("res/textures/enemies.png", TEXTURE_PIXEL_FORMAT_RGBA);
 	sprite = Sprite::createSprite(sizeEnemy, glm::vec2(0.0625f, 0.1875f), &spritesheet, &shaderProgram);
@@ -250,5 +363,11 @@ void Koopa::change_to_turtle() {
 	sprite->addKeyframe(MOVE, glm::vec2(0.0625f * 1, 0.125f));
 
 	sprite->setAnimationSpeed(DIE, 8);
-	sprite->addKeyframe(DIE, glm::vec2(0.0625f * 6, 0.125f));
+	sprite->addKeyframe(DIE, glm::vec2(0.0625f * 2, 0.125f));
+}
+
+bool Koopa::isKoopaShellMove()
+{
+	if(bShell && !bStop) return true;
+	return false;
 }

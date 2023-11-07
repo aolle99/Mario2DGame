@@ -41,6 +41,8 @@ public:
 	void resume();
 	void restart();
 
+	vector< std::unique_ptr<Enemy>>* getEnemies();
+
 	
 private:
 	void initShaders();

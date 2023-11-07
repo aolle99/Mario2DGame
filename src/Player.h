@@ -29,6 +29,7 @@ public:
 	void bend();
 	void run();
 	bool checkJumping();
+	void marioDying();
 	void update(int deltaTime);
 	void render();
 	

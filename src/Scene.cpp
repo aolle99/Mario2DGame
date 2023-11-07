@@ -84,6 +84,26 @@ void Scene::update(int deltaTime)
 
 		for (auto& enemy : enemies) {
 			enemy->update(deltaTime);
+			if (enemy->isKoopaShellMove()) {
+				for (auto& enemy2 : enemies) {
+					if (enemy != enemy2) {
+						if (enemy->collisionEnemies(enemy2->getPosition(), enemy2->getSize())) enemy2->collisionDeath();
+					}
+				}
+			}
+			else if (enemy->isModeTurtle()) {
+				for (auto& enemy2 : enemies) {
+					if (enemy != enemy2) {
+						if (enemy2->isModeTurtle()) {
+							if (enemy->collisionEnemies(enemy2->getPosition(), enemy2->getSize())) {
+								enemy->changeDirection();
+								enemy2->changeDirection();
+							}
+						}
+					}
+				}
+			}
+			
 		}
 	}
 }
@@ -271,6 +291,11 @@ void Scene::resume()
 
 void Scene::restart()
 {
+}
+
+vector<std::unique_ptr<Enemy>>* Scene::getEnemies()
+{
+	return &enemies;
 }
 
 void Scene::initShaders()

@@ -5,6 +5,7 @@
 #include "Player.h"
 #include "Game.h"
 #include <cmath>
+#include "GameManager.h"
 
 #define JUMP_ANGLE_STEP 4.f
 #define FALL_STEP 8
@@ -203,6 +204,27 @@ bool Player::checkJumping()
 	return false;
 }
 
+void Player::marioDying() {
+	sprite->changeAnimation(DIE);
+
+	if (currentTime <= 10) {
+		posPlayer.y -= 2;
+	}
+
+	if (currentTime > 10) {
+		posPlayer.y += 2;
+
+	}
+
+	if (posPlayer.y > 518) {
+		bDead = true;
+		bDying = false;
+		GameManager::instance().substractLive(true);
+		currentTime = 0;
+	}
+	currentTime += 1;
+}
+
 void Player::update(int deltaTime)
 {
 	sprite->update(deltaTime);
@@ -215,24 +237,7 @@ void Player::update(int deltaTime)
 	}
 
 	if (bDying) {
-		
-		sprite->changeAnimation(DIE);
-
-		if (currentTime <= 10) {
-			posPlayer.y -= 2;
-		}
-
-		if (currentTime > 10) {
-			posPlayer.y += 2;
-			
-		}	
-
-		if (posPlayer.y > 518) {
-			bDead = true;
-			bDying = false;
-			currentTime = 0;
-		}
-		currentTime += 1;
+		this->marioDying();
 	}
 	else {
 		int textureChanged = 3;
@@ -291,6 +296,7 @@ void Player::update(int deltaTime)
 	if (!bDying && posPlayer.y + 32 >= 511  && posPlayer.y + 32  <= 513) {
 		bDying = true;
 		this->die();
+		GameManager::instance().substractLive(true);
 	}
 
 	sprite->setPosition(posPlayer);

@@ -9,7 +9,7 @@ void Game::init()
 	bExit = false;
 	glClearColor(0.5f, 0.7686f, 1.f, 1.0f);
 	SoundManager::instance().init();
-	currentScreen = "load_level";
+	currentScreen = "game";
 	mainMenu.init("main_menu");
 	instructions.init("instructions");
 	loadLevel.init("load_level");
