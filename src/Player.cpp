@@ -260,7 +260,7 @@ void Player::update(int deltaTime)
 		else if (Game::instance().getSpecialKey(GLUT_KEY_RIGHT)) this->move(true);
 		else textureChanged -= 1;
 
-		if (Game::instance().getKey(32)) this->jump();
+		if (Game::instance().getKey(32) || Game::instance().getSpecialKey(GLUT_KEY_UP)) this->jump();
 		else if (Game::instance().getSpecialKey(GLUT_KEY_DOWN)) this->bend();
 		else if (Game::instance().getSpecialKey(112)) this->run();
 		else {
@@ -414,6 +414,11 @@ bool Player::isMarioStar() {
 	return star > 0;
 }
 
+bool Player::isSuperMario()
+{
+	return hp == 2;
+}
+
 bool Player::isInvulnerable()
 {
 	return bInvulnerable;
@@ -436,6 +441,10 @@ void Player::setInvulnerable(bool invulnerable)
 void Player::setInvTime(int time)
 {
 	invTime = time;
+}
+
+void Player::removeCollisionBlock(int x, int y) {
+		map->removeCollisionBlock(x, y);
 }
 
 

@@ -16,6 +16,7 @@ public:
 	void die();
 	void render();
 	bool isVisible();
+	void show();
 
 	void setTileMap(TileMap* tileMap);
 	void setPosition(const glm::vec2& pos);

@@ -57,6 +57,8 @@ public:
 
 	bool isMarioStar();
 
+	bool isSuperMario();
+
 	bool isInvulnerable();
 
 	int getHp();
@@ -66,6 +68,8 @@ public:
 	void setInvulnerable(bool invulnerable);
 
 	void setInvTime(int time);
+
+	void removeCollisionBlock(int x, int y);
 	
 private:
 	Player() {};

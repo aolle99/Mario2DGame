@@ -20,18 +20,13 @@ public:
 	virtual void render();
 
 	virtual Item* getItem();
+	virtual void setAnimatedTileSheet(Texture& tilesheetAnim) {};
 
 	void free();
 
 	void setPosition(const glm::vec2 &pos);
 
-	bool collisionDown(const glm::ivec2& pos, const glm::ivec2& size, int object_type);
-
-	bool collisionUp(const glm::ivec2& object_pos, const glm::ivec2& object_size, int object_type);
-
-	bool collisionLeft(const glm::ivec2& object_pos, const glm::ivec2& object_size, int object_type);
-
-	bool collisionRight(const glm::ivec2& object_pos, const glm::ivec2& object_size, int object_type);
+	bool collisionDown();
 
 protected:
 	GLuint vao;
@@ -52,56 +47,46 @@ public:
 	virtual void update(int deltaTime);
 	virtual void render();
 
-	Item* getItem();
+	void destroy();
 
-	bool collisionDown();
+	virtual Item* getItem();
+
 private:
 	Item* item;
+	bool bJumping;
+	float startY;
+	bool bDestroyed;
 };
 
 class QuestionTile : public Tile
 {
 public:
-	QuestionTile(const glm::ivec2& tileMapPos, const glm::vec2 pos, int item = 0);
+	QuestionTile(const glm::ivec2& tileMapPos, const glm::vec2 pos, Texture& tilesheetAnim, int item = 0 );
 
 	virtual void init(ShaderProgram& shaderProgram, Texture& tilesheet);
 	virtual void update(int deltaTime);
 	virtual void render();
-
-	bool collisionDown();
+	Item* getItem();
 private:
 	Item* item;
 	Sprite* sprite;
-};
-
-class CoinTile : public Tile
-{
-public:
-	CoinTile(const glm::ivec2& tileMapPos, const glm::vec2 pos);
-
-	virtual void init(ShaderProgram& shaderProgram, Texture& tilesheet);
-	virtual void update(int deltaTime);
-	virtual void render();
-
-	bool collision();
-
-private:
-	Sprite* sprite;
+	bool bUsed;
+	Texture tilesheetAnim;
 };
 
 class InvisibleTile : public Tile
 {
 public:
 	InvisibleTile(const glm::ivec2& tileMapPos, const glm::vec2 pos, int item);
-
 	virtual void init(ShaderProgram& shaderProgram, Texture& tilesheet);
 	virtual void update(int deltaTime);
 	virtual void render();
 
-	bool collisionDown();
+	Item* getItem();
 
 private:
 	Item* item;
+	bool bUsed;
 };
 
 #endif // _PLAYER_INCLUDE

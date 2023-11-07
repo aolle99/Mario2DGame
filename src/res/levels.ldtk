@@ -11,7 +11,7 @@
 	"iid": "4ba4dd90-6280-11ee-81f7-512cdb3a57b7",
 	"jsonVersion": "1.4.1",
 	"appBuildId": 471015,
-	"nextUid": 18,
+	"nextUid": 20,
 	"identifierStyle": "Capitalize",
 	"toc": [],
 	"worldLayout": "Free",
@@ -69,6 +69,37 @@
 			"autoRuleGroups": [],
 			"autoSourceLayerDefUid": null,
 			"tilesetDefUid": null,
+			"tilePivotX": 0,
+			"tilePivotY": 0
+		},
+		{
+			"__type": "Tiles",
+			"identifier": "Items",
+			"type": "Tiles",
+			"uid": 18,
+			"doc": null,
+			"uiColor": null,
+			"gridSize": 32,
+			"guideGridWid": 0,
+			"guideGridHei": 0,
+			"displayOpacity": 1,
+			"inactiveOpacity": 1,
+			"hideInList": false,
+			"hideFieldsWhenInactive": false,
+			"canSelectWhenInactive": true,
+			"renderInWorldView": true,
+			"pxOffsetX": 0,
+			"pxOffsetY": 0,
+			"parallaxFactorX": 0,
+			"parallaxFactorY": 0,
+			"parallaxScaling": true,
+			"requiredTags": [],
+			"excludedTags": [],
+			"intGridValues": [],
+			"intGridValuesGroups": [],
+			"autoRuleGroups": [],
+			"autoSourceLayerDefUid": null,
+			"tilesetDefUid": 19,
 			"tilePivotX": 0,
 			"tilePivotY": 0
 		},
@@ -257,7 +288,7 @@
 			"savedSelections": [],
 			"cachedPixelData": {
 				"opaqueTiles": "11110100111000000100100000000000000000000000000001000010010000100101000011110100001000000000000000000000000000000000000000000000",
-				"averageColors": "fd87fb53fb64fc86ed95fd84ed837b86f731f998fca6fca5fc75cdb8fbb7f996fca6f8766d987a98fb76beb9dcc8d9960000fb867cb9fb75f996d996fbb7e778dbbada57f7970000fbb7dcc7fcb7c677c8b2c7a23ddeceee3dde5a863681bb75e7a1f7ad0abc4dde1bcc9691f7a196915a64f16c38b2c8c138b16b99f7a063bbcb74fb64cb74f52106e244c193b13370f842fb53f842f211a4b1f4c1a4b137b03665dc41fc00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000"
+				"averageColors": "fd87fb53fb64fc86ed95fd84ed837b86f731f998fca6fca5fc75cdb8fbb7f996fca6f8766d987a98fb76beb9dcc8d9967ea4fb867cb9fb75f996d996fbb7e778dbbada57f7970000fbb7dcc7fcb7c677c8b2c7a23ddeceee3dde5a863681bb75e7a1f7ad0abc4dde1bcc9691f7a196915a64f16c38b2c8c138b16b99f7a063bbcb74fb64cb74f52106e244c193b13370f842fb53f842f211a4b1f4c1a4b137b03665dc41fc00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000"
 			}
 		},
 		{
@@ -303,6 +334,28 @@
 				"opaqueTiles": "0000000000000000000000000000000000000000000000000000000000000000",
 				"averageColors": "5da72d863d9700000000000000000000000000000000000000000000000000009955995599558955b966b9663744986669558966596648555966696500000000d856c856a856c8569855b856d866b845b855a845b85688668856886700000000995698559855a8569856c856b9669845a845a856885598560000000000000000"
 			}
+		},
+		{
+			"__cWid": 8,
+			"__cHei": 8,
+			"identifier": "Items",
+			"uid": 19,
+			"relPath": "Textures/Items.png",
+			"embedAtlas": null,
+			"pxWid": 256,
+			"pxHei": 256,
+			"tileGridSize": 32,
+			"spacing": 0,
+			"padding": 0,
+			"tags": [],
+			"tagsSourceEnumUid": null,
+			"enumTags": [],
+			"customData": [],
+			"savedSelections": [],
+			"cachedPixelData": {
+				"opaqueTiles": "0000000000000000000000000000000000000000000000000000000000000000",
+				"averageColors": "4ea17ea44ea12e910000000000000000dca9ecaaecaaecaabd97b8b900007b65d9b6d9b6d9b6d9b6000000000000d9779964bb97bba8baa98c948a97899900002fd62fc53fc73fd83fd70fd20fd20000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000"
+			}
 		}
 	], "enums": [], "externalEnums": [], "levelFields": [] },
 	"levels": [
@@ -323,7 +376,7 @@
 			"bgPivotX": 0,
 			"bgPivotY": 0,
 			"__smartColor": "#ADADB5",
-			"__bgPos": { "topLeftPx": [0,0], "scale": [6.05,6.05], "cropRect": [0,0,1280,84.62809917355372] },
+			"__bgPos": null,
 			"externalRelPath": "levels/Level_0.ldtkl",
 			"fieldInstances": [],
 			"layerInstances": null,

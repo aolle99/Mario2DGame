@@ -87,8 +87,23 @@ void Tile::free()
 	glDeleteBuffers(1, &vbo);
 }
 
+bool Tile::collisionDown()
+{
+	glm::vec2 posMario = Player::instance().getPosition();
+	float marioX = posMario.x + 16;
+	if (marioX > position.x && marioX < position.x + 32 && posMario.y > position.y && posMario.y < position.y + 32) {
+		return true;
+	}
+
+	return false;
+}
+
+
+
 // --------------BLOCK TILE----------------
 BrickTile::BrickTile(const glm::ivec2& tileMapPos, const glm::vec2 pos, int item) : Tile(glm::ivec2(32,0), pos) {
+	bDestroyed = false;
+
 	switch (item)
 	{
 	case 1: // mushroom
@@ -110,38 +125,55 @@ BrickTile::BrickTile(const glm::ivec2& tileMapPos, const glm::vec2 pos, int item
 void BrickTile::init(ShaderProgram& shaderProgram, Texture& tilesheet)
 {
 	Tile::init(shaderProgram, tilesheet);
-	if (item != nullptr) item->init(position, shaderProgram);
+	if (item != nullptr) item->init(position-glm::vec2(0,32), shaderProgram);
 }
 
 void BrickTile::update(int deltaTime)
 {
+	if (!bDestroyed) {
+		if (collisionDown()) {
+			if (item != nullptr) {
+				item->show();
+			}
+			if (Player::instance().isSuperMario()) {
+				destroy();
+			}
+			else {
+				//jump
+				if (!bJumping) {
+					bJumping = true;
+					startY = position.y;
+				}
+			}
+		}
+	}
 }
 
 void BrickTile::render()
 {
-	Tile::render();
+	if(!bDestroyed) Tile::render();
+}
+
+void BrickTile::destroy() {
+	if (item == nullptr) {
+		Player::instance().removeCollisionBlock(position.x, position.y);
+		bDestroyed = true;
+	}
+	else {
+		texturePos = glm::ivec2(96, 0);
+		Tile::init(*shaderProgram, tilesheet);
+	}
 }
 
 Item* BrickTile::getItem() {
 	return item;
 }
 
-bool BrickTile::collisionDown() {
-	glm::vec2 posMario = Player::instance().getPosition();
-
-	if (posMario.x + 32 > position.x && posMario.x < position.x + 32 && posMario.y + 32 > position.y && posMario.y < position.y + 32) {
-		if (item != NULL) {
-			//item->setActive(true);
-			item->setPosition(glm::vec2(position.x, position.y - 32));
-		}
-		return true;
-	}
-
-	return false;
-}
-
 // --------------QUESTION TILE----------------
-QuestionTile::QuestionTile(const glm::ivec2& tileMapPos, const glm::vec2 pos, int item) : Tile(glm::ivec2(0, 0), pos) {
+QuestionTile::QuestionTile(const glm::ivec2& tileMapPos, const glm::vec2 pos, Texture& tilesheetAnim, int item) : Tile(glm::ivec2(0, 0), pos)
+{
+	bUsed = false;
+	this->tilesheetAnim = tilesheetAnim;
 	switch (item)
 	{
 	case 1: // mushroom
@@ -163,11 +195,11 @@ enum QuestionTileAnims
 
 void QuestionTile::init(ShaderProgram& shaderProgram, Texture& tilesheet)
 {
-
+	this->shaderProgram = &shaderProgram;
 	this->tilesheet = tilesheet;
-	sprite = Sprite::createSprite(glm::vec2(32,32), glm::vec2(0.25f, 0.125f), &tilesheet, &shaderProgram);
-	sprite->setNumberAnimations(1);
-	sprite->setAnimationSpeed(ROTATE, 7);
+	sprite = Sprite::createSprite(glm::vec2(32,32), glm::vec2(0.25f, 0.125f), &tilesheetAnim, &shaderProgram);
+	sprite->setNumberAnimations(4);
+	sprite->setAnimationSpeed(ROTATE, 2);
 	sprite->addKeyframe(ROTATE, glm::vec2(0.25f * 0, 0.f));
 	sprite->addKeyframe(ROTATE, glm::vec2(0.25f * 1, 0.f));
 	sprite->addKeyframe(ROTATE, glm::vec2(0.25f * 2, 0.f));
@@ -176,85 +208,79 @@ void QuestionTile::init(ShaderProgram& shaderProgram, Texture& tilesheet)
 	sprite->changeAnimation(0);
 	sprite->setPosition(position);
 
-	if (item != NULL) item->init(position, shaderProgram);
+	if (item != nullptr) item->init(position - glm::vec2(0, 32), shaderProgram);
 }
 
 void QuestionTile::update(int deltaTime)
 {
-	
+	if (!bUsed) {
+		sprite->update(deltaTime);
+		if (collisionDown()) {
+
+			bUsed = true;
+			texturePos = glm::ivec2(96, 0);
+			Tile::init(*shaderProgram, tilesheet);
+			if (item != nullptr) {
+				item->show();
+			}
+
+		}
+	}
 }
 
 void QuestionTile::render()
 {
-	sprite->render();
-}
-
-bool QuestionTile::collisionDown() {
-	glm::vec2 posMario = Player::instance().getPosition();
-
-	if (posMario.x + 32 > position.x && posMario.x < position.x + 32 && posMario.y + 32 > position.y && posMario.y < position.y + 32) {
-		if (item != NULL) {
-			//item->setActive(true);
-			item->setPosition(glm::vec2(position.x, position.y - 32));
-		}
-		return true;
+	if(!bUsed) sprite->render();
+	else {
+		Tile::render();
 	}
-
-	return false;
 }
 
-// --------------COIN TILE----------------
-CoinTile::CoinTile(const glm::ivec2& tileMapPos, const glm::vec2 pos) : Tile(glm::ivec2(64, 0), pos) {}
-
-void CoinTile::init(ShaderProgram& shaderProgram, Texture& tilesheet)
-{
-	Tile::init(shaderProgram, tilesheet);
-}
-
-void CoinTile::update(int deltaTime)
-{
-}
-
-void CoinTile::render()
-{
-	Tile::render();
-}
-
-bool CoinTile::collision() {
-	glm::vec2 posMario = Player::instance().getPosition();
-
-	if (posMario.x + 32 > position.x && posMario.x < position.x + 32 && posMario.y + 32 > position.y && posMario.y < position.y + 32) {
-		return true;
-	}
-	return false;
-
+Item* QuestionTile::getItem() {
+	return item;
 }
 
 // --------------InvisibleTile----------------
-InvisibleTile::InvisibleTile(const glm::ivec2& tileMapPos, const glm::vec2 pos, int item) : Tile(glm::ivec2(96, 0), pos) {}
+InvisibleTile::InvisibleTile(const glm::ivec2& tileMapPos, const glm::vec2 pos, int item) : Tile(glm::ivec2(96, 0), pos) {
+	bUsed = false;
+	switch (item)
+	{
+	case 1: // mushroom
+		this->item = new Mushroom();
+		break;
+	case 2: // Star
+		this->item = new Star();
+		break;
+	case 3: // Coin
+		this->item = new Coin();
+		break;
+	}
+}
 
 void InvisibleTile::init(ShaderProgram& shaderProgram, Texture& tilesheet)
 {
 	Tile::init(shaderProgram, tilesheet);
+	if (item != nullptr) item->init(position - glm::vec2(0, 32), shaderProgram);
 }
 
 void InvisibleTile::update(int deltaTime)
 {
+	if (!bUsed) {
+		if (collisionDown()) {
+			if (item != nullptr) {
+				item->show();
+			}
+			bUsed = true;
+		}
+	}
 }
 
 void InvisibleTile::render()
 {
-	Tile::render();
+	if(bUsed) Tile::render();
 }
 
-bool InvisibleTile::collisionDown() {
-	glm::vec2 posMario = Player::instance().getPosition();
-
-	if (posMario.x + 32 > position.x && posMario.x < position.x + 32 && posMario.y + 32 > position.y && posMario.y < position.y + 32) {
-		return true;
-	}
-	return false;
-
+Item* InvisibleTile::getItem() {
+	return item;
 }
-
 
