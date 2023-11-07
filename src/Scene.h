@@ -34,6 +34,7 @@ public:
 	void buildLevel(const string& levelFile);
 
 	void createEntities(const Json::Value entities);
+	void keyReleased(int key);
 
 	void quit();
 	void pause();
@@ -45,7 +46,8 @@ private:
 	void initShaders();
 
 private:
-	bool bPlay;                       
+	bool bPlay; 
+	bool bGameOver;
 	TileMap *map;
 	TileMapStatic* mapDecoration;
 	vector< std::unique_ptr<Enemy >> enemies;

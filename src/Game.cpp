@@ -9,7 +9,7 @@ void Game::init()
 	bExit = false;
 	glClearColor(0.5f, 0.7686f, 1.f, 1.0f);
 	SoundManager::instance().init();
-	currentScreen = "main_menu";
+	currentScreen = "load_level";
 	mainMenu.init("main_menu");
 	instructions.init("instructions");
 	loadLevel.init("load_level");
@@ -73,17 +73,9 @@ void Game::keyPressed(int key)
 void Game::keyReleased(int key)
 {
 	if (currentScreen == "game") {
-		if (key == 80 || key == 112) { // P or p
-			//scene.pause()
-		}
-		else if (key == 82 || key == 114) {
-			//scene.restart()
-		}
-		else if (key == 81 || key == 113) {
-			scene.quit();
-		}
-		keys[key] = false;
+		scene.keyReleased(key);
 	}
+	
 }
 
 void Game::specialKeyPressed(int key)

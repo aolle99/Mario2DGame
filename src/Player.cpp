@@ -206,8 +206,7 @@ bool Player::checkJumping()
 void Player::update(int deltaTime)
 {
 	sprite->update(deltaTime);
-	currentTime += deltaTime;
-
+	
 	if (bInvulnerable) {
 		invTime -= 1;
 		if (invTime == 0) {
@@ -216,12 +215,24 @@ void Player::update(int deltaTime)
 	}
 
 	if (bDying) {
+		
 		sprite->changeAnimation(DIE);
 
+		if (currentTime <= 10) {
+			posPlayer.y -= 2;
+		}
+
 		if (currentTime > 10) {
-			posPlayer.y += 1;
-			currentTime = 0;
+			posPlayer.y += 2;
+			
 		}	
+
+		if (posPlayer.y > 518) {
+			bDead = true;
+			bDying = false;
+			currentTime = 0;
+		}
+		currentTime += 1;
 	}
 	else {
 		int textureChanged = 3;
@@ -275,9 +286,12 @@ void Player::update(int deltaTime)
 		}
 
 		if (!textureChanged) sprite->changeAnimation(STAND);
-
-		
 	}	
+
+	if (!bDying && posPlayer.y + 32 >= 511  && posPlayer.y + 32  <= 513) {
+		bDying = true;
+		this->die();
+	}
 
 	sprite->setPosition(posPlayer);
 }

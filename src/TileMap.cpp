@@ -130,12 +130,13 @@ void TileMap::createTile(const glm::ivec2& pos, const glm::ivec2& texPos, int ty
 	case BlockTypes::BRICK_COIN:
 		blocks.push_back(new BrickTile(texPos, pos, ItemTypes::COIN_ITEM));
 		break;
+		/*
 	case BlockTypes::QUESTION_COIN:
 		blocks.push_back(new QuestionTile(texPos, pos, ItemTypes::COIN_ITEM));
 		break;
 	case BlockTypes::QUESTION_MUSHROOM:
 		blocks.push_back(new QuestionTile(texPos, pos, ItemTypes::MUSHROOM));
-		break;
+		break;*/
 	case BlockTypes::BRICK_STAR:
 		blocks.push_back(new BrickTile(texPos, pos, ItemTypes::STAR));
 		break;

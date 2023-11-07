@@ -16,34 +16,6 @@ enum EnemyAnims
 	MOVE, DIE, STOP
 };
 
-void Enemy::move(bool direction)
-{
-	posEnemy.y += FALL_STEP;
-	if (!map->collisionMoveDown(posEnemy, sizeEnemy, &posEnemy.y))
-		return;
-	
-	if (direction) { // left
-		posEnemy.x += 2;
-		if (map->collisionMoveRight(posEnemy, sizeEnemy))
-		{
-			bLeft = !bLeft;
-		}
-
-	}
-	else { // right
-		posEnemy.x -= 2;
-		if (map->collisionMoveLeft(posEnemy, sizeEnemy)) // mira si hi ha colisio a l'esquerra
-		{
-			bLeft = !bLeft;
-		}
-	}
-}
-
-void Enemy::die()
-{
-	sprite->changeAnimation(DIE);
-}
-
 
 void Enemy::update(int deltaTime)
 {
@@ -83,80 +55,32 @@ void Enemy::update(int deltaTime)
 	sprite->setPosition(posEnemy);
 }
 
-void Koopa::update(int deltaTime)
+void Enemy::move(bool direction)
 {
-	sprite->update(deltaTime);	
-	
-	if (bDying) { // Koopa morint
-		sprite->changeAnimation(DIE);
-		currentTime += 1;
+	posEnemy.y += FALL_STEP;
+	if (!map->collisionMoveDown(posEnemy, sizeEnemy, &posEnemy.y))
+		return;
 
-		if (currentTime == 10) {
-			bDead = true;
-			currentTime = 0;
+	if (direction) { // left
+		posEnemy.x += 2;
+		if (map->collisionMoveRight(posEnemy, sizeEnemy))
+		{
+			bLeft = !bLeft;
+		}
+
+	}
+	else { // right
+		posEnemy.x -= 2;
+		if (map->collisionMoveLeft(posEnemy, sizeEnemy)) // mira si hi ha colisio a l'esquerra
+		{
+			bLeft = !bLeft;
 		}
 	}
-	else { 
-		if (!bShell) { // Koopa en modo tortuga
-			move(bLeft);
+}
 
-			if (!bDead && !Player::instance().isInvulnerable()) {
-				if (Player::instance().collisionRight(posEnemy, sizeEnemy) || Player::instance().collisionLeft(posEnemy, sizeEnemy)) {
-					if (Player::instance().isMarioStar()) {
-						this->die();
-						bDying = true;
-					}
-					else {
-						Player::instance().damagePlayer();
-					}
-				}
-				else if (Player::instance().collisionDown(posEnemy, sizeEnemy, false)) {
-					change_to_shell();
-					bShell = true;
-					bStop = true;
-					sprite->changeAnimation(STOP);
-				}
-			}
-		}
-		
-		else { // Koopa en modo caparazon
-			
-			if (!bStop) { // Koopa en moviment
-				this->move(bLeft);
-				
-				if (Player::instance().collisionLeft(posEnemy, sizeEnemy) || Player::instance().collisionRight(posEnemy, sizeEnemy)) {
-					if (Player::instance().isMarioStar()) {
-						this->die();
-						bDying = true;
-					}
-					else if(!Player::instance().isInvulnerable()){
-						Player::instance().damagePlayer();
-					}
-				}
-				printf("Koopa en moviment\n");
-				if (Player::instance().collisionDown(posEnemy, sizeEnemy, false)) {
-					bStop = true;
-					sprite->changeAnimation(STOP);
-					return;
-				}
-			}
-			if (bStop) { // Koopa parat
-				printf("Koopa parat\n");
-				
-				if (Player::instance().collisionLeft(posEnemy, sizeEnemy) || Player::instance().collisionRight(posEnemy, sizeEnemy) || Player::instance().collisionDown(posEnemy, sizeEnemy, false)) {
-					bStop = false;
-					sprite->changeAnimation(MOVE);
-					Player::instance().setInvulnerable(true);
-					Player::instance().setInvTime(50);
-				}
-
-			}
-			
-
-		}
-	}
-	
-	sprite->setPosition(posEnemy);
+void Enemy::die()
+{
+	sprite->changeAnimation(DIE);
 }
 
 void Enemy::render()
@@ -213,6 +137,82 @@ void Koopa::init(const glm::ivec2& tileMapPos, ShaderProgram& shaderProgram)
 
 	sprite->changeAnimation(0);
 	posEnemy = tileMapPos;
+	sprite->setPosition(posEnemy);
+}
+
+void Koopa::update(int deltaTime)
+{
+	sprite->update(deltaTime);
+
+	if (bDying) { // Koopa morint
+		sprite->changeAnimation(DIE);
+		currentTime += 1;
+
+		if (currentTime == 10) {
+			bDead = true;
+			currentTime = 0;
+		}
+	}
+	else {
+		if (!bShell) { // Koopa en modo tortuga
+			move(bLeft);
+
+			if (!bDead && !Player::instance().isInvulnerable()) {
+				if (Player::instance().collisionRight(posEnemy, sizeEnemy) || Player::instance().collisionLeft(posEnemy, sizeEnemy)) {
+					if (Player::instance().isMarioStar()) {
+						this->die();
+						bDying = true;
+					}
+					else {
+						Player::instance().damagePlayer();
+					}
+				}
+				else if (Player::instance().collisionDown(posEnemy, sizeEnemy, false)) {
+					change_to_shell();
+					bShell = true;
+					bStop = true;
+					sprite->changeAnimation(STOP);
+				}
+			}
+		}
+
+		else { // Koopa en modo caparazon
+
+			if (!bStop) { // Koopa en moviment
+				this->move(bLeft);
+
+				if (Player::instance().collisionLeft(posEnemy, sizeEnemy) || Player::instance().collisionRight(posEnemy, sizeEnemy)) {
+					if (Player::instance().isMarioStar()) {
+						this->die();
+						bDying = true;
+					}
+					else if (!Player::instance().isInvulnerable()) {
+						Player::instance().damagePlayer();
+					}
+				}
+				printf("Koopa en moviment\n");
+				if (Player::instance().collisionDown(posEnemy, sizeEnemy, false)) {
+					bStop = true;
+					sprite->changeAnimation(STOP);
+					return;
+				}
+			}
+			if (bStop) { // Koopa parat
+				printf("Koopa parat\n");
+
+				if (Player::instance().collisionLeft(posEnemy, sizeEnemy) || Player::instance().collisionRight(posEnemy, sizeEnemy) || Player::instance().collisionDown(posEnemy, sizeEnemy, false)) {
+					bStop = false;
+					sprite->changeAnimation(MOVE);
+					Player::instance().setInvulnerable(true);
+					Player::instance().setInvTime(50);
+				}
+
+			}
+
+
+		}
+	}
+
 	sprite->setPosition(posEnemy);
 }
 

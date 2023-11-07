@@ -9,6 +9,7 @@
 #include "Item.h"
 #include "Player.h"
 #include "SoundManager.h"
+#include "GameManager.h"
 
 
 #define SCREEN_X 32
@@ -38,6 +39,7 @@ Scene::~Scene()
 void Scene::init()
 {
 	bPlay = false;
+	bGameOver = false;
 	initShaders();
 	buildLevel("res/levels/Level_0.ldtkl");
 	cameraX = 0.f;
@@ -61,6 +63,8 @@ void Scene::init()
 	//engine = SoundManager::instance().getSoundEngine();
 	//engine->play2D("res/Music/overworld.ogg");
 
+	GameManager::instance().init();
+
 }
 
 void Scene::update(int deltaTime)
@@ -68,6 +72,7 @@ void Scene::update(int deltaTime)
 	if (bPlay) {
 		currentTime += deltaTime;
 		Player::instance().update(deltaTime);
+		GameManager::instance().update(deltaTime);
 		mushroom->update(deltaTime);
 		star->update(deltaTime);
 
@@ -109,12 +114,41 @@ void Scene::render()
 	for (const auto& item : items) {
 		item->render();
 	}
-	
-	text.render("SCORE: ", glm::vec2(SCREEN_WIDTH / 4 * 0 + 60, 25), 16, glm::vec4(1, 1, 1, 1));
-	text.render("COINS: x", glm::vec2(SCREEN_WIDTH / 4 * 1 + 60, 25), 16, glm::vec4(1, 1, 1, 1));
-	text.render("WORLD: 1-1", glm::vec2(SCREEN_WIDTH / 4 * 2 + 60, 25), 16, glm::vec4(1, 1, 1, 1));
-	text.render("TIME: ", glm::vec2(SCREEN_WIDTH / 4 * 3 + 60, 25), 16, glm::vec4(1, 1, 1, 1));
 
+	string score = to_string(GameManager::instance().getScore());
+	string coins = to_string(GameManager::instance().getCoins());
+	string time = to_string(GameManager::instance().getTime());
+	string level = to_string(GameManager::instance().getLevel());
+	string lives = to_string(GameManager::instance().getLives());
+	
+	text.render("LIVES: " + lives, glm::vec2(SCREEN_WIDTH / 5 * 0 + 30, 25), 16, glm::vec4(1, 1, 1, 1));
+	text.render("SCORE: " + score, glm::vec2(SCREEN_WIDTH / 5 * 1 + 30, 25), 16, glm::vec4(1, 1, 1, 1));
+	text.render("COINS: " + coins, glm::vec2(SCREEN_WIDTH / 5 * 2 + 30, 25), 16, glm::vec4(1, 1, 1, 1));
+	text.render("WORLD: 1-" + level, glm::vec2(SCREEN_WIDTH / 5 * 3 + 30, 25), 16, glm::vec4(1, 1, 1, 1));
+	text.render("TIME: " + time, glm::vec2(SCREEN_WIDTH / 5 * 4 + 30, 25), 16, glm::vec4(1, 1, 1, 1));
+
+	if (!bPlay && !bGameOver) {
+		text.render("Press 'SPACE' to start", glm::vec2(SCREEN_WIDTH / 2 - 180, SCREEN_HEIGHT / 2), 16, glm::vec4(1, 1, 1, 1));
+	}
+
+	if (GameManager::instance().getTime() == 0) {
+		bPlay = false;
+		bGameOver = true;
+		text.render("GAME OVER", glm::vec2(SCREEN_WIDTH / 2 - 130, SCREEN_HEIGHT / 2 - 50), 32, glm::vec4(1, 0, 0, 1));
+		text.render("you run out of time", glm::vec2(SCREEN_WIDTH / 2 - 140, SCREEN_HEIGHT / 2 -20), 16, glm::vec4(1, 0, 0, 1));
+		text.render("Press 'Q' to quit", glm::vec2(SCREEN_WIDTH / 2 - 120, SCREEN_HEIGHT / 2 + 20), 16, glm::vec4(1, 1, 1, 1));
+		text.render("Press 'R' to restart", glm::vec2(SCREEN_WIDTH / 2 - 145, SCREEN_HEIGHT / 2 + 40), 16, glm::vec4(1, 1, 1, 1));
+	}
+
+	if (GameManager::instance().getLives() == 0) {
+		bPlay = false;
+		bGameOver = true;
+		text.render("GAME OVER", glm::vec2(SCREEN_WIDTH / 2 - 130, SCREEN_HEIGHT / 2 - 50), 32, glm::vec4(1, 0, 0, 1));
+		text.render("you run out of lives", glm::vec2(SCREEN_WIDTH / 2 - 140, SCREEN_HEIGHT / 2 - 20), 16, glm::vec4(1, 0, 0, 1));
+		text.render("Press 'Q' to quit", glm::vec2(SCREEN_WIDTH / 2 - 120, SCREEN_HEIGHT / 2 + 20), 16, glm::vec4(1, 1, 1, 1));
+		text.render("Press 'R' to restart", glm::vec2(SCREEN_WIDTH / 2 - 145, SCREEN_HEIGHT / 2 + 40), 16, glm::vec4(1, 1, 1, 1));
+	}
+	
 }
 
 bool Scene::calculateCameraPosition()
@@ -203,6 +237,23 @@ void Scene::createEntities(const Json::Value entities)
 		}
 	}	
 
+}
+
+void Scene::keyReleased(int key)
+{
+	if (key == 80 || key == 112) { // P or p
+		bPlay = false;
+	}
+	else if (key == 82 || key == 114) {
+		//scene.restart()
+	}
+	else if (key == 81 || key == 113) {
+		quit(); // TODO: s'ha de reinciar el joc
+	}
+	else if (key == 32) {
+		bPlay = true;
+	}
+	
 }
 
 void Scene::quit()
