@@ -1,12 +1,14 @@
 #include <GL/glew.h>
 #include <GL/glut.h>
 #include "Game.h"
+#include "SoundManager.h"
 
 
 void Game::init()
 {
 	bPlay = true;
 	glClearColor(0.5f, 0.7686f, 1.f, 1.0f);
+	SoundManager::instance().init();
 	currentScreen = "game";
 	mainMenu.init();
 	instructions.init();
