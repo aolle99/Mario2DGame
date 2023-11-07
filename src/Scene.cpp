@@ -38,7 +38,7 @@ Scene::~Scene()
 
 void Scene::init()
 {
-	bPlay = false;
+	bPlay = true;
 	bGameOver = false;
 	initShaders();
 	buildLevel("res/levels/Level_0.ldtkl");
@@ -47,15 +47,9 @@ void Scene::init()
 	
 	currentTime = 0.0f;
 
-	mushroom = new Mushroom();
-	mushroom->init(glm::vec2(260, 416), texProgram);
-	mushroom->setPosition(glm::vec2(10 * map->getTileSize(), INIT_PLAYER_Y_TILES * map->getTileSize()));
-	mushroom->setTileMap(map);
-
-	star = new Star();
-	star->init(glm::vec2(360, 416), texProgram);
-	star->setPosition(glm::vec2(10 * map->getTileSize(), INIT_PLAYER_Y_TILES * map->getTileSize()));
-	star->setTileMap(map);
+	for (auto& item : items) {
+		item->setTileMap(map);
+	}
 
 	if (!text.init("res/Fonts/main_font.ttf"))
 		cout << "Could not load font!!!" << endl;
@@ -73,8 +67,6 @@ void Scene::update(int deltaTime)
 		currentTime += deltaTime;
 		Player::instance().update(deltaTime);
 		GameManager::instance().update(deltaTime);
-		mushroom->update(deltaTime);
-		star->update(deltaTime);
 
 		if (calculateCameraPosition()) {
 			projection = glm::ortho(cameraX, float(SCREEN_WIDTH - 1) + cameraX, float(SCREEN_HEIGHT - 1), 0.f);
@@ -105,6 +97,12 @@ void Scene::update(int deltaTime)
 			}
 			
 		}
+
+		map->update(deltaTime);
+
+		for (auto& item : items) {
+			item->update(deltaTime);
+		}
 	}
 }
 
@@ -123,9 +121,6 @@ void Scene::render()
 	map->render();
 
 	Player::instance().render();
-
-	if (mushroom->isVisible()) mushroom->render();
-	if (star->isVisible()) star->render();
 
 	for (auto& enemy : enemies) {
 		if(!enemy->isDead())enemy->render();

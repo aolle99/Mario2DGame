@@ -75,6 +75,7 @@ void Game::keyReleased(int key)
 	if (currentScreen == "game") {
 		scene.keyReleased(key);
 	}
+	keys[key] = false;
 	
 }
 

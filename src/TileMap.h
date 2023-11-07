@@ -27,6 +27,7 @@ public:
 	~TileMap();
 
 	void render() const;
+	void update(int deltaTime);
 	void free();
 	
 	int getTileSize() const { return tileSize; }
@@ -43,6 +44,7 @@ public:
 	bool collisionMoveDown(const glm::ivec2 &pos, const glm::ivec2 &size, int *posY) const;
 
 	bool collisionMoveUp(const glm::ivec2& pos, const glm::ivec2& size) const;
+	void removeCollisionBlock(int x, int y);
 	bool checkOutOfBoundsLeft(float posX);
 
 	bool checkOutOfBoundsRight(float posX);

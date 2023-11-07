@@ -17,13 +17,13 @@ enum BlockTypes {
 	INVISIBLE_COIN = 18,
 	INVISIBLE_MUSHROOM = 19,
 	BRICK_MUSHROOM = 27,
-	COIN = 24,
 };
 
 enum ItemTypes {
+	NONE = 0,
 	MUSHROOM = 1,
 	STAR = 2,
-	COIN_ITEM = 3,
+	COIN = 3,
 };
 
 
@@ -56,6 +56,14 @@ void TileMap::render() const
 	for (const auto& block : blocks)
 	{
 		block->render();
+	}
+}
+
+void TileMap::update(int deltaTime)
+{
+	for (const auto& block : blocks)
+	{
+		block->update(deltaTime);
 	}
 }
 
@@ -109,7 +117,7 @@ void TileMap::prepareArrays( ShaderProgram& program)
 		}
 		else if (typeid(*block) == typeid(QuestionTile))
 		{
-			block->init(program, tilesheetAnim);
+			block->init(program, tilesheet);
 		}
 		else
 		{
@@ -125,32 +133,28 @@ void TileMap::createTile(const glm::ivec2& pos, const glm::ivec2& texPos, int ty
 	switch (type)
 	{
 	case BlockTypes::BRICK:
-		blocks.push_back(new BrickTile(texPos, pos));
+		blocks.push_back(new BrickTile(texPos, pos,ItemTypes::NONE));
 		break;
 	case BlockTypes::BRICK_COIN:
-		blocks.push_back(new BrickTile(texPos, pos, ItemTypes::COIN_ITEM));
+		blocks.push_back(new BrickTile(texPos, pos, ItemTypes::COIN));
 		break;
-		/*
 	case BlockTypes::QUESTION_COIN:
-		blocks.push_back(new QuestionTile(texPos, pos, ItemTypes::COIN_ITEM));
+		blocks.push_back(new QuestionTile(texPos, pos, tilesheetAnim,ItemTypes::COIN));
 		break;
 	case BlockTypes::QUESTION_MUSHROOM:
-		blocks.push_back(new QuestionTile(texPos, pos, ItemTypes::MUSHROOM));
-		break;*/
+		blocks.push_back(new QuestionTile(texPos, pos, tilesheetAnim, ItemTypes::MUSHROOM));
+		break;
 	case BlockTypes::BRICK_STAR:
 		blocks.push_back(new BrickTile(texPos, pos, ItemTypes::STAR));
 		break;
 	case BlockTypes::INVISIBLE_COIN:
-		blocks.push_back(new InvisibleTile(texPos, pos, ItemTypes::COIN_ITEM));
+		blocks.push_back(new InvisibleTile(texPos, pos, ItemTypes::COIN));
 		break;
 	case BlockTypes::INVISIBLE_MUSHROOM:
 		blocks.push_back(new InvisibleTile(texPos, pos, ItemTypes::MUSHROOM));
 		break;
 	case BlockTypes::BRICK_MUSHROOM:
 		blocks.push_back(new BrickTile(texPos, pos, ItemTypes::MUSHROOM));
-		break;
-	case BlockTypes::COIN:
-		blocks.push_back(new CoinTile(texPos, pos));
 		break;
 	default:
 		blocks.push_back(new Tile(texPos, pos));
@@ -235,6 +239,8 @@ bool TileMap::collisionMoveDown(const glm::ivec2 &pos, const glm::ivec2 &size, i
 	x0 = pos.x / tileSize;
 	x1 = (pos.x + size.x - 1) / tileSize;
 	y = (pos.y + size.y - 1) / tileSize;
+	if(y >= mapSize.y || x1 >= mapSize.x)
+		return false;
 	for(int x=x0; x<=x1; x++)
 	{
 		if(map[y*mapSize.x+x] != 0)
@@ -264,6 +270,13 @@ bool TileMap::collisionMoveUp(const glm::ivec2& pos, const glm::ivec2& size) con
 	}
 	
 	return false;
+}
+
+void TileMap::removeCollisionBlock(int x, int y) {
+	int posX = x / 32;
+	int posY = y / 32;
+	if(posX < mapSize.x && posY < mapSize.y)
+		map[posY * mapSize.x + posX] = 0;
 }
 
 
