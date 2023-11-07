@@ -35,10 +35,9 @@ public:
 
 	void createEntities(const Json::Value entities);
 
-	
+	void initTexts();
 
 	
-
 private:
 	void initShaders();
 

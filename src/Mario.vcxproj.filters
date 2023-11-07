@@ -65,15 +65,6 @@
     <ClInclude Include="Item.h">
       <Filter>Archivos de encabezado</Filter>
     </ClInclude>
-    <ClInclude Include="MainMenu.h">
-      <Filter>Archivos de encabezado</Filter>
-    </ClInclude>
-    <ClInclude Include="Instructions.h">
-      <Filter>Archivos de encabezado</Filter>
-    </ClInclude>
-    <ClInclude Include="Credits.h">
-      <Filter>Archivos de encabezado</Filter>
-    </ClInclude>
     <ClInclude Include="Text.h">
       <Filter>Archivos de encabezado\Helpers</Filter>
     </ClInclude>
@@ -84,6 +75,9 @@
       <Filter>Archivos de encabezado</Filter>
     </ClInclude>
     <ClInclude Include="Scene.h">
+      <Filter>Archivos de encabezado</Filter>
+    </ClInclude>
+    <ClInclude Include="Screen.h">
       <Filter>Archivos de encabezado</Filter>
     </ClInclude>
     <ClInclude Include="SoundManager.h">
@@ -127,20 +121,14 @@
     <ClCompile Include="Item.cpp">
       <Filter>Archivos de código fuente</Filter>
     </ClCompile>
-    <ClCompile Include="MainMenu.cpp">
-      <Filter>Archivos de código fuente</Filter>
-    </ClCompile>
-    <ClCompile Include="Instructions.cpp">
-      <Filter>Archivos de código fuente</Filter>
-    </ClCompile>
-    <ClCompile Include="Credits.cpp">
-      <Filter>Archivos de código fuente</Filter>
-    </ClCompile>
     <ClCompile Include="Text.cpp">
       <Filter>Archivos de código fuente\Helpers</Filter>
     </ClCompile>
     <ClCompile Include="TexturedQuad.cpp">
       <Filter>Archivos de código fuente\Helpers</Filter>
+    </ClCompile>
+    <ClCompile Include="Screen.cpp">
+      <Filter>Archivos de código fuente</Filter>
     </ClCompile>
     <ClCompile Include="TileMap.cpp">
       <Filter>Archivos de código fuente</Filter>

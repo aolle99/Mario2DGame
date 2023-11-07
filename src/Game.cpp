@@ -10,19 +10,23 @@ void Game::init()
 	glClearColor(0.5f, 0.7686f, 1.f, 1.0f);
 	SoundManager::instance().init();
 	currentScreen = "game";
-	mainMenu.init();
-	instructions.init();
+	mainMenu.init("main_menu");
+	instructions.init("instructions");
+	loadLevel.init("load_level");
 	scene.init();
-	credits.init();
+	credits.init("credits");
 }
 
 bool Game::update(int deltaTime)
 {
-	if (currentScreen == "mainMenu") {
+	if (currentScreen == "main_menu") {
 		mainMenu.update(deltaTime);
 	}
 	else if (currentScreen == "instructions") {
 		instructions.update(deltaTime);
+	}
+	else if (currentScreen == "load_level") {
+		loadLevel.update(deltaTime);
 	}
 	else if (currentScreen == "game") {
 		scene.update(deltaTime);
@@ -37,11 +41,14 @@ bool Game::update(int deltaTime)
 void Game::render()
 {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	if (currentScreen == "mainMenu") {
+	if (currentScreen == "main_menu") {
 		mainMenu.render();
 	}
 	else if (currentScreen == "instructions") {
 		instructions.render();
+	}
+	else if (currentScreen == "load_level") {
+		loadLevel.render();
 	}
 	else if (currentScreen == "game") {
 		scene.render();
@@ -49,6 +56,11 @@ void Game::render()
 	else if (currentScreen == "credits") {
 		credits.render();
 	}
+}
+
+void Game::setCurrentScreen(string currentScreen)
+{
+		this->currentScreen = currentScreen;
 }
 
 void Game::keyPressed(int key)

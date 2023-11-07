@@ -3,9 +3,7 @@
 
 
 #include "Scene.h"
-#include "MainMenu.h"
-#include "Instructions.h"
-#include "Credits.h"
+#include "Screen.h"
 
 
 #define SCREEN_WIDTH 1024
@@ -32,6 +30,7 @@ public:
 	void init();
 	bool update(int deltaTime);
 	void render();
+	void setCurrentScreen(string currentScreen);
 	
 	// Input callback methods
 	void keyPressed(int key);
@@ -53,7 +52,8 @@ private:
 	MainMenu mainMenu;
 	Instructions instructions;
 	Credits credits;
-	string currentScreen = "0";
+	LoadLevel loadLevel;
+	string currentScreen;
 
 };
 
