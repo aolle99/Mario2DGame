@@ -102,6 +102,10 @@ void Scene::render()
 	for (auto& enemy : enemies) {
 		if(!enemy->isDead())enemy->render();
 	}
+
+	for (const auto& item : items) {
+		item->render();
+	}
 	
 	text.render("SCORE: ", glm::vec2(SCREEN_WIDTH / 4 * 0 + 60, 25), 16, glm::vec4(1, 1, 1, 1));
 	text.render("COINS: x", glm::vec2(SCREEN_WIDTH / 4 * 1 + 60, 25), 16, glm::vec4(1, 1, 1, 1));
@@ -158,7 +162,8 @@ void Scene::buildLevel(const string& levelFile)
 	if (main) map = TileMap::createTileMap(main["gridTiles"], mapSize, texProgram);
 	if (decoration) mapDecoration = TileMapStatic::createTileMap(decoration["gridTiles"], mapSize, texProgram);
 	if (entities) this->createEntities(entities["entityInstances"]);
-
+	
+	items = map->getItems();
 
 	return;
 }

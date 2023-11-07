@@ -19,6 +19,8 @@ public:
 	virtual void update(int deltaTime){};
 	virtual void render();
 
+	virtual Item* getItem();
+
 	void free();
 
 	void setPosition(const glm::vec2 &pos);
@@ -45,9 +47,11 @@ class BrickTile : public Tile
 public:
 	BrickTile(const glm::ivec2& tileMapPos, const glm::vec2 pos, int item=0);
 
-	void init(ShaderProgram& shaderProgram, Texture& tilesheet);
-	void update(int deltaTime) override;
-	void render();
+	virtual void init(ShaderProgram& shaderProgram, Texture& tilesheet);
+	virtual void update(int deltaTime);
+	virtual void render();
+
+	Item* getItem();
 
 	bool collisionDown();
 private:
@@ -59,9 +63,9 @@ class QuestionTile : public Tile
 public:
 	QuestionTile(const glm::ivec2& tileMapPos, const glm::vec2 pos, int item = 0);
 
-	void init(ShaderProgram& shaderProgram, Texture& tilesheet);
-	void update(int deltaTime);
-	void render();
+	virtual void init(ShaderProgram& shaderProgram, Texture& tilesheet);
+	virtual void update(int deltaTime);
+	virtual void render();
 
 	bool collisionDown();
 private:
@@ -74,9 +78,9 @@ class CoinTile : public Tile
 public:
 	CoinTile(const glm::ivec2& tileMapPos, const glm::vec2 pos);
 
-	void init(ShaderProgram& shaderProgram, Texture& tilesheet);
-	void update(int deltaTime);
-	void render();
+	virtual void init(ShaderProgram& shaderProgram, Texture& tilesheet);
+	virtual void update(int deltaTime);
+	virtual void render();
 
 	bool collision();
 
@@ -89,9 +93,9 @@ class InvisibleTile : public Tile
 public:
 	InvisibleTile(const glm::ivec2& tileMapPos, const glm::vec2 pos, int item);
 
-	void init(ShaderProgram& shaderProgram, Texture& tilesheet);
-	void update(int deltaTime);
-	void render();
+	virtual void init(ShaderProgram& shaderProgram, Texture& tilesheet);
+	virtual void update(int deltaTime);
+	virtual void render();
 
 	bool collisionDown();
 

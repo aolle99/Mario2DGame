@@ -58,6 +58,7 @@ private:
 
 	Mushroom *mushroom;
 	Star *star;
+	vector<Item*> items;
 
 
 

@@ -115,6 +115,8 @@ void TileMap::prepareArrays( ShaderProgram& program)
 		{
 			block->init(program, tilesheet);
 		}
+		Item* item = block->getItem();
+		if (item != nullptr) items.push_back(item);
 	}
 }
 
@@ -123,39 +125,46 @@ void TileMap::createTile(const glm::ivec2& pos, const glm::ivec2& texPos, int ty
 	switch (type)
 	{
 	case BlockTypes::BRICK:
-		blocks.push_back(make_unique<BrickTile>(texPos, pos));
+		blocks.push_back(new BrickTile(texPos, pos));
 		break;
 	case BlockTypes::BRICK_COIN:
-		blocks.push_back(make_unique<BrickTile>(texPos, pos, ItemTypes::COIN_ITEM));
+		blocks.push_back(new BrickTile(texPos, pos, ItemTypes::COIN_ITEM));
 		break;
 	case BlockTypes::QUESTION_COIN:
-		blocks.push_back(make_unique<QuestionTile>(texPos, pos, ItemTypes::COIN_ITEM));
+		blocks.push_back(new QuestionTile(texPos, pos, ItemTypes::COIN_ITEM));
 		break;
 	case BlockTypes::QUESTION_MUSHROOM:
-		blocks.push_back(make_unique<QuestionTile>(texPos, pos, ItemTypes::MUSHROOM));
+		blocks.push_back(new QuestionTile(texPos, pos, ItemTypes::MUSHROOM));
 		break;
 	case BlockTypes::BRICK_STAR:
-		blocks.push_back(make_unique<BrickTile>(texPos, pos, ItemTypes::STAR));
+		blocks.push_back(new BrickTile(texPos, pos, ItemTypes::STAR));
 		break;
 	case BlockTypes::INVISIBLE_COIN:
-		blocks.push_back(make_unique<InvisibleTile>(texPos, pos, ItemTypes::COIN_ITEM));
+		blocks.push_back(new InvisibleTile(texPos, pos, ItemTypes::COIN_ITEM));
 		break;
 	case BlockTypes::INVISIBLE_MUSHROOM:
-		blocks.push_back(make_unique<InvisibleTile>(texPos, pos, ItemTypes::MUSHROOM));
+		blocks.push_back(new InvisibleTile(texPos, pos, ItemTypes::MUSHROOM));
 		break;
 	case BlockTypes::BRICK_MUSHROOM:
-		blocks.push_back(make_unique<BrickTile>(texPos, pos, ItemTypes::MUSHROOM));
+		blocks.push_back(new BrickTile(texPos, pos, ItemTypes::MUSHROOM));
 		break;
 	case BlockTypes::COIN:
-		blocks.push_back(make_unique<CoinTile>(texPos, pos));
+		blocks.push_back(new CoinTile(texPos, pos));
 		break;
 	default:
-		blocks.push_back(make_unique<Tile>(texPos, pos));
+		blocks.push_back(new Tile(texPos, pos));
+		
 	}
+	
 }
 
 glm::ivec2 TileMap::getSize() {
 	return mapSize;
+}
+
+vector<Item*> TileMap::getItems()
+{
+	return items;
 }
 
 bool TileMap::checkOutOfBoundsLeft(float posX) {

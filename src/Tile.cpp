@@ -67,6 +67,11 @@ void Tile::render()
 	glDisable(GL_TEXTURE_2D);
 }
 
+Item* Tile::getItem()
+{
+	return nullptr;
+}
+
 void Tile::free()
 {
 	glDeleteBuffers(1, &vbo);
@@ -100,13 +105,15 @@ void BrickTile::init(ShaderProgram& shaderProgram, Texture& tilesheet)
 
 void BrickTile::update(int deltaTime)
 {
-	if (item != nullptr) item->update(deltaTime);
 }
 
 void BrickTile::render()
 {
 	Tile::render();
-	if (item != nullptr) item->render();
+}
+
+Item* BrickTile::getItem() {
+	return item;
 }
 
 bool BrickTile::collisionDown() {
@@ -146,6 +153,7 @@ enum QuestionTileAnims
 
 void QuestionTile::init(ShaderProgram& shaderProgram, Texture& tilesheet)
 {
+
 	this->tilesheet = tilesheet;
 	sprite = Sprite::createSprite(glm::vec2(32,32), glm::vec2(0.25f, 0.125f), &tilesheet, &shaderProgram);
 	sprite->setNumberAnimations(1);
@@ -163,13 +171,12 @@ void QuestionTile::init(ShaderProgram& shaderProgram, Texture& tilesheet)
 
 void QuestionTile::update(int deltaTime)
 {
-	if (item != NULL) item->update(deltaTime);
+	
 }
 
 void QuestionTile::render()
 {
 	sprite->render();
-	if (item != NULL) item->render();
 }
 
 bool QuestionTile::collisionDown() {

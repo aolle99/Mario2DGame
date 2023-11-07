@@ -30,7 +30,6 @@ protected:
 	Texture spritesheet;
 	Sprite* sprite;
 	TileMap* map;
-	ShaderProgram shaderProgram;
 };
 
 
@@ -38,8 +37,8 @@ protected:
 class Mushroom : public Item
 {
 public:
-	void init(const glm::ivec2& tileMapPos, ShaderProgram& shaderProgram);
-	void update(int deltaTime);
+	virtual void init(const glm::ivec2& tileMapPos, ShaderProgram& shaderProgram);
+	virtual void update(int deltaTime);
 
 private:
 };
@@ -47,8 +46,8 @@ private:
 class Star : public Item
 {
 public:
-	void init(const glm::ivec2& tileMapPos, ShaderProgram& shaderProgram);
-	void update(int deltaTime);
+	virtual void init(const glm::ivec2& tileMapPos, ShaderProgram& shaderProgram);
+	virtual void update(int deltaTime);
 
 protected:
 };
@@ -56,8 +55,8 @@ protected:
 class Coin : public Item
 {
 public:
-	void init(const glm::ivec2& tileMapPos, ShaderProgram& shaderProgram);
-	void update(int deltaTime);
+	virtual void init(const glm::ivec2& tileMapPos, ShaderProgram& shaderProgram);
+	virtual void update(int deltaTime);
 
 protected:
 };
@@ -65,8 +64,8 @@ protected:
 class Flag : public Item
 {
 public:
-	void init(const glm::ivec2& tileMapPos, ShaderProgram& shaderProgram);
-	void update(int deltaTime);
+	virtual void init(const glm::ivec2& tileMapPos, ShaderProgram& shaderProgram);
+	virtual void update(int deltaTime);
 protected:
 };
 
