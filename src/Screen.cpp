@@ -25,10 +25,6 @@ void Screen::init(string currentScreenStr) {
 	if (!text.init("res/Fonts/main_font.ttf")) cout << "Could not load font!!!" << endl;
 }
 
-void Screen::printTexts() {
-
-}
-
 void Screen::initBackground() {
 	spritesheetBackground.loadFromFile("res/images/" + currentScreen + ".png", TEXTURE_PIXEL_FORMAT_RGBA);
 	background = Sprite::createSprite(glm::ivec2(SCREEN_WIDTH - 1, SCREEN_HEIGHT - 1), glm::vec2(1.0, 1.0), &spritesheetBackground, &texProgram);
@@ -41,14 +37,6 @@ void Screen::initBackground() {
 	background->setPosition(glm::vec2(0, 0));
 }
 
-void Screen::hover(int which, bool isHover) {
-
-}
-
-void Screen::clicked(int which) {
-	
-}
-
 void Screen::update(int deltaTime) {
 	currentTime += deltaTime;
 
@@ -57,6 +45,11 @@ void Screen::update(int deltaTime) {
 
 void Screen::render()
 {
+}
+
+void Screen::mouseMove(int x, int y)
+{
+
 }
 
 void MainMenu::render()
@@ -74,6 +67,22 @@ void MainMenu::render()
 	text.render("PLAY", glm::vec2(SCREEN_WIDTH / 2 - 50, SCREEN_HEIGHT / 2), 24, glm::vec4(1, 1, 1, 1));
 	text.render("INSTRUCTIONS", glm::vec2(SCREEN_WIDTH / 2 - 140, SCREEN_HEIGHT / 2 + 40), 24, glm::vec4(1, 1, 1, 1));
 	text.render("EXIT", glm::vec2(SCREEN_WIDTH / 2 - 50, SCREEN_HEIGHT / 2 + 80), 24, glm::vec4(1, 1, 1, 1));
+}
+
+string MainMenu::mouseRelease(int button, int xMouse, int yMouse)
+{
+	if (xMouse > 465 && xMouse < 556 && yMouse > 236 && yMouse < 256) {
+		return "game";
+	}
+	else if(xMouse > SCREEN_WIDTH / 2 - 140 && xMouse < SCREEN_WIDTH / 2 + 140 && yMouse > 276 && yMouse < 296) {
+		return "instructions";
+	}
+	else if (xMouse > SCREEN_WIDTH / 2 - 50 && xMouse < SCREEN_WIDTH / 2 + 50 && yMouse > 316 && yMouse < 335) {
+		return "exit";
+	}
+	else {
+		return "main_menu";
+	}
 }
 
 void Instructions::render() {
@@ -98,13 +107,26 @@ void Instructions::render() {
 	text.render("- Restart: 'R'", glm::vec2(30, 250), 12, glm::vec4(0, 0, 0, 1));
 	text.render("- Quit: 'Q'", glm::vec2(30, 270), 12, glm::vec4(0, 0, 0, 1));
 
-	text.render("OBJECTIVES:", glm::vec2(20, 320), 14, glm::vec4(0, 0, 0, 1));
-	text.render("- Collect all the coins", glm::vec2(30, 350), 12, glm::vec4(0, 0, 0, 1));
-	text.render("- Reach the flag", glm::vec2(30, 370), 12, glm::vec4(0, 0, 0, 1));
-	text.render("- Defeat enemies by jumping on them", glm::vec2(30, 390), 12, glm::vec4(0, 0, 0, 1));
-	text.render("- Don't fall", glm::vec2(30, 410), 12, glm::vec4(0, 0, 0, 1));
-	text.render("- Don't run out of time", glm::vec2(30, 430), 12, glm::vec4(0, 0, 0, 1));
+	// write the objectives next to the controls
+	text.render("OBJECTIVES:", glm::vec2(SCREEN_WIDTH / 2 + 20, 100), 14, glm::vec4(0, 0, 0, 1));
+	text.render("- Collect all the coins", glm::vec2(SCREEN_WIDTH / 2 + 30, 130), 12, glm::vec4(0, 0, 0, 1));
+	text.render("- Reach the flag", glm::vec2(SCREEN_WIDTH / 2 + 30, 150), 12, glm::vec4(0, 0, 0, 1));
+	text.render("- Defeat enemies by jumping on them", glm::vec2(SCREEN_WIDTH / 2 + 30, 170), 12, glm::vec4(0, 0, 0, 1));
+	text.render("- Don't fall", glm::vec2(SCREEN_WIDTH / 2 + 30, 190), 12, glm::vec4(0, 0, 0, 1));
+	text.render("- Don't run out of time", glm::vec2(SCREEN_WIDTH / 2 + 30, 210), 12, glm::vec4(0, 0, 0, 1));
+	text.render("- Collect all the coins", glm::vec2(SCREEN_WIDTH / 2 + 30, 230), 12, glm::vec4(0, 0, 0, 1));
 
+	text.render("Return to Main Menu", glm::vec2(20, SCREEN_HEIGHT - 20), 14, glm::vec4(0, 0, 0, 1));
+}
+
+string Instructions::mouseRelease(int button, int xMouse, int yMouse)
+{
+	if(xMouse >= 20 && xMouse < 278 && yMouse > SCREEN_HEIGHT - 20 - 14 && yMouse < SCREEN_HEIGHT - 20) {
+		return "main_menu";
+	}
+	else {
+		return "instructions";
+	}
 }
 
 void Credits::render() {
@@ -134,7 +156,6 @@ void LoadLevel::render()
 	text.render("WORLD 1-1", glm::vec2(SCREEN_WIDTH / 2 - 100, SCREEN_HEIGHT / 2), 24, glm::vec4(1, 1, 1, 1));
 	text.render("LIVES: 5", glm::vec2(SCREEN_WIDTH / 2 - 60, SCREEN_HEIGHT / 2 + 40), 16, glm::vec4(1, 1, 1, 1));
 }
-
 
 void Screen::initShaders()
 {

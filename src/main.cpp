@@ -55,7 +55,7 @@ static void mouseCallback(int button, int state, int x, int y)
 	if(state == GLUT_DOWN)
 		Game::instance().mousePress(button);
 	else if(state == GLUT_UP)
-		Game::instance().mouseRelease(button);
+		Game::instance().mouseRelease(button, x, y);
 }
 
 static void drawCallback()

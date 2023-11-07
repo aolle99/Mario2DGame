@@ -39,7 +39,7 @@ public:
 	void specialKeyReleased(int key);
 	void mouseMove(int x, int y);
 	void mousePress(int button);
-	void mouseRelease(int button);
+	void mouseRelease(int button, int xMouse, int yMouse);
 	
 	bool getKey(int key) const;
 	bool getSpecialKey(int key) const;

@@ -191,6 +191,23 @@ void Scene::createEntities(const Json::Value entities)
 
 }
 
+void Scene::quit()
+{
+	Game::instance().setCurrentScreen("main_menu");
+}
+
+void Scene::pause()
+{
+}
+
+void Scene::resume()
+{
+}
+
+void Scene::restart()
+{
+}
+
 void Scene::initShaders()
 {
 	Shader vShader, fShader;

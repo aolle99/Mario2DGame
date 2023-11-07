@@ -18,13 +18,11 @@ public:
 	void update(int deltaTime);
 	virtual void render();
 
-	void hover(int which, bool isHover);
-	void clicked(int which);
+	void mouseMove(int x, int y);
 
 private:
 	void initShaders();
 	void initBackground();
-	void printTexts();
 
 protected:
 	ShaderProgram texProgram;
@@ -41,13 +39,16 @@ class MainMenu : public Screen
 {
 	public:
 		void render();
+		string mouseRelease(int button, int xMouse, int yMouse);
 };
 
 class Instructions : public Screen
 {
 	public:
 		void render();
+		string mouseRelease(int button, int xMouse, int yMouse);
 };
+
 
 class Credits : public Screen
 {

@@ -34,7 +34,10 @@ public:
 
 	void createEntities(const Json::Value entities);
 
-	void initTexts();
+	void quit();
+	void pause();
+	void resume();
+	void restart();
 
 	
 private:
