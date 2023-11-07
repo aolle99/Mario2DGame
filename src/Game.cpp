@@ -6,10 +6,10 @@
 
 void Game::init()
 {
-	bPlay = true;
+	bExit = false;
 	glClearColor(0.5f, 0.7686f, 1.f, 1.0f);
 	SoundManager::instance().init();
-	currentScreen = "game";
+	currentScreen = "main_menu";
 	mainMenu.init("main_menu");
 	instructions.init("instructions");
 	loadLevel.init("load_level");
@@ -35,7 +35,7 @@ bool Game::update(int deltaTime)
 		credits.update(deltaTime);
 	}
 	
-	return bPlay;
+	return bExit;
 }
 
 void Game::render()
@@ -66,7 +66,7 @@ void Game::setCurrentScreen(string currentScreen)
 void Game::keyPressed(int key)
 {
 	if(key == 27) // Escape code
-		bPlay = false;
+		bExit = true;
 	keys[key] = true;
 }
 

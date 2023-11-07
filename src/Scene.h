@@ -45,6 +45,7 @@ private:
 	void initShaders();
 
 private:
+	bool bPlay;                       
 	TileMap *map;
 	TileMapStatic* mapDecoration;
 	vector< std::unique_ptr<Enemy >> enemies;

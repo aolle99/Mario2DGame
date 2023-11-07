@@ -37,6 +37,7 @@ Scene::~Scene()
 
 void Scene::init()
 {
+	bPlay = false;
 	initShaders();
 	buildLevel("res/levels/Level_0.ldtkl");
 	cameraX = 0.f;
@@ -57,26 +58,28 @@ void Scene::init()
 	if (!text.init("res/Fonts/main_font.ttf"))
 		cout << "Could not load font!!!" << endl;
 
-	engine = SoundManager::instance().getSoundEngine();
-	engine->play2D("res/Music/overworld.ogg");
+	//engine = SoundManager::instance().getSoundEngine();
+	//engine->play2D("res/Music/overworld.ogg");
 
 }
 
 void Scene::update(int deltaTime)
 {
-	currentTime += deltaTime;
-	Player::instance().update(deltaTime);
-	mushroom->update(deltaTime);
-	star->update(deltaTime);
+	if (bPlay) {
+		currentTime += deltaTime;
+		Player::instance().update(deltaTime);
+		mushroom->update(deltaTime);
+		star->update(deltaTime);
 
-	if (calculateCameraPosition()) {
-		projection = glm::ortho(cameraX, float(SCREEN_WIDTH - 1) + cameraX, float(SCREEN_HEIGHT - 1), 0.f);
-		this->map->setLeftBound(cameraX);
-	}
+		if (calculateCameraPosition()) {
+			projection = glm::ortho(cameraX, float(SCREEN_WIDTH - 1) + cameraX, float(SCREEN_HEIGHT - 1), 0.f);
+			this->map->setLeftBound(cameraX);
+		}
 
-	
-	for (auto& enemy : enemies) {
-		enemy->update(deltaTime);
+
+		for (auto& enemy : enemies) {
+			enemy->update(deltaTime);
+		}
 	}
 }
 
