@@ -40,6 +40,7 @@ protected:
 	Texture tilesheet;
 	glm::vec2 position;
 	glm::ivec2 texturePos;
+	ShaderProgram* shaderProgram;
 };
 
 class BrickTile : public Tile

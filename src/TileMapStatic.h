@@ -32,7 +32,7 @@ public:
 
 private:
 	bool loadLevel(const Json::Value layerMap, const glm::ivec2& mapSize);
-	void prepareArrays(ShaderProgram& program);
+	void prepareArrays();
 
 private:
 	GLuint vao;
@@ -44,6 +44,7 @@ private:
 	Texture tilesheet;
 	glm::vec2 tileTexSize;
 	vector< glm::ivec2> tiles;
+	ShaderProgram* shaderProgram;
 
 };
 

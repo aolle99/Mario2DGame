@@ -260,9 +260,9 @@ void Player::update(int deltaTime)
 		else if (Game::instance().getSpecialKey(GLUT_KEY_RIGHT)) this->move(true);
 		else textureChanged -= 1;
 
-		if (Game::instance().getSpecialKey(GLUT_KEY_UP)) this->jump();
+		if (Game::instance().getKey(32)) this->jump();
 		else if (Game::instance().getSpecialKey(GLUT_KEY_DOWN)) this->bend();
-		else if (Game::instance().getKey('z')) this->run();
+		else if (Game::instance().getSpecialKey(112)) this->run();
 		else {
 			textureChanged -= 1;
 			speed = 2;

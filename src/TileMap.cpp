@@ -130,13 +130,12 @@ void TileMap::createTile(const glm::ivec2& pos, const glm::ivec2& texPos, int ty
 	case BlockTypes::BRICK_COIN:
 		blocks.push_back(new BrickTile(texPos, pos, ItemTypes::COIN_ITEM));
 		break;
-		/*
 	case BlockTypes::QUESTION_COIN:
 		blocks.push_back(new QuestionTile(texPos, pos, ItemTypes::COIN_ITEM));
 		break;
 	case BlockTypes::QUESTION_MUSHROOM:
 		blocks.push_back(new QuestionTile(texPos, pos, ItemTypes::MUSHROOM));
-		break;*/
+		break;
 	case BlockTypes::BRICK_STAR:
 		blocks.push_back(new BrickTile(texPos, pos, ItemTypes::STAR));
 		break;
@@ -235,6 +234,8 @@ bool TileMap::collisionMoveDown(const glm::ivec2 &pos, const glm::ivec2 &size, i
 	x0 = pos.x / tileSize;
 	x1 = (pos.x + size.x - 1) / tileSize;
 	y = (pos.y + size.y - 1) / tileSize;
+	if(y >= mapSize.y || x1 >= mapSize.x)
+		return false;
 	for(int x=x0; x<=x1; x++)
 	{
 		if(map[y*mapSize.x+x] != 0)

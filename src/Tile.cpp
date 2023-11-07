@@ -25,6 +25,7 @@ Tile::~Tile()
 void Tile::init(ShaderProgram &shaderProgram, Texture &tilesheet)
 {
 	this->tilesheet = tilesheet;
+	this->shaderProgram = &shaderProgram;
 	glm::vec2 posTile, texCoordTile[2];
 	vector<float> vertices;
 	posTile = glm::vec2(position.x,position.y);
@@ -58,6 +59,15 @@ void Tile::init(ShaderProgram &shaderProgram, Texture &tilesheet)
 
 void Tile::render()
 {
+	glm::mat4 modelview;
+
+	shaderProgram->use();
+	shaderProgram->setUniform4f("color", 1.0f, 1.0f, 1.0f, 1.0f);
+
+	modelview = glm::mat4(1.0f);
+	shaderProgram->setUniformMatrix4f("modelview", modelview);
+	shaderProgram->setUniform2f("texCoordDispl", 0.f, 0.f);
+
 	glEnable(GL_TEXTURE_2D);
 	tilesheet.use();
 	glBindVertexArray(vao);
