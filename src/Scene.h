@@ -1,7 +1,6 @@
 #ifndef _SCENE_INCLUDE
 #define _SCENE_INCLUDE
 
-
 #include <glm/glm.hpp>
 #include "ShaderProgram.h"
 #include "TileMap.h"
@@ -11,6 +10,8 @@
 #include <memory>
 #include "Item.h"
 #include "Text.h"
+#include <irrKlang.h>
+using namespace irrklang;
 
 
 // Scene contains all the entities of our game.
@@ -53,6 +54,7 @@ private:
 	float cameraX = 0.f;
 	glm::vec2 playerStartPos;
 	Text text;
+	ISoundEngine* engine;
 
 	Mushroom *mushroom;
 	Star *star;

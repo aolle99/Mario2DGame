@@ -1,13 +1,15 @@
 #include <GL/glew.h>
 #include <GL/glut.h>
 #include "Game.h"
+#include "SoundManager.h"
 
 
 void Game::init()
 {
 	bPlay = true;
 	glClearColor(0.5f, 0.7686f, 1.f, 1.0f);
-	currentScreen = "instructions";
+	SoundManager::instance().init();
+	currentScreen = "game";
 	mainMenu.init("main_menu");
 	instructions.init("instructions");
 	loadLevel.init("load_level");
@@ -108,14 +110,14 @@ void Game::mousePress(int button)
 
 void Game::mouseRelease(int button, int xMouse, int yMouse)
 {
-	
+
 	if (currentScreen == "main_menu") {
 		string cScreen = mainMenu.mouseRelease(button, xMouse, yMouse);
 		if (cScreen != "main_menu") {
 			currentScreen = cScreen;
 		}
 	}
-	
+
 	else if (currentScreen == "instructions") {
 		string cScreen = instructions.mouseRelease(button, xMouse, yMouse);
 		if(cScreen != "instructions") {

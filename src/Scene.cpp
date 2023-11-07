@@ -8,6 +8,7 @@
 #include <fstream>
 #include "Item.h"
 #include "Player.h"
+#include "SoundManager.h"
 
 
 #define SCREEN_X 32
@@ -55,6 +56,10 @@ void Scene::init()
 
 	if (!text.init("res/Fonts/main_font.ttf"))
 		cout << "Could not load font!!!" << endl;
+
+	engine = SoundManager::instance().getSoundEngine();
+	engine->play2D("res/Music/overworld.ogg");
+
 }
 
 void Scene::update(int deltaTime)
@@ -68,6 +73,7 @@ void Scene::update(int deltaTime)
 		projection = glm::ortho(cameraX, float(SCREEN_WIDTH - 1) + cameraX, float(SCREEN_HEIGHT - 1), 0.f);
 		this->map->setLeftBound(cameraX);
 	}
+
 	
 	for (auto& enemy : enemies) {
 		enemy->update(deltaTime);

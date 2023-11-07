@@ -80,6 +80,9 @@
     <ClInclude Include="Screen.h">
       <Filter>Archivos de encabezado</Filter>
     </ClInclude>
+    <ClInclude Include="SoundManager.h">
+      <Filter>Archivos de encabezado\Helpers</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Game.cpp">
@@ -132,6 +135,9 @@
     </ClCompile>
     <ClCompile Include="Scene.cpp">
       <Filter>Archivos de código fuente</Filter>
+    </ClCompile>
+    <ClCompile Include="SoundManager.cpp">
+      <Filter>Archivos de código fuente\Helpers</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
