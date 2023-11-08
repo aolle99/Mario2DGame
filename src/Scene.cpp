@@ -121,10 +121,13 @@ void Scene::render()
 	map->render();
 
 	if(!Player::instance().isDead())Player::instance().render();
-	else restart();
+	//else restart();
 
 	for (auto& enemy : enemies) {
-		if(!enemy->isDead())enemy->render();
+		if(!enemy->isDead())enemy->render(cameraX);
+		/*else {
+			text.render("100", glm::vec2(enemy->getPosition().x, enemy->getPosition().y - 10), 16, glm::vec4(1, 1, 1, 1));
+		}*/
 	}
 
 	for (const auto& item : items) {

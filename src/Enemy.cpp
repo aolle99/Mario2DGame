@@ -31,7 +31,7 @@ void Enemy::move()
 		int aux = 0;
 		//if (bLeft) aux = 35;
 		//else aux = -35;
-		if (!map->collisionMoveDown(posEnemy, sizeEnemy + glm::ivec2(aux, 0), &posEnemy.y)) bLeft = !bLeft;
+		if (!map->collisionMoveDown(posEnemy, sizeEnemy, &posEnemy.y)) bLeft = !bLeft;
 	}
 	else if(!map->collisionMoveDown(posEnemy, sizeEnemy, &posEnemy.y)) return;
 		
@@ -58,9 +58,10 @@ void Enemy::die()
 	sprite->changeAnimation(DIE);
 }
 
-void Enemy::render()
+void Enemy::render(float cameraX)
 {
 	sprite->render(bLeft);
+	if(bDying) this->renderPunctuation(cameraX);
 }
 
 void Enemy::collisionDeath()
@@ -127,6 +128,8 @@ void Goomba::init(const glm::ivec2& tileMapPos, ShaderProgram& shaderProgram)
 	speed = 2;
 	sizeEnemy = glm::ivec2(32, 32);
 
+	if (!text.init("res/Fonts/main_font.ttf")) cout << "Could not load font!!!" << endl;
+
 	spritesheet.loadFromFile("res/textures/enemies.png", TEXTURE_PIXEL_FORMAT_RGBA);
 	sprite = Sprite::createSprite(sizeEnemy, glm::vec2(0.0625f, 0.125f), &spritesheet, &shaderProgram);
 	sprite->setNumberAnimations(4);
@@ -149,7 +152,9 @@ void Goomba::update(int deltaTime)
 
 	if (bDying) {
 		if (bSmashed) {
+			//this->renderPunctuation();
 			this->smashedDeath();
+			
 		}
 		else {
 			this->collisionDeath();
@@ -203,10 +208,14 @@ bool Koopa::isModeTurtle()
 	return false;
 }
 
+void Enemy::renderPunctuation(float cameraX) {
+	text.render("100", glm::vec2(posEnemy.x - cameraX, posEnemy.y - 16), 14, glm::vec4(1, 1, 1, 1));
+}
+
 void Goomba::smashedDeath()
 {
 	sprite->changeAnimation(DIE);
-	currentTime += 1;
+	currentTime += 1;	
 
 	if (currentTime == 20) {
 		bDead = true;
@@ -224,6 +233,8 @@ void Koopa::init(const glm::ivec2& tileMapPos, ShaderProgram& shaderProgram)
 	currentTime = 0;
 	this->shaderProgram = shaderProgram;
 	this->change_to_turtle();
+
+	if (!text.init("res/Fonts/main_font.ttf")) cout << "Could not load font!!!" << endl;
 
 	sprite->changeAnimation(0);
 	posEnemy = tileMapPos;

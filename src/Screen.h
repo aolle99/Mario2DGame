@@ -15,7 +15,7 @@ public:
 	~Screen();
 
 	void init(string currentScreen);
-	void update(int deltaTime);
+	virtual void update(int deltaTime);
 	virtual void render();
 
 	void mouseMove(int x, int y);
@@ -58,8 +58,13 @@ class Credits : public Screen
 
 class LoadLevel : public Screen
 {
-public:
-	void render();
+	public:
+		void render();
+		virtual void update(int deltaTime);
+		int getLoadingTime();
+
+	private:
+		int loading_time;
 };
 
 #endif // _SCREEN_INCLUDE

@@ -157,6 +157,16 @@ void LoadLevel::render()
 	text.render("LIVES: 5", glm::vec2(SCREEN_WIDTH / 2 - 60, SCREEN_HEIGHT / 2 + 40), 16, glm::vec4(1, 1, 1, 1));
 }
 
+void LoadLevel::update(int deltaTime)
+{
+	loading_time += 1;
+	background->update(deltaTime);
+}
+
+int LoadLevel::getLoadingTime() {
+	return loading_time;
+}
+
 void Screen::initShaders()
 {
 	Shader vShader, fShader;

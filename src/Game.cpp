@@ -9,7 +9,7 @@ void Game::init()
 	bExit = false;
 	glClearColor(0.5f, 0.7686f, 1.f, 1.0f);
 	SoundManager::instance().init();
-	currentScreen = "game";
+	currentScreen = "main_menu";
 	mainMenu.init("main_menu");
 	instructions.init("instructions");
 	loadLevel.init("load_level");
@@ -26,7 +26,8 @@ bool Game::update(int deltaTime)
 		instructions.update(deltaTime);
 	}
 	else if (currentScreen == "load_level") {
-		loadLevel.update(deltaTime);
+		if(loadLevel.getLoadingTime() == 120) currentScreen = "game";
+		else loadLevel.update(deltaTime);
 	}
 	else if (currentScreen == "game") {
 		scene.update(deltaTime);
@@ -107,7 +108,8 @@ void Game::mouseRelease(int button, int xMouse, int yMouse)
 	if (currentScreen == "main_menu") {
 		string cScreen = mainMenu.mouseRelease(button, xMouse, yMouse);
 		if (cScreen != "main_menu") {
-			currentScreen = cScreen;
+			if (cScreen == "game") currentScreen = "load_level";
+			else currentScreen = cScreen;
 		}
 	}
 

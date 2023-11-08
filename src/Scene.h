@@ -56,7 +56,7 @@ private:
 	ShaderProgram texProgram;
 	float currentTime;
 	glm::mat4 projection;
-	float cameraX = 0.f;
+	
 	glm::vec2 playerStartPos;
 	Text text;
 	ISoundEngine* engine;
@@ -65,7 +65,8 @@ private:
 	Star *star;
 	vector<Item*> items;
 
-
+protected:
+	float cameraX = 0.f;
 
 };
 

@@ -4,6 +4,7 @@
 
 #include "Sprite.h"
 #include "TileMap.h"
+#include "Text.h"
 
 
 // Enemy is basically a Sprite that represents an enemy. As such it has
@@ -15,7 +16,7 @@ public:
 	void move();
 	void die();
 	virtual void update(int deltaTime);
-	void render();
+	void render(float cameraX);
 	virtual void collisionDeath();
 
 	void setTileMap(TileMap* tileMap);
@@ -28,6 +29,8 @@ public:
 
 	glm::ivec2 getPosition();
 	glm::ivec2 getSize();
+
+	void renderPunctuation(float cameraX);
 
 protected:
 	bool bFalling;
@@ -42,6 +45,7 @@ protected:
 	Sprite* sprite;
 	TileMap* map;
 	ShaderProgram shaderProgram;
+	Text text;
 };
 
 class Goomba : public Enemy
