@@ -342,22 +342,6 @@
 				},
 				{
 					"__identifier": "Koopa",
-					"__grid": [34,12],
-					"__pivot": [0,0],
-					"__tags": [],
-					"__tile": { "tilesetUid": 8, "x": 0, "y": 32, "w": 32, "h": 32 },
-					"__smartColor": "#EAD4AA",
-					"__worldX": 1088,
-					"__worldY": 352,
-					"iid": "90802e10-6280-11ee-a830-a952d2cd40d8",
-					"width": 32,
-					"height": 48,
-					"defUid": 11,
-					"px": [1088,384],
-					"fieldInstances": []
-				},
-				{
-					"__identifier": "Koopa",
 					"__grid": [129,4],
 					"__pivot": [0,0],
 					"__tags": [],
@@ -402,6 +386,22 @@
 					"height": 32,
 					"defUid": 6,
 					"px": [192,384],
+					"fieldInstances": []
+				},
+				{
+					"__identifier": "Koopa",
+					"__grid": [35,12],
+					"__pivot": [0,0],
+					"__tags": [],
+					"__tile": { "tilesetUid": 8, "x": 0, "y": 32, "w": 32, "h": 32 },
+					"__smartColor": "#EAD4AA",
+					"__worldX": 1120,
+					"__worldY": 352,
+					"iid": "e7a32e10-6280-11ee-a61f-ffd3adadc7ad",
+					"width": 32,
+					"height": 48,
+					"defUid": 11,
+					"px": [1120,384],
 					"fieldInstances": []
 				}
 			]
