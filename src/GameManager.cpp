@@ -47,9 +47,9 @@ void GameManager::setLevel(int level)
 	this->level = level;
 }
 
-void GameManager::setCoins(int coins)
+void GameManager::addCoin()
 {
-	this->coins = coins;
+	++coins;
 }
 
 int GameManager::getScore()

@@ -5,6 +5,7 @@
 #include <GL/glut.h>
 #include "Game.h"
 #include "Player.h"
+#include "GameManager.h"
 
 
 #define JUMP_ANGLE_STEP 4
@@ -164,7 +165,7 @@ void Coin::update(int deltaTime)
 	if (!bVisible) return;
 	sprite->update(deltaTime);
 	if (Player::instance().collisionRight(posItem, sizeItem) || Player::instance().collisionLeft(posItem, sizeItem) || Player::instance().collisionDown(posItem, sizeItem, true) || Player::instance().collisionUp(posItem, sizeItem)) {
-		Player::instance().giveCoin();
+		GameManager::instance().addCoin();
 		bVisible = false;
 	}
 

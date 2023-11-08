@@ -31,7 +31,7 @@ public:
 	void substractLive(int lives);
 	void setTime(int time);
 	void setLevel(int level);
-	void setCoins(int coins);
+	void addCoin();
 
 	int getScore();
 	int getLives();
