@@ -208,21 +208,22 @@ void Player::marioDying() {
 	sprite->changeAnimation(DIE);
 
 	if (currentTime <= 10) {
-		posPlayer.y -= 2;
+		posPlayer.y -= 4;
 	}
 
-	if (currentTime > 10) {
-		posPlayer.y += 2;
+	else if (currentTime > 10) {
+		posPlayer.y += 4;
 
 	}
+	currentTime += 1;
 
 	if (posPlayer.y > 518) {
 		bDead = true;
 		bDying = false;
-		GameManager::instance().substractLive(true);
+		GameManager::instance().substractLive();
 		currentTime = 0;
 	}
-	currentTime += 1;
+	
 }
 
 void Player::update(int deltaTime)
@@ -292,11 +293,9 @@ void Player::update(int deltaTime)
 
 		if (!textureChanged) sprite->changeAnimation(STAND);
 	}	
-
-	if (!bDying && posPlayer.y + 32 >= 511  && posPlayer.y + 32  <= 513) {
+	
+	if (!bDead && !bDying && posPlayer.y + 32 >= 511  && posPlayer.y + 32  <= 513) {
 		bDying = true;
-		this->die();
-		GameManager::instance().substractLive(true);
 	}
 
 	sprite->setPosition(posPlayer);
@@ -412,10 +411,6 @@ void Player::giveMushroom() {
 	}
 }
 
-void Player::giveCoin() {
-	this->score += 1;
-}
-
 bool Player::isMarioStar() {
 	return star > 0;
 }
@@ -428,6 +423,11 @@ bool Player::isSuperMario()
 bool Player::isInvulnerable()
 {
 	return bInvulnerable;
+}
+
+bool Player::isDead()
+{
+	return bDead;
 }
 
 int Player::getHp() {

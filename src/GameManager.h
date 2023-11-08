@@ -28,7 +28,7 @@ public:
 	void render();
 
 	void setScore(int score);
-	void substractLive(int lives);
+	void substractLive();
 	void setTime(int time);
 	void setLevel(int level);
 	void addCoin();

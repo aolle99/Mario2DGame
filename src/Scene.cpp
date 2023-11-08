@@ -120,7 +120,8 @@ void Scene::render()
 	mapDecoration->render();
 	map->render();
 
-	Player::instance().render();
+	if(!Player::instance().isDead())Player::instance().render();
+	else restart();
 
 	for (auto& enemy : enemies) {
 		if(!enemy->isDead())enemy->render();
@@ -260,9 +261,10 @@ void Scene::keyReleased(int key)
 		bPlay = false;
 	}
 	else if (key == 82 || key == 114) {
-		//scene.restart()
+		restart();
 	}
 	else if (key == 81 || key == 113) {
+		restart();
 		quit(); // TODO: s'ha de reinciar el joc
 	}
 	else if (key == 32) {
@@ -286,6 +288,8 @@ void Scene::resume()
 
 void Scene::restart()
 {
+	this->init();
+
 }
 
 vector<std::unique_ptr<Enemy>>* Scene::getEnemies()

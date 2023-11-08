@@ -32,7 +32,7 @@ void GameManager::setScore(int score)
 	this->score = score;
 }
 
-void GameManager::substractLive(int lives)
+void GameManager::substractLive()
 {
 	--lives;
 }

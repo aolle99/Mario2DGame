@@ -54,13 +54,13 @@ public:
 
 	void giveMushroom();
 
-	void giveCoin();
-
 	bool isMarioStar();
 
 	bool isSuperMario();
 
 	bool isInvulnerable();
+
+	bool isDead();
 
 	int getHp();
 
