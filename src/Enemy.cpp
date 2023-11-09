@@ -5,6 +5,7 @@
 #include <GL/glut.h>
 #include "Game.h"
 #include "Player.h"
+#include "GameManager.h"
 
 
 #define JUMP_ANGLE_STEP 4
@@ -26,14 +27,17 @@ void Enemy::move()
 {
 	posEnemy.y += FALL_STEP;
 	
-	if (this->isModeTurtle()) {
-		glm::vec2 hitbox = glm::vec2(posEnemy.x, posEnemy.y);
-		int aux = 0;
-		//if (bLeft) aux = 35;
-		//else aux = -35;
-		if (!map->collisionMoveDown(posEnemy, sizeEnemy, &posEnemy.y)) bLeft = !bLeft;
-	}
-	else if(!map->collisionMoveDown(posEnemy, sizeEnemy, &posEnemy.y)) return;
+	
+		if (map->collisionMoveDown(posEnemy, sizeEnemy, &posEnemy.y)) {
+			if (this->isModeTurtle()) {
+				if (map->nearFall(posEnemy, sizeEnemy, bLeft)) {
+					bLeft = !bLeft;
+				}
+			}
+		}
+		else {
+			return;
+		}
 		
 
 	if (bLeft) { // left
@@ -55,13 +59,14 @@ void Enemy::move()
 
 void Enemy::die()
 {
+
 	sprite->changeAnimation(DIE);
 }
 
-void Enemy::render(float cameraX)
+void Enemy::render()
 {
 	sprite->render(bLeft);
-	if(bDying) this->renderPunctuation(cameraX);
+	
 }
 
 void Enemy::collisionDeath()
@@ -128,8 +133,6 @@ void Goomba::init(const glm::ivec2& tileMapPos, ShaderProgram& shaderProgram)
 	speed = 2;
 	sizeEnemy = glm::ivec2(32, 32);
 
-	if (!text.init("res/Fonts/main_font.ttf")) cout << "Could not load font!!!" << endl;
-
 	spritesheet.loadFromFile("res/textures/enemies.png", TEXTURE_PIXEL_FORMAT_RGBA);
 	sprite = Sprite::createSprite(sizeEnemy, glm::vec2(0.0625f, 0.125f), &spritesheet, &shaderProgram);
 	sprite->setNumberAnimations(4);
@@ -144,17 +147,17 @@ void Goomba::init(const glm::ivec2& tileMapPos, ShaderProgram& shaderProgram)
 	sprite->changeAnimation(0);
 	posEnemy = tileMapPos;
 	sprite->setPosition(posEnemy);
+
 }
 
 void Goomba::update(int deltaTime)
 {
+	if(GameManager::instance().getScrollX() + 50 < posEnemy.x) return;
 	sprite->update(deltaTime);
 
 	if (bDying) {
 		if (bSmashed) {
-			//this->renderPunctuation();
 			this->smashedDeath();
-			
 		}
 		else {
 			this->collisionDeath();
@@ -208,15 +211,10 @@ bool Koopa::isModeTurtle()
 	return false;
 }
 
-void Enemy::renderPunctuation(float cameraX) {
-	text.render("100", glm::vec2(posEnemy.x - cameraX, posEnemy.y - 16), 14, glm::vec4(1, 1, 1, 1));
-}
-
 void Goomba::smashedDeath()
 {
 	sprite->changeAnimation(DIE);
-	currentTime += 1;	
-
+	currentTime += 1;
 	if (currentTime == 20) {
 		bDead = true;
 		currentTime = 0;
@@ -233,8 +231,6 @@ void Koopa::init(const glm::ivec2& tileMapPos, ShaderProgram& shaderProgram)
 	currentTime = 0;
 	this->shaderProgram = shaderProgram;
 	this->change_to_turtle();
-
-	if (!text.init("res/Fonts/main_font.ttf")) cout << "Could not load font!!!" << endl;
 
 	sprite->changeAnimation(0);
 	posEnemy = tileMapPos;
@@ -296,6 +292,7 @@ void Koopa::turtleMode()
 
 void Koopa::update(int deltaTime)
 {
+	if (GameManager::instance().getScrollX() < posEnemy.x) return;
 	sprite->update(deltaTime);
 
 	if (bDying) { // Koopa morint

@@ -22,11 +22,10 @@
 #define INIT_ENEMY_Y_TILES 20
 
 
-Scene::Scene()
+Scene::Scene(int lvl)
 {
+	this->level = lvl;
 	map = NULL;
-	mushroom = NULL;
-	star = NULL;
 }
 
 Scene::~Scene()
@@ -41,10 +40,10 @@ void Scene::init()
 	bPlay = true;
 	bGameOver = false;
 	initShaders();
-	buildLevel("res/levels/Level_0.ldtkl");
+	buildLevel("res/levels/Level_" + to_string(level) + ".ldtkl");
 	cameraX = 0.f;
 	projection = glm::ortho(0.f, float(SCREEN_WIDTH - 1), float(SCREEN_HEIGHT - 1), 0.f);
-	
+	GameManager::instance().setScrollX(SCREEN_WIDTH);
 	currentTime = 0.0f;
 
 	for (auto& item : items) {
@@ -57,7 +56,7 @@ void Scene::init()
 	//engine = SoundManager::instance().getSoundEngine();
 	//engine->play2D("res/Music/overworld.ogg");
 
-	GameManager::instance().init();
+
 
 }
 
@@ -124,7 +123,7 @@ void Scene::render()
 	//else restart();
 
 	for (auto& enemy : enemies) {
-		if(!enemy->isDead())enemy->render(cameraX);
+		if(!enemy->isDead())enemy->render();
 		/*else {
 			text.render("100", glm::vec2(enemy->getPosition().x, enemy->getPosition().y - 10), 16, glm::vec4(1, 1, 1, 1));
 		}*/
@@ -167,7 +166,6 @@ void Scene::render()
 		text.render("Press 'Q' to quit", glm::vec2(SCREEN_WIDTH / 2 - 120, SCREEN_HEIGHT / 2 + 20), 16, glm::vec4(1, 1, 1, 1));
 		text.render("Press 'R' to restart", glm::vec2(SCREEN_WIDTH / 2 - 145, SCREEN_HEIGHT / 2 + 40), 16, glm::vec4(1, 1, 1, 1));
 	}
-	
 }
 
 bool Scene::calculateCameraPosition()
@@ -181,6 +179,7 @@ bool Scene::calculateCameraPosition()
 			cameraX = oldCameraX;
 			return false;
 		}
+		GameManager::instance().setScrollX(float(SCREEN_WIDTH - 1) + cameraX);
 		playerStartPos.x = newPosPlayer.x;
 		return true;
 	}
@@ -198,7 +197,7 @@ void Scene::buildLevel(const string& levelFile)
 
 	glm::ivec2 mapSize = glm::ivec2(root["pxWid"].asInt()/32, root["pxHei"].asInt()/32);
 	//@TODO: Hi haura problemes ja que entitats necessiten el map
-	Json::Value entities, decoration, main;
+	Json::Value entities, decoration, main,items_map;
 	for (Json::Value type : root["layerInstances"])
 	{
 		if (type["__identifier"].asString() == "Entities")
@@ -213,13 +212,23 @@ void Scene::buildLevel(const string& levelFile)
 		{
 			decoration = type;
 		}
+		else if (type["__identifier"].asString() == "Items")
+		{
+			items_map = type;
+		}
+
 	}
 
 	if (main) map = TileMap::createTileMap(main["gridTiles"], mapSize, texProgram);
 	if (decoration) mapDecoration = TileMapStatic::createTileMap(decoration["gridTiles"], mapSize, texProgram);
 	if (entities) this->createEntities(entities["entityInstances"]);
+	if (items_map) this->createItemsMap(items_map["entityInstances"]);
 	
-	items = map->getItems();
+	vector<Item*> map_items = map->getItems();
+	
+	for (auto& item : map_items) {
+		items.push_back(item);
+	}
 
 	return;
 }
@@ -245,17 +254,71 @@ void Scene::createEntities(const Json::Value entities)
 			Goomba *goomba = new Goomba();
 			goomba->init(glm::vec2(entity["px"][0].asInt(), entity["px"][1].asInt()), texProgram);
 			goomba->setTileMap(map);
-			enemies.push_back(std::unique_ptr<Enemy>(goomba));
+			enemies.push_back(goomba);
 		}
 		else if (entity["__identifier"].asString() == "Koopa")
 		{
 			Koopa *koopa = new Koopa();
 			koopa->init(glm::vec2(entity["px"][0].asInt(), entity["px"][1].asInt()), texProgram);
 			koopa->setTileMap(map);
-			enemies.push_back(std::unique_ptr<Enemy>(koopa));
+			enemies.push_back(koopa);
 		}
 	}	
 
+}
+
+void Scene::createItemsMap(const Json::Value items_map) {
+	for (Json::Value item : items_map)
+	{
+		if (item["__identifier"].asString() == "Mushroom")
+		{
+			Mushroom *mushroom = new Mushroom();
+			mushroom->init(glm::vec2(item["px"][0].asInt(), item["px"][1].asInt()), texProgram);
+			mushroom->show();
+			items.push_back(mushroom);
+		}
+		else if (item["__identifier"].asString() == "Star")
+		{
+			Star *star = new Star();
+			star->init(glm::vec2(item["px"][0].asInt(), item["px"][1].asInt()), texProgram);
+			star->show();
+			items.push_back(star);
+		}
+		else if (item["__identifier"].asString() == "Coin")
+		{
+			Coin *coin = new Coin();
+			coin->init(glm::vec2(item["px"][0].asInt(), item["px"][1].asInt()), texProgram);
+			coin->show();
+			items.push_back(coin);
+		}
+		else if (item["__identifier"].asString() == "Flag")
+		{
+			glm::ivec2 minCoords = glm::ivec2(item["fieldInstances"][0]["__value"]["cx"].asInt(), item["fieldInstances"][0]["__value"]["cy"].asInt());
+			Flag *flag = new Flag();
+			flag->init(glm::vec2(item["px"][0].asInt(), item["px"][1].asInt()), texProgram, minCoords);
+			flag->show();
+			items.push_back(flag);
+		}
+		else if (item["__identifier"].asString() == "Castle_Flag")
+		{
+			CastleFlag *castleFlag = new CastleFlag();
+			castleFlag->init(glm::vec2(item["px"][0].asInt(), item["px"][1].asInt()), texProgram);
+			items.push_back(castleFlag);
+		} 
+		else if (item["__identifier"].asString() == "End_pivot")
+		{
+			int mult = item["fieldInstances"][0]["__value"].asInt();
+			EndPivot *endpivot = new EndPivot();
+			endpivot->init(glm::vec2(item["px"][0].asInt(), item["px"][1].asInt()), texProgram, mult);
+			endpivot->show();
+			items.push_back(endpivot);
+		}
+		else if (item["__identifier"].asString() == "EndLevel")
+		{
+			Player::instance().setEndPos(glm::vec2(item["px"][0].asInt(), item["px"][1].asInt()));
+		}
+
+	}	
 }
 
 void Scene::keyReleased(int key)
@@ -295,7 +358,7 @@ void Scene::restart()
 
 }
 
-vector<std::unique_ptr<Enemy>>* Scene::getEnemies()
+vector<Enemy*>* Scene::getEnemies()
 {
 	return &enemies;
 }

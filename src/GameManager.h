@@ -6,6 +6,7 @@
 #include "json/json.h"
 #include <memory>
 #include <chrono>
+#include "Text.h"
 
 
 // GameManager contains all the entities of our game.
@@ -27,24 +28,34 @@ public:
 	void update(int deltaTime);
 	void render();
 
-	void setScore(int score);
+	void addScore(int score);
 	void substractLive();
 	void setTime(int time);
 	void setLevel(int level);
 	void addCoin();
-
+	void setLevelEnd(bool bEnd);
+	void setLevelCompleted(bool bCompleted);
+	void setPaused(bool bPaused);
+	void setScrollX(int scrollX);
 	int getScore();
 	int getLives();
 	int getTime();
 	int getLevel();
 	int getCoins();
+	int getScrollX();
+
+	bool isLevelEnd();
+	bool isPaused();
 
 
 
 
 private:
-	int score, lives, time, level, coins;
+	int score, lives, time, level, coins, scrollX;
 	std::chrono::time_point<std::chrono::high_resolution_clock>  startTime;
+	bool bLevelEnd, bPaused, bLevelCompleted;
+	string textToRender;
+	glm::vec2 textCoords;
 	
 
 };

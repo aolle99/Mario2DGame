@@ -164,16 +164,17 @@ void Coin::update(int deltaTime)
 {
 	if (!bVisible) return;
 	sprite->update(deltaTime);
-	if (Player::instance().collisionRight(posItem, sizeItem) || Player::instance().collisionLeft(posItem, sizeItem) || Player::instance().collisionDown(posItem, sizeItem, true) || Player::instance().collisionUp(posItem, sizeItem)) {
+	if (Player::instance().collision(posItem, sizeItem)) {
 		GameManager::instance().addCoin();
 		bVisible = false;
 	}
-
 }
 
-void Flag::init(const glm::ivec2& tileMapPos, ShaderProgram& shaderProgram)
+void Flag::init(const glm::ivec2& tileMapPos, ShaderProgram& shaderProgram, glm::ivec2 minCoords)
 {
-
+	int x = minCoords.x * 32;
+	int y = minCoords.y * 32;
+	this->minCoords = glm::ivec2(x, y);
 	Item::init(tileMapPos, shaderProgram);
 	sprite = Sprite::createSprite(sizeItem, glm::vec2(0.125f, 0.125f), &spritesheet, &shaderProgram);
 	sprite->setNumberAnimations(4);
@@ -185,6 +186,68 @@ void Flag::init(const glm::ivec2& tileMapPos, ShaderProgram& shaderProgram)
 	sprite->addKeyframe(MOVE, glm::vec2(0.125f * 3, 0.125f * 2));
 
 	sprite->changeAnimation(0);
-	posItem = tileMapPos - glm::ivec2(0,16);
+	posItem = tileMapPos - glm::ivec2(14,0);
 	sprite->setPosition(posItem);
 }
+
+void Flag::update(int deltaTime)
+{
+	if (!bVisible) return;
+	sprite->update(deltaTime);
+	if (GameManager::instance().isLevelEnd() && posItem.y < minCoords.y) {
+		posItem = glm::vec2(posItem.x, posItem.y + 4);
+		sprite->setPosition(posItem);
+	}
+}
+
+void CastleFlag::init(const glm::ivec2& tileMapPos, ShaderProgram& shaderProgram)
+{
+	Item::init(tileMapPos, shaderProgram);
+	sprite = Sprite::createSprite(sizeItem, glm::vec2(0.125f, 0.125f), &spritesheet, &shaderProgram);
+	sprite->setNumberAnimations(4);
+
+	sprite->setAnimationSpeed(MOVE, 10);
+	sprite->addKeyframe(MOVE, glm::vec2(0.125f * 0, 0.125f * 1));
+	sprite->addKeyframe(MOVE, glm::vec2(0.125f * 1, 0.125f * 1));
+	sprite->addKeyframe(MOVE, glm::vec2(0.125f * 2, 0.125f * 1));
+	sprite->addKeyframe(MOVE, glm::vec2(0.125f * 3, 0.125f * 1));
+
+	sprite->changeAnimation(0);
+	posItem = tileMapPos;
+	sprite->setPosition(posItem);
+}
+
+void CastleFlag::update(int deltaTime)
+{
+	if(GameManager::instance().isLevelEnd()) bVisible = true;
+	
+	if (!bVisible) return;
+	sprite->update(deltaTime);
+}
+
+void EndPivot::init(const glm::ivec2& tileMapPos, ShaderProgram& shaderProgram, int multiplier)
+{
+	this->multiplier = multiplier;
+	Item::init(tileMapPos, shaderProgram);
+	sprite = Sprite::createSprite(sizeItem, glm::vec2(0.125f, 0.125f), &spritesheet, &shaderProgram);
+	sprite->setNumberAnimations(1);
+
+	sprite->setAnimationSpeed(MOVE, 0);
+	sprite->addKeyframe(MOVE, glm::vec2(0.125f * 7, 0.125f * 1));
+
+	sprite->changeAnimation(0);
+	posItem = tileMapPos;
+	sprite->setPosition(posItem);
+}
+
+void EndPivot::update(int deltaTime)
+{
+	if (!bVisible) return;
+	glm::ivec2 pos = posItem + glm::ivec2(14,0);
+	glm::ivec2 size = sizeItem - glm::ivec2(28,0);
+	if (!GameManager::instance().isLevelEnd() && Player::instance().collision(pos, size)) {
+		GameManager::instance().addScore((multiplier+1) * 10);
+		GameManager::instance().setLevelEnd(true);
+	}
+}
+

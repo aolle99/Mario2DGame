@@ -13,23 +13,24 @@ void GameManager::init()
 
 void GameManager::update(int deltaTime)
 {
-	// Each second , time is reduced by 1
-	auto currentTime = std::chrono::high_resolution_clock::now();
-	auto timePassed = std::chrono::duration_cast<std::chrono::seconds>(currentTime - startTime).count();
-	if (timePassed >= 1) {
-		time--;
-		startTime = std::chrono::high_resolution_clock::now();
+	if (!bPaused && !bLevelEnd) {
+		// Each second , time is reduced by 1
+		auto currentTime = std::chrono::high_resolution_clock::now();
+		auto timePassed = std::chrono::duration_cast<std::chrono::seconds>(currentTime - startTime).count();
+		if (timePassed >= 1) {
+			time--;
+			startTime = std::chrono::high_resolution_clock::now();
+		}
 	}
-
 }
 
 void GameManager::render()
-{
+{		
 }
 
-void GameManager::setScore(int score)
+void GameManager::addScore(int score)
 {
-	this->score = score;
+	this->score += score;
 }
 
 void GameManager::substractLive()
@@ -47,9 +48,29 @@ void GameManager::setLevel(int level)
 	this->level = level;
 }
 
+void GameManager::setScrollX(int scrollX)
+{
+ 	this->scrollX = scrollX;
+}
+
 void GameManager::addCoin()
 {
 	++coins;
+}
+
+void GameManager::setLevelEnd(bool bEnd)
+{
+		bLevelEnd = bEnd;
+}
+
+void GameManager::setLevelCompleted(bool bCompleted)
+{
+	bLevelCompleted = bCompleted;
+}
+
+void GameManager::setPaused(bool bPaused)
+{
+		this->bPaused = bPaused;
 }
 
 int GameManager::getScore()
@@ -75,4 +96,19 @@ int GameManager::getLevel()
 int GameManager::getCoins()
 {
 	return coins;
+}
+
+int GameManager::getScrollX()
+{
+	return scrollX;
+}
+
+bool GameManager::isLevelEnd()
+{
+	return bLevelEnd;
+}
+
+bool GameManager::isPaused()
+{
+	return bPaused;
 }

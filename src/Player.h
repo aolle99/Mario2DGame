@@ -36,6 +36,8 @@ public:
 	void setTileMap(TileMap *tileMap);
 	void setPosition(const glm::vec2 &pos);
 
+	bool collision(const glm::ivec2& object_pos, const glm::ivec2& object_size);
+
 	bool collisionDown(const glm::ivec2& pos, const glm::ivec2& size, bool isItem);
 
 	bool collisionUp(const glm::ivec2& object_pos, const glm::ivec2& object_size);
@@ -70,11 +72,17 @@ public:
 
 	void setInvTime(int time);
 
+	void setEndPos(glm::ivec2 pos);
+
 	void removeCollisionBlock(int x, int y);
+
+
 	
 private:
 	Player() {};
 	glm::ivec2 getHitboxPosition();
+
+	void animationEnd();
 	
 private:
 	bool bJumping;
@@ -99,6 +107,8 @@ private:
 	int currentTime;
 	int hp;
 	int score;
+	int animStep;
+	glm::ivec2 endLevelPos;
 };
 
 

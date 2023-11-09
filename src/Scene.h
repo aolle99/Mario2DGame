@@ -22,7 +22,7 @@ class Scene
 {
 
 public:
-	Scene();
+	Scene(int lvl=0);
 	~Scene();
 
 	void init();
@@ -34,6 +34,7 @@ public:
 	void buildLevel(const string& levelFile);
 
 	void createEntities(const Json::Value entities);
+	void createItemsMap(const Json::Value items_map);
 	void keyReleased(int key);
 
 	void quit();
@@ -41,7 +42,7 @@ public:
 	void resume();
 	void restart();
 
-	vector< std::unique_ptr<Enemy>>* getEnemies();
+	vector<Enemy*>* getEnemies();
 
 	
 private:
@@ -52,7 +53,7 @@ private:
 	bool bGameOver;
 	TileMap *map;
 	TileMapStatic* mapDecoration;
-	vector< std::unique_ptr<Enemy >> enemies;
+
 	ShaderProgram texProgram;
 	float currentTime;
 	glm::mat4 projection;
@@ -60,9 +61,9 @@ private:
 	glm::vec2 playerStartPos;
 	Text text;
 	ISoundEngine* engine;
-
-	Mushroom *mushroom;
-	Star *star;
+	
+	int level;
+	vector<Enemy*> enemies;
 	vector<Item*> items;
 
 protected:

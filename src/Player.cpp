@@ -14,7 +14,7 @@
 
 enum PlayerAnims
 {
-	STAND, MOVE, JUMP, DIE, FIRE, SHIFT
+	STAND, MOVE, JUMP, DIE, SHIFT, END
 };
 
 void Player::init(glm::vec2 &startPos, ShaderProgram &shaderProgram)
@@ -33,6 +33,7 @@ void Player::init(glm::vec2 &startPos, ShaderProgram &shaderProgram)
 	currentTime = 0;
 	score = 0;
 	posPlayer = startPos;
+	animStep = 0;
 	this->shaderProgram = shaderProgram;
 	this->changeToMario();
 	sprite->changeAnimation(0);
@@ -62,10 +63,13 @@ void Player::changeToMario() {
 	sprite->addKeyframe(JUMP, glm::vec2(0.0625f * 5, 0.75f));
 
 	sprite->setAnimationSpeed(SHIFT, 0);
-	sprite->addKeyframe(SHIFT, glm::vec2(0.0625f * 6, 0.75f));
+	sprite->addKeyframe(SHIFT, glm::vec2(0.0625f * 0, 0.75f));
 
 	sprite->setAnimationSpeed(DIE, 8);
 	sprite->addKeyframe(DIE, glm::vec2(0.0625f * 6, 0.75f));
+
+	sprite->setAnimationSpeed(END, 8);
+	sprite->addKeyframe(END, glm::vec2(0.0625f * 8, 0.75f));
 }
 
 void Player::changeToSuperMario() {
@@ -91,9 +95,9 @@ void Player::changeToSuperMario() {
 	sprite->setAnimationSpeed(SHIFT, 0);
 	sprite->addKeyframe(SHIFT, glm::vec2(0.0625f * 6, 0.25f));
 
-	sprite->setAnimationSpeed(FIRE, 8);
-	sprite->addKeyframe(FIRE, glm::vec2(0.0625f * 5, 0.25f));
-	sprite->addKeyframe(FIRE, glm::vec2(0.0625f * 7, 0.25f));
+	sprite->setAnimationSpeed(END, 8);
+	sprite->addKeyframe(END, glm::vec2(0.0625f * 9, 0.75f));
+
 }
 
 void Player::move(bool direction)
@@ -240,6 +244,10 @@ void Player::update(int deltaTime)
 	if (bDying) {
 		this->marioDying();
 	}
+	else if (GameManager::instance().isLevelEnd() || GameManager::instance().isPaused()) {
+		sprite->changeAnimation(STAND);
+		if(GameManager::instance().isLevelEnd()) this->animationEnd();
+	}
 	else {
 		int textureChanged = 3;
 
@@ -317,6 +325,25 @@ void Player::setPosition(const glm::vec2 &pos)
 	sprite->setPosition(posPlayer);
 }
 
+bool Player::collision(const glm::ivec2& object_pos, const glm::ivec2& object_size)
+{
+	int px0 = posPlayer.x;
+	int px1 = posPlayer.x + size.x;
+	int py0 = posPlayer.y;
+	int py1 = posPlayer.y + size.y;
+
+	int ox0 = object_pos.x;
+	int ox1 = object_pos.x + object_size.x;
+	int oy0 = object_pos.y;
+	int oy1 = object_pos.y + object_size.y;
+
+	if (px0 < ox1 && px1 > ox0 && py0 < oy1 && py1 > oy0) {
+		return true; // Colisiï¿½n
+	}
+
+	return false; // No hay colisiï¿½n
+}
+
 bool Player::collisionDown(const glm::ivec2& object_pos, const glm::ivec2& object_size, bool isItem)
 {
 	int player_bottom = posPlayer.y + size.y;
@@ -331,10 +358,10 @@ bool Player::collisionDown(const glm::ivec2& object_pos, const glm::ivec2& objec
 			startY = posPlayer.y + object_size.y;
 			bBounce = true;
 		}
-		return true; // Colisión hacia abajo
+		return true; // Colisiï¿½n hacia abajo
 	}
 
-	return false; // No hay colisión hacia abajo
+	return false; // No hay colisiï¿½n hacia abajo
 }
 
 bool Player::collisionUp(const glm::ivec2& object_pos, const glm::ivec2& object_size)
@@ -345,10 +372,10 @@ bool Player::collisionUp(const glm::ivec2& object_pos, const glm::ivec2& object_
 	if (player_top == object_bottom &&
 		posPlayer.x + hitbox.x >= object_pos.x &&
 		posPlayer.x <= object_pos.x + object_size.x) {
-		return true; // Colisión hacia arriba
+		return true; // Colisiï¿½n hacia arriba
 	}
 
-	return false; // No hay colisión hacia arriba
+	return false; // No hay colisiï¿½n hacia arriba
 }
 
 bool Player::collisionLeft(const glm::ivec2& object_pos, const glm::ivec2& object_size)
@@ -359,10 +386,10 @@ bool Player::collisionLeft(const glm::ivec2& object_pos, const glm::ivec2& objec
 	if ((player_left == object_right || player_left == object_right - 1 || player_left == object_right - 2) &&
 		posPlayer.y + hitbox.y >= object_pos.y &&
 		posPlayer.y <= object_pos.y + object_size.y) {
-		return true; // Colisión hacia la izquierda
+		return true; // Colisiï¿½n hacia la izquierda
 	}
 
-	return false; // No hay colisión hacia la izquierda
+	return false; // No hay colisiï¿½n hacia la izquierda
 }
 
 bool Player::collisionRight(const glm::ivec2& object_pos, const glm::ivec2& object_size)
@@ -373,10 +400,10 @@ bool Player::collisionRight(const glm::ivec2& object_pos, const glm::ivec2& obje
 	if ((player_right == object_left || player_right == object_left+1 || player_right == object_left + 2) &&
 		posPlayer.y + hitbox.y >= object_pos.y &&
 		posPlayer.y <= object_pos.y + object_size.y) {
-		return true; // Colisión hacia la derecha
+		return true; // Colisiï¿½n hacia la derecha
 	}
 
-	return false; // No hay colisión hacia la derecha
+	return false; // No hay colisiï¿½n hacia la derecha
 }
 
 glm::ivec2 Player::getPosition() {
@@ -449,6 +476,10 @@ void Player::setInvTime(int time)
 	invTime = time;
 }
 
+void Player::setEndPos(glm::ivec2 pos) {
+	endLevelPos = pos;
+}
+
 void Player::removeCollisionBlock(int x, int y) {
 		map->removeCollisionBlock(x, y);
 }
@@ -458,4 +489,33 @@ glm::ivec2 Player::getHitboxPosition() {
 	return posPlayer + glm::ivec2(4, 0);
 }
 
+
+void Player::animationEnd()
+{
+	if (animStep==0) {
+		if (!map->collisionMoveDown(posPlayer, size, &posPlayer.y))
+		{
+			posPlayer.y += 4;
+		}
+		else {
+			animStep = 1;
+		}
+	}
+	else if (animStep==1) {
+		sprite->changeAnimation(MOVE);
+		bLeft = false;
+		if (posPlayer.x < endLevelPos.x) {
+			posPlayer.x += 2;
+			if (!map->collisionMoveDown(posPlayer, size, &posPlayer.y))
+			{
+				posPlayer.y += 4;
+			}
+		}
+		else {
+			GameManager::instance().setLevelEnd(false);
+			GameManager::instance().setLevelCompleted(true);
+			animStep = 2;
+		}
+	}
+}
 
