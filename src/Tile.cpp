@@ -7,10 +7,14 @@
 #include "Item.h"
 #include "Player.h"
 #include "Sprite.h"
+#include "GameManager.h"
+#include "PunctuationDisplay.h"
+#include "SoundManager.h"
 
 #define gridSize 32
 #define tilesheetWidth 256.f
 #define tilesheetHeight 512.f
+#define PUNCT_BLOCK 50
 
 Tile::Tile(const glm::ivec2 tileMapPos, const glm::vec2 pos)
 {
@@ -134,6 +138,7 @@ void BrickTile::update(int deltaTime)
 		if (collisionDown()) {
 			if (item != nullptr) {
 				item->show();
+				if (!item->isCoin()) SoundManager::instance().playSound("res/sounds/powerup_appears.wav");
 			}
 			if (Player::instance().isSuperMario()) {
 				destroy();
@@ -158,6 +163,9 @@ void BrickTile::destroy() {
 	if (item == nullptr) {
 		Player::instance().removeCollisionBlock(position.x, position.y);
 		bDestroyed = true;
+		PunctuationDisplay::instance().addDisplay(to_string(PUNCT_BLOCK), position);
+		GameManager::instance().addScore(PUNCT_BLOCK);
+		SoundManager::instance().playSound("res/sounds/breakblock.wav");
 	}
 	else {
 		texturePos = glm::ivec2(96, 0);
@@ -222,6 +230,7 @@ void QuestionTile::update(int deltaTime)
 			Tile::init(*shaderProgram, tilesheet);
 			if (item != nullptr) {
 				item->show();
+				if (!item->isCoin()) SoundManager::instance().playSound("res/sounds/powerup_appears.wav");
 			}
 
 		}
@@ -269,6 +278,7 @@ void InvisibleTile::update(int deltaTime)
 		if (collisionDown()) {
 			if (item != nullptr) {
 				item->show();
+				if(!item->isCoin()) SoundManager::instance().playSound("res/sounds/powerup_appears.wav");
 			}
 			bUsed = true;
 		}

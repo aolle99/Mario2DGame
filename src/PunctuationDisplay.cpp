@@ -43,7 +43,7 @@ void PunctuationDisplay::render()
 
 void PunctuationDisplay::addDisplay(string text, glm::vec2 coords)
 {
-	float dispX = GameManager::instance().getMinScrollX() + coords.x;
+	float dispX = coords.x -  GameManager::instance().getMinScrollX();
 	float dispY = coords.y - 20;
 	displayText* display = new displayText;
 	display->text = text;

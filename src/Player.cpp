@@ -6,6 +6,7 @@
 #include "Game.h"
 #include <cmath>
 #include "GameManager.h"
+#include "SoundManager.h"
 
 #define JUMP_ANGLE_STEP 4.f
 #define FALL_STEP 8
@@ -151,6 +152,7 @@ void Player::jump()
 	jumpAngle = 0;
 	startY = posPlayer.y;
 	sprite->changeAnimation(JUMP);
+	SoundManager::instance().playSound("res/sounds/jump_super.wav");
 }
 
 void Player::bend()
@@ -310,6 +312,12 @@ void Player::update(int deltaTime)
 			star -= 0.01;
 		}
 
+		if (star < 0.5 && star != 0) {
+			star = 0;
+			SoundManager::instance().stopMusic();
+			SoundManager::instance().playMusic("res/music/overworld_resumed.ogg");
+		}
+
 		if (map->checkOutOfBoundsDown(posPlayer.y)) {
 			this->die();
 		}
@@ -319,6 +327,8 @@ void Player::update(int deltaTime)
 	
 	if (!bDead && !bDying && posPlayer.y + 32 >= 511  && posPlayer.y + 32  <= 513) {
 		bDying = true;
+		SoundManager::instance().stopMusic();
+		SoundManager::instance().playSound("res/sounds/mario_die.wav");
 	}
 
 	sprite->setPosition(posPlayer);
@@ -436,6 +446,8 @@ void Player::damagePlayer() {
 		hp = 0;
 		bDying = true;
 		this->die();
+		SoundManager::instance().stopMusic();
+		SoundManager::instance().playSound("res/sounds/mario_die.wav");
 	}
 	else if (hp == 2) {
 		bInvulnerable = true;
@@ -445,7 +457,9 @@ void Player::damagePlayer() {
 }
 
 void Player::giveStar() {
-	star = 10;
+	SoundManager::instance().stopMusic();
+	SoundManager::instance().playMusic("res/music/invincibility.ogg");
+	star = 5;
 }
 
 void Player::giveMushroom() {

@@ -6,11 +6,16 @@
 #include "Game.h"
 #include "Player.h"
 #include "GameManager.h"
+#include "PunctuationDisplay.h"
+#include "SoundManager.h"
 
 
 #define JUMP_ANGLE_STEP 4
 #define JUMP_HEIGHT 150
 #define FALL_STEP 4
+#define PUNCT_COIN 200
+#define PUNCT_MUSHROOM 1000
+#define PUNCT_STAR 1500
 
 enum ItemAnims
 {
@@ -74,7 +79,6 @@ void Item::die()
 	sprite->changeAnimation(DIE);
 }
 
-
 bool Item::isVisible()
 {
 	return bVisible;
@@ -88,6 +92,11 @@ bool Item::isUsed()
 void Item::show()
 {
 	bVisible = true;
+}
+
+bool Item::isCoin()
+{
+	return false;
 }
 
 void Item::setTileMap(TileMap* tileMap)
@@ -120,6 +129,9 @@ void Mushroom::update(int deltaTime)
 	Item::update(deltaTime);
 	if (Player::instance().collisionRight(posItem, sizeItem) || Player::instance().collisionLeft(posItem, sizeItem) || Player::instance().collisionDown(posItem, sizeItem, true) || Player::instance().collisionUp(posItem, sizeItem)) {
 		Player::instance().giveMushroom();
+		GameManager::instance().addScore(PUNCT_MUSHROOM);
+		PunctuationDisplay::instance().addDisplay(to_string(PUNCT_MUSHROOM), Player::instance().getPosition());
+		SoundManager::instance().playSound("res/Sounds/powerup.wav");
 		bVisible = false;
 		bUsed = true;
 	}
@@ -147,6 +159,8 @@ void Star::update(int deltaTime)
 
 	if (Player::instance().collisionRight(posItem, sizeItem) || Player::instance().collisionLeft(posItem, sizeItem) || Player::instance().collisionDown(posItem, sizeItem, true) || Player::instance().collisionUp(posItem, sizeItem)) {
 		Player::instance().giveStar();
+		GameManager::instance().addScore(PUNCT_STAR);
+		PunctuationDisplay::instance().addDisplay(to_string(PUNCT_STAR), Player::instance().getPosition());
 		bVisible = false;
 		bUsed = true;
 	}
@@ -174,9 +188,16 @@ void Coin::update(int deltaTime)
 	sprite->update(deltaTime);
 	if (Player::instance().collision(posItem, sizeItem)) {
 		GameManager::instance().addCoin();
+		GameManager::instance().addScore(PUNCT_COIN);
+		SoundManager::instance().playSound("res/Sounds/coin.wav");
 		bVisible = false;
 		bUsed = true;
 	}
+}
+
+bool Coin::isCoin()
+{
+	return true;
 }
 
 void Flag::init(const glm::ivec2& tileMapPos, ShaderProgram& shaderProgram, glm::ivec2 minCoords)
@@ -256,7 +277,12 @@ void EndPivot::update(int deltaTime)
 	glm::ivec2 size = sizeItem - glm::ivec2(28,0);
 	if (!GameManager::instance().isLevelEnd() && Player::instance().collision(pos, size)) {
 		GameManager::instance().addScore((multiplier+1) * 10);
+		PunctuationDisplay::instance().addDisplay(to_string((multiplier + 1) * 10), pos);
 		GameManager::instance().setLevelEnd(true);
+		SoundManager::instance().stopMusic();
+		SoundManager::instance().playSound("res/Sounds/flagpole.wav");
+		SoundManager::instance().playSound("res/Sounds/fireworks.wav");
+		SoundManager::instance().playSound("res/Sounds/world_clear.wav");
 	}
 }
 

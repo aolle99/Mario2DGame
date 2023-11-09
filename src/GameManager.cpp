@@ -78,7 +78,7 @@ void GameManager::setLevelCompleted(bool bCompleted)
 
 void GameManager::setPaused(bool bPaused)
 {
-		this->bPaused = bPaused;
+	this->bPaused = bPaused;
 }
 
 void GameManager::resetLevel()
