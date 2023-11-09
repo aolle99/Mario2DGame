@@ -4,41 +4,31 @@
 #include "SoundManager.h"
 #include "GameManager.h"
 #include "PunctuationDisplay.h"
+#include "MainMenuScene.h"
+#include "InstructionsScene.h"
+#include "CreditsScene.h"
+#include "LevelLoadingScene.h"
+#include "GameScene.h"
+
+#define LOAD_LEVEL_TIME 80
+
 
 
 void Game::init()
 {
 	bExit = false;
 	glClearColor(0.5f, 0.7686f, 1.f, 1.0f);
+
 	SoundManager::instance().init();
 	GameManager::instance().init();
 	PunctuationDisplay::instance().init();
-	currentScreen = "main_menu";
-	mainMenu.init("main_menu");
-	instructions.init("instructions");
-	loadLevel.init("load_level");
-	scene.init();
-	credits.init("credits");
+
+	showMainMenu();
 }
 
 bool Game::update(int deltaTime)
 {
-	if (currentScreen == "main_menu") {
-		mainMenu.update(deltaTime);
-	}
-	else if (currentScreen == "instructions") {
-		instructions.update(deltaTime);
-	}
-	else if (currentScreen == "load_level") {
-		if(loadLevel.getLoadingTime() == 80) currentScreen = "game";
-		else loadLevel.update(deltaTime);
-	}
-	else if (currentScreen == "game") {
-		scene.update(deltaTime);
-	}
-	else if (currentScreen == "credits") {
-		credits.update(deltaTime);
-	}
+	scene->update(deltaTime);
 	
 	return bExit;
 }
@@ -46,26 +36,75 @@ bool Game::update(int deltaTime)
 void Game::render()
 {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	if (currentScreen == "main_menu") {
-		mainMenu.render();
-	}
-	else if (currentScreen == "instructions") {
-		instructions.render();
-	}
-	else if (currentScreen == "load_level") {
-		loadLevel.render();
-	}
-	else if (currentScreen == "game") {
-		scene.render();
-	}
-	else if (currentScreen == "credits") {
-		credits.render();
-	}
+	
+	scene->render();
 }
 
-void Game::setCurrentScreen(string currentScreen)
+void Game::showMainMenu()
 {
-	this->currentScreen = currentScreen;
+	delete scene;
+	scene = new MainMenuScene();
+	scene->init();
+}
+
+void Game::showInstructions()
+{
+	delete scene;
+	scene = new InstructionsScene();
+	scene->init();
+}
+
+void Game::showLoadLevel()
+{
+	delete scene;
+	scene = new LevelLoadingScene();
+	scene->init();
+}
+
+void Game::showGame()
+{
+	delete scene;
+	GameManager::instance().resetLevel();
+	int level = GameManager::instance().getLevel();
+	scene = new GameScene(level);
+	scene->init();
+}
+
+void Game::showCredits()
+{
+	delete scene;
+	scene = new CreditsScene();
+	scene->init();
+}
+
+void Game::resetGame()
+{
+	delete scene;
+	GameManager::instance().resetLevel();
+	showLoadLevel();
+}
+
+void Game::nextLevel()
+{
+	if (GameManager::instance().hasNextLevel()) {
+		this->changeLevel(GameManager::instance().getLevel()+1);
+		showLoadLevel();
+	}
+	else {
+		GameManager::instance().init();
+		showMainMenu();
+	}
+
+}
+
+void Game::changeLevel(int level)
+{
+	if (GameManager::instance().getLevel() != level && GameManager::instance().levelExists(level)) {
+		GameManager::instance().setLevel(level);
+		SoundManager::instance().stopMusic();
+		showLoadLevel();
+	}
+		
 }
 
 void Game::keyPressed(int key)
@@ -77,9 +116,7 @@ void Game::keyPressed(int key)
 
 void Game::keyReleased(int key)
 {
-	if (currentScreen == "game") {
-		scene.keyReleased(key);
-	}
+	scene->keyReleased(key);
 	keys[key] = false;
 	
 }
@@ -96,10 +133,7 @@ void Game::specialKeyReleased(int key)
 
 void Game::mouseMove(int x, int y)
 {
-	if (currentScreen == "main_menu") mainMenu.mouseMove(x, y);
-	else if (currentScreen == "instructions") instructions.mouseMove(x, y);
-	else if (currentScreen == "load_level") loadLevel.mouseMove(x, y);
-	else if (currentScreen == "credits") credits.mouseMove(x, y);
+	scene->mouseMove(x, y);
 }
 
 void Game::mousePress(int button)
@@ -108,30 +142,7 @@ void Game::mousePress(int button)
 
 void Game::mouseRelease(int button, int xMouse, int yMouse)
 {
-
-	if (currentScreen == "main_menu") {
-		string cScreen = mainMenu.mouseRelease(button, xMouse, yMouse);
-		if (cScreen != "main_menu") {
-			if (cScreen == "game") currentScreen = "load_level";
-			else currentScreen = cScreen;
-		}
-	}
-
-	else if (currentScreen == "instructions") {
-		string cScreen = instructions.mouseRelease(button, xMouse, yMouse);
-		if(cScreen != "instructions") {
-			currentScreen = cScreen;
-		}
-	} 
-	else if (currentScreen == "credits") {
-		string cScreen = credits.mouseRelease(button, xMouse, yMouse);
-		if (cScreen != "credits") {
-			currentScreen = cScreen;
-		}
-	}
-	/*
-	else if (currentScreen == "game") scene.mouseRelease(button);
-	;*/
+	scene->mouseRelease(button, xMouse, yMouse);
 }
 
 bool Game::getKey(int key) const
@@ -142,6 +153,11 @@ bool Game::getKey(int key) const
 bool Game::getSpecialKey(int key) const
 {
 	return specialKeys[key];
+}
+
+void Game::exitGame()
+{
+	bExit = true;
 }
 
 

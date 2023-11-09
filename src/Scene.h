@@ -3,84 +3,40 @@
 
 #include <glm/glm.hpp>
 #include "ShaderProgram.h"
-#include "TileMap.h"
-#include "Enemy.h"
-#include "json/json.h"
-#include "TileMapStatic.h"
-#include <memory>
-#include "Item.h"
+#include "Sprite.h"
 #include "Text.h"
-#include <irrKlang.h>
-using namespace irrklang;
-
-
-// Scene contains all the entities of our game.
-// It is responsible for updating and render them.
-
 
 class Scene
 {
 
 public:
-	Scene(int lvl=0);
+	Scene();
 	~Scene();
 
-	void init();
-	void update(int deltaTime);
-	void render();
+	virtual void init();
+	virtual void update(int deltaTime);
+	virtual void render();
 
-	void keyReleased(int key);
+	virtual void mouseMove(int x, int y);
+	virtual void mouseRelease(int button, int x, int y);
+	virtual void keyReleased(int key);
 
-	vector<Enemy*>* getEnemies();
+	virtual bool isGameLevel() const;
 
-	void quit();
-	void pause();
-	void resume();
-	void restart();
-
-
-
-	
 private:
 	void initShaders();
-	bool calculateCameraPosition();
-
-	void buildLevel(const string& levelFile);
-
-	void createEntities(const Json::Value entities);
-	void createItemsMap(const Json::Value items_map);
-
-
-	void updateEnemies(int deltatime);
-
-	void updateItems(int deltaTime);
-
-	void updateCamera();
-
-	void textRenderer();
-
-private:
-	bool bPlay; 
-	bool bGameOver;
-	TileMap *map;
-	TileMapStatic* mapDecoration;
-
-	ShaderProgram texProgram;
-	float currentTime;
-	glm::mat4 projection;
-	
-	glm::vec2 playerStartPos;
-	Text text;
-	
-	int level;
-	vector<Enemy*> enemies;
-	vector<Item*> items;
+	void initBackground();
 
 protected:
-	float cameraX = 0.f;
-
+	ShaderProgram texProgram;
+	glm::mat4 projection;
+	float currentTime;
+	Texture spritesheetBackground;
+	Sprite* background;
+	string background_image;
+	bool pressedLeft, pressedRight, releasedLeft, releasedRight;
+	Text text;
 };
-
 
 #endif // _SCENE_INCLUDE
 

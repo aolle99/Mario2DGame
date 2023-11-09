@@ -30,6 +30,12 @@
     <Filter Include="Archivos de recursos\images">
       <UniqueIdentifier>{07c79fb7-a508-4a17-86f9-26526f79c176}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Archivos de encabezado\Scenes">
+      <UniqueIdentifier>{dac1b28c-98f5-4713-98f3-956a2e508a12}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Archivos de código fuente\Scenes">
+      <UniqueIdentifier>{c4912947-f977-4696-8e5b-fa5c9cb92a02}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Game.h">
@@ -74,12 +80,6 @@
     <ClInclude Include="TileMap.h">
       <Filter>Archivos de encabezado</Filter>
     </ClInclude>
-    <ClInclude Include="Scene.h">
-      <Filter>Archivos de encabezado</Filter>
-    </ClInclude>
-    <ClInclude Include="Screen.h">
-      <Filter>Archivos de encabezado</Filter>
-    </ClInclude>
     <ClInclude Include="SoundManager.h">
       <Filter>Archivos de encabezado\Helpers</Filter>
     </ClInclude>
@@ -88,6 +88,24 @@
     </ClInclude>
     <ClInclude Include="PunctuationDisplay.h">
       <Filter>Archivos de encabezado\Helpers</Filter>
+    </ClInclude>
+    <ClInclude Include="GameScene.h">
+      <Filter>Archivos de encabezado\Scenes</Filter>
+    </ClInclude>
+    <ClInclude Include="Scene.h">
+      <Filter>Archivos de encabezado\Scenes</Filter>
+    </ClInclude>
+    <ClInclude Include="MainMenuScene.h">
+      <Filter>Archivos de encabezado\Scenes</Filter>
+    </ClInclude>
+    <ClInclude Include="InstructionsScene.h">
+      <Filter>Archivos de encabezado\Scenes</Filter>
+    </ClInclude>
+    <ClInclude Include="CreditsScene.h">
+      <Filter>Archivos de encabezado\Scenes</Filter>
+    </ClInclude>
+    <ClInclude Include="LevelLoadingScene.h">
+      <Filter>Archivos de encabezado\Scenes</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -133,13 +151,7 @@
     <ClCompile Include="TexturedQuad.cpp">
       <Filter>Archivos de código fuente\Helpers</Filter>
     </ClCompile>
-    <ClCompile Include="Screen.cpp">
-      <Filter>Archivos de código fuente</Filter>
-    </ClCompile>
     <ClCompile Include="TileMap.cpp">
-      <Filter>Archivos de código fuente</Filter>
-    </ClCompile>
-    <ClCompile Include="Scene.cpp">
       <Filter>Archivos de código fuente</Filter>
     </ClCompile>
     <ClCompile Include="SoundManager.cpp">
@@ -150,6 +162,24 @@
     </ClCompile>
     <ClCompile Include="PunctuationDisplay.cpp">
       <Filter>Archivos de código fuente\Helpers</Filter>
+    </ClCompile>
+    <ClCompile Include="GameScene.cpp">
+      <Filter>Archivos de código fuente\Scenes</Filter>
+    </ClCompile>
+    <ClCompile Include="Scene.cpp">
+      <Filter>Archivos de código fuente\Scenes</Filter>
+    </ClCompile>
+    <ClCompile Include="MainMenuScene.cpp">
+      <Filter>Archivos de código fuente\Scenes</Filter>
+    </ClCompile>
+    <ClCompile Include="InstructionsScene.cpp">
+      <Filter>Archivos de código fuente\Scenes</Filter>
+    </ClCompile>
+    <ClCompile Include="CreditsScene.cpp">
+      <Filter>Archivos de código fuente\Scenes</Filter>
+    </ClCompile>
+    <ClCompile Include="LevelLoadingScene.cpp">
+      <Filter>Archivos de código fuente\Scenes</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

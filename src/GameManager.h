@@ -37,16 +37,22 @@ public:
 	void setLevelEnd(bool bEnd);
 	void setLevelCompleted(bool bCompleted);
 	void setPaused(bool bPaused);
+	void resetLevel();
 	int getMaxScrollX();
 	int getMinScrollX();
 	int getScore();
 	int getLives();
 	int getTime();
+	int getMaxTime();
 	int getLevel();
 	int getCoins();
+	
 
 	bool isLevelEnd();
 	bool isPaused();
+	bool isLevelStarted();
+	bool hasNextLevel();
+	bool levelExists(int level);
 
 
 

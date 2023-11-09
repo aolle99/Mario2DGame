@@ -1,14 +1,19 @@
 #include "GameManager.h"
 
 
+#define GAME_LEVELS 2
+#define LEVEL_TIME 151
+#define START_LIVES 3
+
 void GameManager::init()
 {
 	score = 0;
-	lives = 3;
-	time = 100;
-	level = 1;
+	lives = START_LIVES;
+	time = LEVEL_TIME;
+	level = 0;
 	coins = 0;
 	startTime = std::chrono::high_resolution_clock::now();
+	bPaused = true;
 }
 
 void GameManager::update(int deltaTime)
@@ -45,7 +50,9 @@ void GameManager::setTime(int time)
 
 void GameManager::setLevel(int level)
 {
-	this->level = level;
+	if(level != this->level)
+		this->level = level;
+		this->resetLevel();
 }
 
 void GameManager::setScrollX(glm::vec2 scrollX)
@@ -74,6 +81,15 @@ void GameManager::setPaused(bool bPaused)
 		this->bPaused = bPaused;
 }
 
+void GameManager::resetLevel()
+{
+	score = 0;
+	time = LEVEL_TIME;
+	coins = 0;
+	startTime = std::chrono::high_resolution_clock::now();
+	bPaused= true;
+}
+
 int GameManager::getScore()
 {
 	return score;
@@ -89,6 +105,11 @@ int GameManager::getTime()
 	return time;
 }
 
+int GameManager::getMaxTime()
+{
+	return LEVEL_TIME;
+}
+
 int GameManager::getLevel()
 {
 	return level;
@@ -98,6 +119,8 @@ int GameManager::getCoins()
 {
 	return coins;
 }
+
+
 
 int GameManager::getMaxScrollX()
 {
@@ -117,4 +140,22 @@ bool GameManager::isLevelEnd()
 bool GameManager::isPaused()
 {
 	return bPaused;
+}
+
+bool GameManager::isLevelStarted()
+{
+	return LEVEL_TIME > time;
+}
+
+bool GameManager::hasNextLevel()
+{
+	if(level+1 < GAME_LEVELS)
+		return true;
+	else
+		return false;
+}
+
+bool GameManager::levelExists(int level)
+{
+	return level < GAME_LEVELS;
 }

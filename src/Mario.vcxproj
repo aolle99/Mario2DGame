@@ -12,14 +12,18 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AnimKeyframes.h" />
+    <ClInclude Include="CreditsScene.h" />
     <ClInclude Include="Enemy.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="GameManager.h" />
+    <ClInclude Include="InstructionsScene.h" />
     <ClInclude Include="Item.h" />
+    <ClInclude Include="LevelLoadingScene.h" />
+    <ClInclude Include="MainMenuScene.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="PunctuationDisplay.h" />
+    <ClInclude Include="GameScene.h" />
     <ClInclude Include="Scene.h" />
-    <ClInclude Include="Screen.h" />
     <ClInclude Include="Shader.h" />
     <ClInclude Include="ShaderProgram.h" />
     <ClInclude Include="SoundManager.h" />
@@ -33,15 +37,19 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\libs\json\dist\jsoncpp.cpp" />
+    <ClCompile Include="CreditsScene.cpp" />
     <ClCompile Include="Enemy.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="GameManager.cpp" />
+    <ClCompile Include="InstructionsScene.cpp" />
     <ClCompile Include="Item.cpp" />
+    <ClCompile Include="LevelLoadingScene.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="MainMenuScene.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="PunctuationDisplay.cpp" />
+    <ClCompile Include="GameScene.cpp" />
     <ClCompile Include="Scene.cpp" />
-    <ClCompile Include="Screen.cpp" />
     <ClCompile Include="Shader.cpp" />
     <ClCompile Include="ShaderProgram.cpp" />
     <ClCompile Include="SoundManager.cpp" />

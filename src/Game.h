@@ -3,7 +3,6 @@
 
 
 #include "Scene.h"
-#include "Screen.h"
 
 
 #define SCREEN_WIDTH 1024
@@ -18,6 +17,7 @@ class Game
 
 private:
 	Game() {}
+	void SceneFactory(const int scene_id);
 	
 public:
 	static Game &instance()
@@ -30,7 +30,20 @@ public:
 	void init();
 	bool update(int deltaTime);
 	void render();
-	void setCurrentScreen(string currentScreen);
+
+	// Scene management
+	void showMainMenu();
+	void showInstructions();
+	void showLoadLevel();
+	void showGame();
+	void showCredits();
+
+
+	// Game state management
+	void resetGame();
+	void nextLevel();
+	void changeLevel(int level);
+
 	
 	// Input callback methods
 	void keyPressed(int key);
@@ -44,16 +57,14 @@ public:
 	bool getKey(int key) const;
 	bool getSpecialKey(int key) const;
 
+	void exitGame();
+
 private:
 	bool bExit;                       // Continue to play game?
-	Scene scene;                      // Scene to render
+	Scene* scene;                      // Scene to render
 	bool keys[256], specialKeys[256]; // Store key states so that 
 	                                  // we can have access at any time
-	MainMenu mainMenu;
-	Instructions instructions;
-	Credits credits;
-	LoadLevel loadLevel;
-	string currentScreen;
+
 
 };
 
