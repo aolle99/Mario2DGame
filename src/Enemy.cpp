@@ -153,7 +153,7 @@ void Goomba::init(const glm::ivec2& tileMapPos, ShaderProgram& shaderProgram)
 
 void Goomba::update(int deltaTime)
 {
-	if(GameManager::instance().getScrollX() + 50 < posEnemy.x) return;
+	if(GameManager::instance().getMaxScrollX() + 50 < posEnemy.x || GameManager::instance().getMinScrollX() -50 > posEnemy.x) return;
 	sprite->update(deltaTime);
 
 	if (bDying) {
@@ -295,7 +295,7 @@ void Koopa::turtleMode()
 
 void Koopa::update(int deltaTime)
 {
-	if (GameManager::instance().getScrollX() < posEnemy.x) return;
+	if (GameManager::instance().getMaxScrollX() + 50 < posEnemy.x || GameManager::instance().getMinScrollX() - 50 > posEnemy.x) return;
 	sprite->update(deltaTime);
 
 	if (bDying) { // Koopa morint

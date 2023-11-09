@@ -29,6 +29,8 @@ public:
 	void update(int deltaTime);
 	void render();
 
+	void keyReleased(int key);
+
 	vector<Enemy*>* getEnemies();
 
 	void quit();
@@ -47,7 +49,7 @@ private:
 
 	void createEntities(const Json::Value entities);
 	void createItemsMap(const Json::Value items_map);
-	void keyReleased(int key);
+
 
 	void updateEnemies(int deltatime);
 
