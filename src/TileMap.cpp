@@ -239,7 +239,7 @@ bool TileMap::collisionMoveRight(const glm::ivec2 &pos, const glm::ivec2 &size) 
 bool TileMap::nearFall(const glm::ivec2& pos, const glm::ivec2& size, bool direction) const
 {
 	int x, y;
-	y = (pos.y + size.y) / tileSize + 1;
+	y = (pos.y + size.y) / tileSize;
 	if(direction)
 		x = (pos.x + size.x) / tileSize;
 
