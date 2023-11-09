@@ -134,7 +134,7 @@ void GameScene::keyReleased(int key)
 	}
 	else if (GameManager::instance().isPaused() && key == 32) {
 		GameManager::instance().setPaused(false);
-		if(!GameManager::instance().isLevelStarted())
+		if(GameManager::instance().isLevelStarted())
 			SoundManager::instance().playMusic("res/music/overworld_resumed.ogg");
 		else
 			SoundManager::instance().playMusic("res/music/overworld.ogg");
