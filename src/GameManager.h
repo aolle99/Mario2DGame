@@ -34,7 +34,7 @@ public:
 	void setLevel(int level);
 	void setScrollX(glm::vec2 scrollX);
 	void addCoin();
-	void setLevelEnd(bool bEnd);
+	void setGameOver(int bEnd);
 	void setLevelCompleted(bool bCompleted);
 	void setPaused(bool bPaused);
 	void resetLevel();
@@ -48,9 +48,10 @@ public:
 	int getCoins();
 	
 
-	bool isLevelEnd();
 	bool isPaused();
 	bool isLevelStarted();
+	bool isLevelCompleted();
+	int isGameOver();
 	bool hasNextLevel();
 	bool levelExists(int level);
 
@@ -58,9 +59,9 @@ public:
 
 
 private:
-	int score, lives, time, level, coins, scrollXmin, scrollXmax;
+	int score, lives, time, level, coins, scrollXmin, scrollXmax, bGameOver;
 	std::chrono::time_point<std::chrono::high_resolution_clock>  startTime;
-	bool bLevelEnd, bPaused, bLevelCompleted;
+	bool bPaused, bLevelCompleted;
 	string textToRender;
 	glm::vec2 textCoords;
 	

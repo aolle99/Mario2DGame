@@ -246,8 +246,8 @@ void Player::update(int deltaTime)
 	if (bDying) {
 		this->marioDying();
 	}
-	else if (GameManager::instance().isLevelEnd() || GameManager::instance().isPaused()) {
-		if(GameManager::instance().isLevelEnd()) this->animationEnd();
+	else if (GameManager::instance().isLevelCompleted() || GameManager::instance().isPaused()) {
+		if(GameManager::instance().isLevelCompleted()) this->animationEnd(deltaTime);
 	}
 	else {
 		int textureChanged = 2;
@@ -514,26 +514,33 @@ void Player::removeCollisionBlock(int x, int y) {
 		map->removeCollisionBlock(x, y);
 }
 
+void Player::resetCurrentTime()
+{
+		currentTime = 0;
+}
+
 
 glm::ivec2 Player::getHitboxPosition() {
 	return posPlayer + glm::ivec2(4, 0);
 }
 
 
-void Player::animationEnd()
+void Player::animationEnd(int deltaTime)
 {
+	currentTime += deltaTime;
 	if (animStep==0) {
 		sprite->changeAnimation(END);
 		if (!map->collisionMoveDown(posPlayer, size, &posPlayer.y))
 		{
-			posPlayer.y += 3;
+			posPlayer.y += 2;
 		}
 		else {
 			animStep = 1;
+			sprite->changeAnimation(MOVE);
 		}
 	}
 	else if (animStep==1) {
-		sprite->changeAnimation(MOVE);
+		
 		bLeft = false;
 		if (posPlayer.x < endLevelPos.x) {
 			posPlayer.x += 1;
@@ -544,7 +551,8 @@ void Player::animationEnd()
 		else {
 			sprite->changeAnimation(STAND);
 			bShow=false;
-			GameManager::instance().setLevelCompleted(true);
+			if(currentTime > 6000)
+				Game::instance().nextLevel();
 		}
 	}
 }

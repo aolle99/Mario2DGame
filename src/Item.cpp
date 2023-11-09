@@ -224,7 +224,7 @@ void Flag::update(int deltaTime)
 {
 	if (!bVisible) return;
 	sprite->update(deltaTime);
-	if (GameManager::instance().isLevelEnd() && posItem.y < minCoords.y) {
+	if (GameManager::instance().isLevelCompleted() && posItem.y < minCoords.y) {
 		posItem = glm::vec2(posItem.x, posItem.y + 4);
 		sprite->setPosition(posItem);
 	}
@@ -249,7 +249,7 @@ void CastleFlag::init(const glm::ivec2& tileMapPos, ShaderProgram& shaderProgram
 
 void CastleFlag::update(int deltaTime)
 {
-	if(GameManager::instance().isLevelEnd()) bVisible = true;
+	if(GameManager::instance().isLevelCompleted()) bVisible = true;
 	
 	if (!bVisible) return;
 	sprite->update(deltaTime);
@@ -275,14 +275,15 @@ void EndPivot::update(int deltaTime)
 	if (!bVisible) return;
 	glm::ivec2 pos = posItem + glm::ivec2(14,0);
 	glm::ivec2 size = sizeItem - glm::ivec2(28,0);
-	if (!GameManager::instance().isLevelEnd() && Player::instance().collision(pos, size)) {
+	if (!GameManager::instance().isLevelCompleted() && Player::instance().collision(pos, size)) {
 		GameManager::instance().addScore((multiplier+1) * 10);
 		PunctuationDisplay::instance().addDisplay(to_string((multiplier + 1) * 10), pos);
-		GameManager::instance().setLevelEnd(true);
+		GameManager::instance().setLevelCompleted(true);
 		SoundManager::instance().stopMusic();
 		SoundManager::instance().playSound("res/Sounds/flagpole.wav");
 		SoundManager::instance().playSound("res/Sounds/fireworks.wav");
 		SoundManager::instance().playSound("res/Sounds/world_clear.wav");
+		Player::instance().resetCurrentTime();
 	}
 }
 

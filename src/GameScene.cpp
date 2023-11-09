@@ -54,7 +54,6 @@ void GameScene::init()
 {
 	Scene::init();
 
-	bGameOver = false;
 	PunctuationDisplay::instance().clear();
 	buildLevel("res/levels/Level_" + to_string(level) + ".ldtkl");
 	cameraX = 0.f;
@@ -73,7 +72,7 @@ void GameScene::init()
 
 void GameScene::update(int deltaTime)
 {
-	if (!GameManager::instance().isPaused()) {
+	if (!GameManager::instance().isPaused() && !GameManager::instance().isGameOver()) {
 		currentTime += deltaTime;
 		Player::instance().update(deltaTime);
 		GameManager::instance().update(deltaTime);
@@ -84,6 +83,8 @@ void GameScene::update(int deltaTime)
 		updateEnemies(deltaTime);
 
 		updateItems(deltaTime);
+
+		checkPlayerAlive();
 
 		map->update(deltaTime);
 	}
@@ -350,6 +351,22 @@ void GameScene::updateCamera() {
 	}
 }
 
+void GameScene::checkPlayerAlive()
+{
+	if (Player::instance().isDead()) {
+		GameManager::instance().substractLive();
+		if (GameManager::instance().getLives() > 0) {
+			Game::instance().showLoadLevel();
+		}
+		else {
+			GameManager::instance().setGameOver(true);
+		}
+	}
+	else if (GameManager::instance().getTime() <= 0) {
+		GameManager::instance().setGameOver(2);
+	}
+}
+
 void GameScene::textRenderer() {
 	string score = to_string(GameManager::instance().getScore());
 	string coins = to_string(GameManager::instance().getCoins());
@@ -371,8 +388,8 @@ void GameScene::textRenderer() {
 		text.render("Press 'SPACE' to " + textToRender, glm::vec2(SCREEN_WIDTH / 2 - 180, SCREEN_HEIGHT / 2), 16, glm::vec4(1, 1, 1, 1));
 	}
 
-	if (GameManager::instance().getTime() == 0) {
-		bGameOver = true;
+	if (GameManager::instance().isGameOver() == 2) {
+		GameManager::instance().setGameOver(2);
 		text.render("GAME OVER", glm::vec2(SCREEN_WIDTH / 2 - 130, SCREEN_HEIGHT / 2 - 50), 32, glm::vec4(1, 0, 0, 1));
 		text.render("you run out of time", glm::vec2(SCREEN_WIDTH / 2 - 140, SCREEN_HEIGHT / 2 - 20), 16, glm::vec4(1, 0, 0, 1));
 		text.render("Press 'Q' to quit", glm::vec2(SCREEN_WIDTH / 2 - 120, SCREEN_HEIGHT / 2 + 20), 16, glm::vec4(1, 1, 1, 1));
@@ -381,8 +398,8 @@ void GameScene::textRenderer() {
         SoundManager::instance().playSound("res/sounds/game_over.wav");
 	}
 
-	if (GameManager::instance().getLives() == 0) {
-		bGameOver = true;
+	if (GameManager::instance().isGameOver() == 1) {
+		GameManager::instance().setGameOver(1);
 		text.render("GAME OVER", glm::vec2(SCREEN_WIDTH / 2 - 130, SCREEN_HEIGHT / 2 - 50), 32, glm::vec4(1, 0, 0, 1));
 		text.render("you run out of lives", glm::vec2(SCREEN_WIDTH / 2 - 140, SCREEN_HEIGHT / 2 - 20), 16, glm::vec4(1, 0, 0, 1));
 		text.render("Press 'Q' to quit", glm::vec2(SCREEN_WIDTH / 2 - 120, SCREEN_HEIGHT / 2 + 20), 16, glm::vec4(1, 1, 1, 1));
