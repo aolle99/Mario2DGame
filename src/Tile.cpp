@@ -7,6 +7,8 @@
 #include "Item.h"
 #include "Player.h"
 #include "Sprite.h"
+#include "GameManager.h"
+#include "PunctuationDisplay.h"
 
 #define gridSize 32
 #define tilesheetWidth 256.f
@@ -159,6 +161,8 @@ void BrickTile::destroy() {
 	if (item == nullptr) {
 		Player::instance().removeCollisionBlock(position.x, position.y);
 		bDestroyed = true;
+		PunctuationDisplay::instance().addDisplay(to_string(PUNCT_BLOCK), position);
+		GameManager::instance().addScore(PUNCT_BLOCK);
 	}
 	else {
 		texturePos = glm::ivec2(96, 0);
