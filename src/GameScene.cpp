@@ -122,6 +122,8 @@ void GameScene::keyReleased(int key)
 {
 	if (key == 80 || key == 112) { // P or p
 		GameManager::instance().setPaused(true);
+        SoundManager::instance().stopMusic();
+        SoundManager::instance().playSound("res/sounds/pause.wav");
 	}
 	else if (key == 82 || key == 114) {
 		Game::instance().resetGame();
@@ -132,6 +134,7 @@ void GameScene::keyReleased(int key)
 	}
 	else if (GameManager::instance().isPaused() && key == 32) {
 		GameManager::instance().setPaused(false);
+        SoundManager::instance().playMusic("res/music/overworld_resumed.ogg");
 	}
 	else if (key == 49) {
 		Game::instance().changeLevel(0);
@@ -170,7 +173,7 @@ void GameScene::buildLevel(const string& levelFile)
 	map_file >> root;
 
 	glm::ivec2 mapSize = glm::ivec2(root["pxWid"].asInt() / 32, root["pxHei"].asInt() / 32);
-    
+
 	Json::Value entities, decoration, main, items_map;
 	for (Json::Value type : root["layerInstances"])
 	{
@@ -371,6 +374,8 @@ void GameScene::textRenderer() {
 		text.render("you run out of time", glm::vec2(SCREEN_WIDTH / 2 - 140, SCREEN_HEIGHT / 2 - 20), 16, glm::vec4(1, 0, 0, 1));
 		text.render("Press 'Q' to quit", glm::vec2(SCREEN_WIDTH / 2 - 120, SCREEN_HEIGHT / 2 + 20), 16, glm::vec4(1, 1, 1, 1));
 		text.render("Press 'R' to restart", glm::vec2(SCREEN_WIDTH / 2 - 145, SCREEN_HEIGHT / 2 + 40), 16, glm::vec4(1, 1, 1, 1));
+        SoundManager::instance().stopMusic();
+        SoundManager::instance().playSound("res/sounds/game_over.wav");
 	}
 
 	if (GameManager::instance().getLives() == 0) {
@@ -379,6 +384,8 @@ void GameScene::textRenderer() {
 		text.render("you run out of lives", glm::vec2(SCREEN_WIDTH / 2 - 140, SCREEN_HEIGHT / 2 - 20), 16, glm::vec4(1, 0, 0, 1));
 		text.render("Press 'Q' to quit", glm::vec2(SCREEN_WIDTH / 2 - 120, SCREEN_HEIGHT / 2 + 20), 16, glm::vec4(1, 1, 1, 1));
 		text.render("Press 'R' to restart", glm::vec2(SCREEN_WIDTH / 2 - 145, SCREEN_HEIGHT / 2 + 40), 16, glm::vec4(1, 1, 1, 1));
+        SoundManager::instance().stopMusic();
+        SoundManager::instance().playSound("res/sounds/game_over.wav");
 	}
 
 	PunctuationDisplay::instance().render();
