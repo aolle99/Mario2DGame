@@ -226,7 +226,6 @@ void Player::marioDying() {
 	if (posPlayer.y > 518) {
 		bDead = true;
 		bDying = false;
-		GameManager::instance().substractLive();
 		currentTime = 0;
 	}
 	
@@ -234,8 +233,9 @@ void Player::marioDying() {
 
 void Player::update(int deltaTime)
 {
+	if(bDead) return;
+
 	sprite->update(deltaTime);
-	
 	if (bInvulnerable) {
 		invTime -= 1;
 		if (invTime == 0) {

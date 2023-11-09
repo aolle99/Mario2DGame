@@ -56,9 +56,11 @@ void GameScene::init()
 
 	PunctuationDisplay::instance().clear();
 	buildLevel("res/levels/Level_" + to_string(level) + ".ldtkl");
-	cameraX = 0.f;
+ 	cameraX = 0.f;
 	
 	GameManager::instance().setScrollX(glm::vec2(cameraX,SCREEN_WIDTH-1));
+
+	SoundManager::instance().stopMusic();
 
 	for (auto& item : items) {
 		item->setTileMap(map);
@@ -74,7 +76,7 @@ void GameScene::update(int deltaTime)
 {
 	if (!GameManager::instance().isPaused() && !GameManager::instance().isGameOver()) {
 		currentTime += deltaTime;
-		Player::instance().update(deltaTime);
+		
 		GameManager::instance().update(deltaTime);
 		PunctuationDisplay::instance().update(deltaTime);
 
@@ -84,9 +86,10 @@ void GameScene::update(int deltaTime)
 
 		updateItems(deltaTime);
 
-		checkPlayerAlive();
-
 		map->update(deltaTime);
+		
+		Player::instance().update(deltaTime);
+		checkPlayerAlive();
 	}
 }
 

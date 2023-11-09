@@ -35,7 +35,3 @@ void LevelLoadingScene::update(int deltaTime)
 	if(loading_time >= LOAD_LEVEL_TIME)
 		Game::instance().showGame();
 }
-
-int LevelLoadingScene::getLoadingTime() {
-	return loading_time;
-}

@@ -79,7 +79,6 @@ void Game::showCredits()
 
 void Game::resetGame()
 {
-	delete scene;
 	GameManager::instance().init();
 	showLoadLevel();
 }

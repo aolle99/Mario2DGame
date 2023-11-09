@@ -1,5 +1,5 @@
-#ifndef LEVELLOADINGSCENE
-#define LEVELLOADINGSCENE
+#ifndef LEVELLOADINGSCENE_INCLUDE
+#define LEVELLOADINGSCENE_INCLUDE
 
 #include "Scene.h"
 
@@ -9,9 +9,8 @@ public:
 	virtual void init();
 	virtual void render();
 	virtual void update(int deltaTime);
-	int getLoadingTime();
 
 private:
 	int loading_time;
 };
-#endif // !LEVELLOADINGSCENE
+#endif // LEVELLOADINGSCENE_INCLUDE
