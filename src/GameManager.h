@@ -32,17 +32,18 @@ public:
 	void substractLive();
 	void setTime(int time);
 	void setLevel(int level);
+	void setScrollX(glm::vec2 scrollX);
 	void addCoin();
 	void setLevelEnd(bool bEnd);
 	void setLevelCompleted(bool bCompleted);
 	void setPaused(bool bPaused);
-	void setScrollX(int scrollX);
+	int getMaxScrollX();
+	int getMinScrollX();
 	int getScore();
 	int getLives();
 	int getTime();
 	int getLevel();
 	int getCoins();
-	int getScrollX();
 
 	bool isLevelEnd();
 	bool isPaused();
@@ -51,7 +52,7 @@ public:
 
 
 private:
-	int score, lives, time, level, coins, scrollX;
+	int score, lives, time, level, coins, scrollXmin, scrollXmax;
 	std::chrono::time_point<std::chrono::high_resolution_clock>  startTime;
 	bool bLevelEnd, bPaused, bLevelCompleted;
 	string textToRender;

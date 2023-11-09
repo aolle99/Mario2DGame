@@ -48,9 +48,10 @@ void GameManager::setLevel(int level)
 	this->level = level;
 }
 
-void GameManager::setScrollX(int scrollX)
+void GameManager::setScrollX(glm::vec2 scrollX)
 {
- 	this->scrollX = scrollX;
+	scrollXmin = scrollX.x;
+	scrollXmax = scrollX.y;
 }
 
 void GameManager::addCoin()
@@ -98,9 +99,14 @@ int GameManager::getCoins()
 	return coins;
 }
 
-int GameManager::getScrollX()
+int GameManager::getMaxScrollX()
 {
-	return scrollX;
+	return scrollXmax;
+}
+
+int GameManager::getMinScrollX()
+{
+	return scrollXmin;
 }
 
 bool GameManager::isLevelEnd()

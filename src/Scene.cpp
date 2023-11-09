@@ -60,7 +60,7 @@ void Scene::init()
 	cameraX = 0.f;
 	
 	projection = glm::ortho(0.f, float(SCREEN_WIDTH - 1), float(SCREEN_HEIGHT - 1), 0.f);
-	GameManager::instance().setScrollX(SCREEN_WIDTH);
+	GameManager::instance().setScrollX(glm::vec2(cameraX,SCREEN_WIDTH-1));
 	
 	currentTime = 0.0f;
 
@@ -131,7 +131,7 @@ bool Scene::calculateCameraPosition()
 			cameraX = oldCameraX;
 			return false;
 		}
-		GameManager::instance().setScrollX(float(SCREEN_WIDTH - 1) + cameraX);
+		GameManager::instance().setScrollX(glm::vec2(cameraX,float(SCREEN_WIDTH - 1) + cameraX));
 		playerStartPos.x = newPosPlayer.x;
 		return true;
 	}
