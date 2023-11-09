@@ -71,7 +71,6 @@ private:
 	
 	glm::vec2 playerStartPos;
 	Text text;
-	ISoundEngine* engine;
 	
 	int level;
 	vector<Enemy*> enemies;

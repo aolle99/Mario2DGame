@@ -70,8 +70,7 @@ void Scene::init()
 
 	text.init("res/Fonts/main_font.ttf");
 
-	//engine = SoundManager::instance().getSoundEngine();
-	//engine->play2D("res/Music/overworld.ogg");
+	SoundManager::instance().playMusic("res/Music/overworld.ogg");
 
 }
 

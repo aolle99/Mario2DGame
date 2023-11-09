@@ -17,6 +17,14 @@ public:
 	void init();
 	ISoundEngine* getSoundEngine();
 
+	void playSound(const char* sound);
+
+	void playMusic(const char* music);
+
+	void stopMusic();
+
+	void setVolume(float volume);
+
 private:
 	ISoundEngine* engine;
 };
