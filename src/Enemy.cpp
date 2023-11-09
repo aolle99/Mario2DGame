@@ -6,6 +6,7 @@
 #include "Game.h"
 #include "Player.h"
 #include "GameManager.h"
+#include "PunctuationDisplay.h"
 
 
 #define JUMP_ANGLE_STEP 4
@@ -214,8 +215,10 @@ bool Koopa::isModeTurtle()
 void Goomba::smashedDeath()
 {
 	sprite->changeAnimation(DIE);
+	
 	currentTime += 1;
 	if (currentTime == 20) {
+		PunctuationDisplay::instance().addDisplay("100", posEnemy);
 		bDead = true;
 		currentTime = 0;
 	}

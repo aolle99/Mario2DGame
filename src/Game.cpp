@@ -3,6 +3,7 @@
 #include "Game.h"
 #include "SoundManager.h"
 #include "GameManager.h"
+#include "PunctuationDisplay.h"
 
 
 void Game::init()
@@ -11,6 +12,7 @@ void Game::init()
 	glClearColor(0.5f, 0.7686f, 1.f, 1.0f);
 	SoundManager::instance().init();
 	GameManager::instance().init();
+	PunctuationDisplay::instance().init();
 	currentScreen = "main_menu";
 	mainMenu.init("main_menu");
 	instructions.init("instructions");

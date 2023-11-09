@@ -10,6 +10,7 @@
 #include "Player.h"
 #include "SoundManager.h"
 #include "GameManager.h"
+#include "PunctuationDisplay.h"
 
 
 #define SCREEN_X 32
@@ -39,6 +40,7 @@ void Scene::init()
 {
 	bPlay = true;
 	bGameOver = false;
+	PunctuationDisplay::instance().clear();
 	initShaders();
 	buildLevel("res/levels/Level_" + to_string(level) + ".ldtkl");
 	cameraX = 0.f;
@@ -74,27 +76,30 @@ void Scene::update(int deltaTime)
 
 
 		for (auto& enemy : enemies) {
-			enemy->update(deltaTime);
-			if (enemy->isKoopaShellMove()) {
-				for (auto& enemy2 : enemies) {
-					if (enemy != enemy2) {
-						if (enemy->collisionEnemies(enemy2->getPosition(), enemy2->getSize())) enemy2->collisionDeath();
+			if(enemy->isDead())
+				enemies.erase(std::remove_if(enemies.begin(), enemies.end(), [](Enemy* enemy) {return enemy->isDead(); }), enemies.end());
+			else {
+				enemy->update(deltaTime);
+				if (enemy->isKoopaShellMove()) {
+					for (auto& enemy2 : enemies) {
+						if (enemy != enemy2) {
+							if (enemy->collisionEnemies(enemy2->getPosition(), enemy2->getSize())) enemy2->collisionDeath();
+						}
 					}
 				}
-			}
-			else if (enemy->isModeTurtle()) {
-				for (auto& enemy2 : enemies) {
-					if (enemy != enemy2) {
-						if (enemy2->isModeTurtle()) {
-							if (enemy->collisionEnemies(enemy2->getPosition(), enemy2->getSize())) {
-								enemy->changeDirection();
-								enemy2->changeDirection();
+				else if (enemy->isModeTurtle()) {
+					for (auto& enemy2 : enemies) {
+						if (enemy != enemy2) {
+							if (enemy2->isModeTurtle()) {
+								if (enemy->collisionEnemies(enemy2->getPosition(), enemy2->getSize())) {
+									enemy->changeDirection();
+									enemy2->changeDirection();
+								}
 							}
 						}
 					}
 				}
 			}
-			
 		}
 
 		map->update(deltaTime);
@@ -102,6 +107,8 @@ void Scene::update(int deltaTime)
 		for (auto& item : items) {
 			item->update(deltaTime);
 		}
+
+		PunctuationDisplay::instance().update(deltaTime);
 	}
 }
 
@@ -166,6 +173,8 @@ void Scene::render()
 		text.render("Press 'Q' to quit", glm::vec2(SCREEN_WIDTH / 2 - 120, SCREEN_HEIGHT / 2 + 20), 16, glm::vec4(1, 1, 1, 1));
 		text.render("Press 'R' to restart", glm::vec2(SCREEN_WIDTH / 2 - 145, SCREEN_HEIGHT / 2 + 40), 16, glm::vec4(1, 1, 1, 1));
 	}
+
+	PunctuationDisplay::instance().render();
 }
 
 bool Scene::calculateCameraPosition()
