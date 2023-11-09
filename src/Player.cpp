@@ -9,6 +9,8 @@
 
 #define JUMP_ANGLE_STEP 4.f
 #define FALL_STEP 8
+#define MAX_WALK_SPEED 2
+#define MAX_RUN_SPEED 5
 
 
 
@@ -27,7 +29,6 @@ void Player::init(glm::vec2 &startPos, ShaderProgram &shaderProgram)
 	bBounce = false;
 	bounceTime = 0;
 	invTime = 0;
-	speed = 2;
 	star = 0.f;
 	hp = 1;
 	currentTime = 0;
@@ -38,6 +39,8 @@ void Player::init(glm::vec2 &startPos, ShaderProgram &shaderProgram)
 	this->changeToMario();
 	sprite->changeAnimation(0);
 	sprite->setPosition(posPlayer);
+	moveSpeed = 0;
+	maxSpeed = MAX_WALK_SPEED;
 }
 
 void Player::changeToMario() {
@@ -112,10 +115,11 @@ void Player::move(bool direction)
 		bLeft = false;
 		if (map->collisionMoveRight(posPlayer, size) || map->checkOutOfBoundsRight(posPlayer.x))
 		{
+			moveSpeed = 0;
 			sprite->changeAnimation(STAND);
 		}
 		else {
-			posPlayer.x += speed;
+			if(moveSpeed < maxSpeed) moveSpeed += 0.1;
 		}
 	}
 	else // left
@@ -123,12 +127,14 @@ void Player::move(bool direction)
 		bLeft = true;
 		if (map->collisionMoveLeft(posPlayer, size) || map->checkOutOfBoundsLeft(posPlayer.x))
 		{
+			moveSpeed = 0;
 			sprite->changeAnimation(STAND);
 		}
 		else {
-			posPlayer.x -= speed;
+			if (moveSpeed > -maxSpeed) moveSpeed -= 0.1;
 		}
 	}
+	posPlayer.x += moveSpeed;
 
 }
 
@@ -148,18 +154,11 @@ void Player::jump()
 
 void Player::bend()
 {
-	speed = 1;
 	if (sprite->animation() != SHIFT) {
 		sprite->changeAnimation(SHIFT);
 	}
 	
 }
-
-void Player::run() {
-	speed = 4;
-	sprite->setAnimationSpeed(MOVE, 10);
-}
-
 bool Player::checkJumping()
 {
 
@@ -249,7 +248,7 @@ void Player::update(int deltaTime)
 		if(GameManager::instance().isLevelEnd()) this->animationEnd();
 	}
 	else {
-		int textureChanged = 3;
+		int textureChanged = 2;
 
 		if (bBounce) {
 			bJumping = false;
@@ -272,21 +271,35 @@ void Player::update(int deltaTime)
 
 		if (Game::instance().getSpecialKey(GLUT_KEY_LEFT)) this->move(false);
 		else if (Game::instance().getSpecialKey(GLUT_KEY_RIGHT)) this->move(true);
-		else textureChanged -= 1;
+		else {
+			if (moveSpeed > 1) {
+				moveSpeed -= 0.1;
+			}
+			else if (moveSpeed < -1) {
+				moveSpeed += 0.1;
+			}
+			else {
+				moveSpeed = 0;
+			}
+			posPlayer.x += moveSpeed;
+			textureChanged -= 1;
+		}
 
 		if (Game::instance().getKey(32) || Game::instance().getSpecialKey(GLUT_KEY_UP)) this->jump();
 		else if (Game::instance().getSpecialKey(GLUT_KEY_DOWN)) this->bend();
-		else if (Game::instance().getSpecialKey(112)) this->run();
+		else if (Game::instance().getSpecialKey(112)) { //shift
+			maxSpeed = MAX_RUN_SPEED;
+			sprite->setAnimationSpeed(MOVE, 10);
+		}
 		else {
-			textureChanged -= 1;
-			speed = 2;
+			maxSpeed = MAX_WALK_SPEED;
 			sprite->setAnimationSpeed(MOVE, 7);
 		}
 
-		if (Game::instance().getKey('m')) {
+		if (Game::instance().getKey('m') || Game::instance().getKey('M')) {
 			this->giveMushroom();
 		}
-		if (Game::instance().getKey('g')) {
+		if (Game::instance().getKey('g') || Game::instance().getKey('G')) {
 			this->giveStar();
 		}
 

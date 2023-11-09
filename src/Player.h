@@ -103,12 +103,13 @@ private:
 	ShaderProgram shaderProgram;
 	Sprite *sprite;
 	TileMap *map;
-	int speed;
 	int currentTime;
 	int hp;
 	int score;
 	int animStep;
 	glm::ivec2 endLevelPos;
+	float moveSpeed;
+	int maxSpeed;
 };
 
 
