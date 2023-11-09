@@ -92,6 +92,7 @@ private:
 	bool bDead;
 	bool bInvulnerable;
 	bool bBounce;
+	bool bShow;
 	float star;
 	int invTime;
 	int bounceTime;

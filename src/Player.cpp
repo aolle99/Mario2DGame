@@ -27,6 +27,7 @@ void Player::init(glm::vec2 &startPos, ShaderProgram &shaderProgram)
 	bDead = false;
 	bInvulnerable = false;
 	bBounce = false;
+	bShow = true;
 	bounceTime = 0;
 	invTime = 0;
 	star = 0.f;
@@ -72,7 +73,7 @@ void Player::changeToMario() {
 	sprite->addKeyframe(DIE, glm::vec2(0.0625f * 6, 0.75f));
 
 	sprite->setAnimationSpeed(END, 8);
-	sprite->addKeyframe(END, glm::vec2(0.0625f * 8, 0.75f));
+	sprite->addKeyframe(END, glm::vec2(0.0625f * 9, 0.75f));
 }
 
 void Player::changeToSuperMario() {
@@ -99,7 +100,7 @@ void Player::changeToSuperMario() {
 	sprite->addKeyframe(SHIFT, glm::vec2(0.0625f * 6, 0.25f));
 
 	sprite->setAnimationSpeed(END, 8);
-	sprite->addKeyframe(END, glm::vec2(0.0625f * 9, 0.75f));
+	sprite->addKeyframe(END, glm::vec2(0.0625f * 9, 0.25f));
 
 }
 
@@ -244,7 +245,6 @@ void Player::update(int deltaTime)
 		this->marioDying();
 	}
 	else if (GameManager::instance().isLevelEnd() || GameManager::instance().isPaused()) {
-		sprite->changeAnimation(STAND);
 		if(GameManager::instance().isLevelEnd()) this->animationEnd();
 	}
 	else {
@@ -324,6 +324,7 @@ void Player::update(int deltaTime)
 
 void Player::render()
 {
+	if (bShow)
 	sprite->render(bLeft, star > 0);
 }
 
@@ -506,9 +507,10 @@ glm::ivec2 Player::getHitboxPosition() {
 void Player::animationEnd()
 {
 	if (animStep==0) {
+		sprite->changeAnimation(END);
 		if (!map->collisionMoveDown(posPlayer, size, &posPlayer.y))
 		{
-			posPlayer.y += 4;
+			posPlayer.y += 3;
 		}
 		else {
 			animStep = 1;
@@ -518,16 +520,15 @@ void Player::animationEnd()
 		sprite->changeAnimation(MOVE);
 		bLeft = false;
 		if (posPlayer.x < endLevelPos.x) {
-			posPlayer.x += 2;
+			posPlayer.x += 1;
+			posPlayer.y += 4;
 			if (!map->collisionMoveDown(posPlayer, size, &posPlayer.y))
-			{
-				posPlayer.y += 4;
-			}
+			{}
 		}
 		else {
-			GameManager::instance().setLevelEnd(false);
+			sprite->changeAnimation(STAND);
+			bShow=false;
 			GameManager::instance().setLevelCompleted(true);
-			animStep = 2;
 		}
 	}
 }

@@ -2,6 +2,7 @@
 #include <GL/glut.h>
 #include "Game.h"
 #include "SoundManager.h"
+#include "GameManager.h"
 
 
 void Game::init()
@@ -9,6 +10,7 @@ void Game::init()
 	bExit = false;
 	glClearColor(0.5f, 0.7686f, 1.f, 1.0f);
 	SoundManager::instance().init();
+	GameManager::instance().init();
 	currentScreen = "main_menu";
 	mainMenu.init("main_menu");
 	instructions.init("instructions");
@@ -26,7 +28,7 @@ bool Game::update(int deltaTime)
 		instructions.update(deltaTime);
 	}
 	else if (currentScreen == "load_level") {
-		if(loadLevel.getLoadingTime() == 120) currentScreen = "game";
+		if(loadLevel.getLoadingTime() == 80) currentScreen = "game";
 		else loadLevel.update(deltaTime);
 	}
 	else if (currentScreen == "game") {
