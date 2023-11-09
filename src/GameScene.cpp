@@ -67,7 +67,7 @@ void GameScene::init()
 
 	text.init("res/Fonts/main_font.ttf");
 
-	SoundManager::instance().playMusic("res/Music/overworld.ogg");
+
 
 }
 
@@ -134,7 +134,10 @@ void GameScene::keyReleased(int key)
 	}
 	else if (GameManager::instance().isPaused() && key == 32) {
 		GameManager::instance().setPaused(false);
-        SoundManager::instance().playMusic("res/music/overworld_resumed.ogg");
+		if(!GameManager::instance().isLevelStarted())
+			SoundManager::instance().playMusic("res/music/overworld_resumed.ogg");
+		else
+			SoundManager::instance().playMusic("res/music/overworld.ogg");
 	}
 	else if (key == 49) {
 		Game::instance().changeLevel(0);
