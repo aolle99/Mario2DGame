@@ -12,6 +12,7 @@
 #define JUMP_ANGLE_STEP 4
 #define JUMP_HEIGHT 150
 #define FALL_STEP 4
+#define PUNCT_ENEMY 100
 
 enum EnemyAnims
 {
@@ -22,6 +23,11 @@ enum EnemyAnims
 void Enemy::update(int deltaTime)
 {
 	
+}
+
+void Enemy::render()
+{
+	sprite->render(bLeft);
 }
 
 void Enemy::move()
@@ -60,14 +66,7 @@ void Enemy::move()
 
 void Enemy::die()
 {
-
 	sprite->changeAnimation(DIE);
-}
-
-void Enemy::render()
-{
-	sprite->render(bLeft);
-	
 }
 
 void Enemy::collisionDeath()
@@ -130,6 +129,7 @@ void Goomba::init(const glm::ivec2& tileMapPos, ShaderProgram& shaderProgram)
 	bDying = false;
 	bDead = false;
 	bSmashed = false;
+	bTextRendered = false;
 	currentTime = 0;
 	speed = 2;
 	sizeEnemy = glm::ivec2(32, 32);
@@ -190,6 +190,13 @@ void Goomba::update(int deltaTime)
 void Goomba::collisionDeath()
 {
 	bDying = true;
+
+	if (!bTextRendered) {
+		PunctuationDisplay::instance().addDisplay(to_string(PUNCT_ENEMY), posEnemy);
+		GameManager::instance().addScore(PUNCT_ENEMY);
+		bTextRendered = true;
+	}
+
 	if (currentTime <= 10) {
 		posEnemy.y -= 2;
 	}
@@ -206,19 +213,18 @@ void Goomba::collisionDeath()
 	currentTime += 1;
 }
 
-bool Koopa::isModeTurtle()
-{
-	if(!bShell) return true;
-	return false;
-}
-
 void Goomba::smashedDeath()
 {
 	sprite->changeAnimation(DIE);
 	
 	currentTime += 1;
+	if (!bTextRendered) {
+		PunctuationDisplay::instance().addDisplay(to_string(PUNCT_ENEMY), posEnemy);
+		GameManager::instance().addScore(PUNCT_ENEMY);
+		bTextRendered = true;
+	}
 	if (currentTime == 20) {
-		PunctuationDisplay::instance().addDisplay("100", posEnemy);
+		
 		bDead = true;
 		currentTime = 0;
 	}
@@ -230,6 +236,7 @@ void Koopa::init(const glm::ivec2& tileMapPos, ShaderProgram& shaderProgram)
 	bStop = false;
 	bDying = false;
 	bDead = false;
+	bTextRendered = false;
 	speed = 2;
 	currentTime = 0;
 	this->shaderProgram = shaderProgram;
@@ -237,6 +244,28 @@ void Koopa::init(const glm::ivec2& tileMapPos, ShaderProgram& shaderProgram)
 
 	sprite->changeAnimation(0);
 	posEnemy = tileMapPos;
+	sprite->setPosition(posEnemy);
+}
+
+void Koopa::update(int deltaTime)
+{
+	if (GameManager::instance().getMaxScrollX() + 50 < posEnemy.x || GameManager::instance().getMinScrollX() - 50 > posEnemy.x) return;
+	sprite->update(deltaTime);
+
+	if (bDying) { // Koopa morint
+		collisionDeath();
+	}
+	else {
+		if (!bShell) { // Koopa en modo tortuga
+			this->turtleMode();
+		}
+
+		else { // Koopa en modo caparazon
+
+			this->shellMode();
+		}
+	}
+
 	sprite->setPosition(posEnemy);
 }
 
@@ -293,33 +322,17 @@ void Koopa::turtleMode()
 	}
 }
 
-void Koopa::update(int deltaTime)
-{
-	if (GameManager::instance().getMaxScrollX() + 50 < posEnemy.x || GameManager::instance().getMinScrollX() - 50 > posEnemy.x) return;
-	sprite->update(deltaTime);
-
-	if (bDying) { // Koopa morint
-		collisionDeath();
-	}
-	else {
-		if (!bShell) { // Koopa en modo tortuga
-			this->turtleMode();
-		}
-
-		else { // Koopa en modo caparazon
-
-			this->shellMode();
-		}
-	}
-
-	sprite->setPosition(posEnemy);
-}
-
 void Koopa::collisionDeath()
 {
 	sprite->changeAnimation(DIE);
 	bStop = true;
 	bDying = true;
+
+	if (!bTextRendered) {
+		PunctuationDisplay::instance().addDisplay(to_string(PUNCT_ENEMY), posEnemy);
+		GameManager::instance().addScore(PUNCT_ENEMY);
+		bTextRendered = true;
+	}
 
 	if (currentTime <= 10) {
 		posEnemy.y -= 2;
@@ -327,7 +340,6 @@ void Koopa::collisionDeath()
 
 	if (currentTime > 10) {
 		posEnemy.y += 2;
-
 	}
 
 	if (posEnemy.y > 518) {
@@ -380,5 +392,11 @@ void Koopa::change_to_turtle() {
 bool Koopa::isKoopaShellMove()
 {
 	if(bShell && !bStop) return true;
+	return false;
+}
+
+bool Koopa::isModeTurtle()
+{
+	if (!bShell) return true;
 	return false;
 }

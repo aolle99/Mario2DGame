@@ -13,7 +13,7 @@ void Game::init()
 	SoundManager::instance().init();
 	GameManager::instance().init();
 	PunctuationDisplay::instance().init();
-	currentScreen = "main_menu";
+	currentScreen = "game";
 	mainMenu.init("main_menu");
 	instructions.init("instructions");
 	loadLevel.init("load_level");

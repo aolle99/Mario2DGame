@@ -34,6 +34,7 @@ protected:
 	bool bLeft;
 	bool bDying;
 	bool bDead;
+	bool bTextRendered;
 	int currentTime;
 	int speed;
 	glm::ivec2 posEnemy, sizeEnemy;

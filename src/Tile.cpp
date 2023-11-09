@@ -11,6 +11,7 @@
 #define gridSize 32
 #define tilesheetWidth 256.f
 #define tilesheetHeight 512.f
+#define PUNCT_BLOCK 50
 
 Tile::Tile(const glm::ivec2 tileMapPos, const glm::vec2 pos)
 {
