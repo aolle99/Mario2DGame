@@ -251,19 +251,21 @@ void Player::update(int deltaTime)
 		int textureChanged = 2;
 
 		if (bBounce) {
-			bJumping = false;
-			if (bounceTime < 20) {
-				posPlayer.y -= 2;
-				bounceTime += 1;
+			if (bounceTime < 8) {
+				if (!map->collisionMoveUp(posPlayer, size)) {
+					posPlayer.y -= FALL_STEP - bounceTime / 8.f * FALL_STEP;
+					bounceTime += 1;
+				}				
 			}
-			else if (bounceTime == 20){
-				if (startY != posPlayer.y) {
-					posPlayer.y += 2;
+			else if (bounceTime < 8){
+				if (!map->collisionMoveDown(posPlayer, size, &posPlayer.y)) {
+					posPlayer.y += FALL_STEP - (8 - bounceTime) / 8.f * FALL_STEP;
+					bounceTime += 1;
 				}
-				else {
-					bounceTime = 20;
-					bBounce = false;
-				}
+			}
+			else {
+				bounceTime = 0;
+				bBounce = false;
 			}
 		}
 

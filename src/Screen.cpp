@@ -64,20 +64,25 @@ void MainMenu::render()
 	texProgram.setUniform2f("texCoordDispl", 0.f, 0.f);
 	background->render();
 
-	text.render("PLAY", glm::vec2(SCREEN_WIDTH / 2 - 50, SCREEN_HEIGHT / 2), 24, glm::vec4(1, 1, 1, 1));
-	text.render("INSTRUCTIONS", glm::vec2(SCREEN_WIDTH / 2 - 140, SCREEN_HEIGHT / 2 + 40), 24, glm::vec4(1, 1, 1, 1));
-	text.render("EXIT", glm::vec2(SCREEN_WIDTH / 2 - 50, SCREEN_HEIGHT / 2 + 80), 24, glm::vec4(1, 1, 1, 1));
+	text.render("PLAY", glm::vec2(SCREEN_WIDTH / 2 - 50, SCREEN_HEIGHT / 2 + 40), 24, glm::vec4(1, 1, 1, 1));
+	text.render("INSTRUCTIONS", glm::vec2(SCREEN_WIDTH / 2 - 140, SCREEN_HEIGHT / 2 + 80), 24, glm::vec4(1, 1, 1, 1));
+	text.render("CREDITS", glm::vec2(SCREEN_WIDTH / 2 - 80, SCREEN_HEIGHT / 2 + 120), 24, glm::vec4(1, 1, 1, 1));
+	text.render("EXIT", glm::vec2(SCREEN_WIDTH / 2 - 50, SCREEN_HEIGHT / 2 + 160), 24, glm::vec4(1, 1, 1, 1));
+	
 }
 
 string MainMenu::mouseRelease(int button, int xMouse, int yMouse)
 {
-	if (xMouse > 465 && xMouse < 556 && yMouse > 236 && yMouse < 256) {
+	if (xMouse > SCREEN_WIDTH / 2 - 50 && xMouse < SCREEN_WIDTH / 2 + 50 && yMouse > 276 && yMouse < 296) {
 		return "game";
 	}
-	else if(xMouse > SCREEN_WIDTH / 2 - 140 && xMouse < SCREEN_WIDTH / 2 + 140 && yMouse > 276 && yMouse < 296) {
+	else if(xMouse > SCREEN_WIDTH / 2 - 140 && xMouse < SCREEN_WIDTH / 2 + 140 && yMouse > 316 && yMouse < 336) {
 		return "instructions";
 	}
-	else if (xMouse > SCREEN_WIDTH / 2 - 50 && xMouse < SCREEN_WIDTH / 2 + 50 && yMouse > 316 && yMouse < 335) {
+	else if (xMouse > SCREEN_WIDTH / 2 - 80 && xMouse < SCREEN_WIDTH / 2 + 80 && yMouse > 356 && yMouse < 376) {
+		return "credits";
+	}
+	else if (xMouse > SCREEN_WIDTH / 2 - 50 && xMouse < SCREEN_WIDTH / 2 + 50 && yMouse > 396 && yMouse < 416) {
 		return "exit";
 	}
 	else {
@@ -139,6 +144,29 @@ void Credits::render() {
 	texProgram.setUniformMatrix4f("modelview", modelview);
 	texProgram.setUniform2f("texCoordDispl", 0.f, 0.f);
 	background->render();
+
+	text.render("CREDITS:", glm::vec2(20, 50), 20, glm::vec4(0, 0, 0, 1));
+	text.render("Game created by:", glm::vec2(20, 100), 14, glm::vec4(0, 0, 0, 1));
+	text.render("- Alex Olle and Cristina Migo", glm::vec2(30, 120), 14, glm::vec4(0, 0, 0, 1));
+	text.render("Sprites from:", glm::vec2(20, 150), 14, glm::vec4(0, 0, 0, 1));
+	text.render("- https://www.spriters-resource.com/nes/supermariobros/", glm::vec2(30, 170), 14, glm::vec4(0, 0, 0, 1));
+	text.render("Music from:", glm::vec2(20, 200), 14, glm::vec4(0, 0, 0, 1));
+	text.render("- https://www.youtube.com/watch?v=7q5VUcaDOZI", glm::vec2(30, 220), 14, glm::vec4(0, 0, 0, 1));
+	text.render("- https://www.youtube.com/watch?v=7q5VUcaDOZI", glm::vec2(30, 240), 14, glm::vec4(0, 0, 0, 1));
+
+
+
+	text.render("Return to Main Menu", glm::vec2(20, SCREEN_HEIGHT - 20), 14, glm::vec4(0, 0, 0, 1));
+}
+
+string Credits::mouseRelease(int button, int xMouse, int yMouse)
+{
+	if (xMouse >= 20 && xMouse < 278 && yMouse > SCREEN_HEIGHT - 20 - 14 && yMouse < SCREEN_HEIGHT - 20) {
+		return "main_menu";
+	}
+	else {
+		return "credits";
+	}
 }
 
 void LoadLevel::render()

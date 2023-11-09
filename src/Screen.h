@@ -54,6 +54,7 @@ class Credits : public Screen
 {
 	public:
 		void render();
+		string mouseRelease(int button, int xMouse, int yMouse);
 };
 
 class LoadLevel : public Screen

@@ -122,11 +122,16 @@ void Game::mouseRelease(int button, int xMouse, int yMouse)
 		if(cScreen != "instructions") {
 			currentScreen = cScreen;
 		}
+	} 
+	else if (currentScreen == "credits") {
+		string cScreen = credits.mouseRelease(button, xMouse, yMouse);
+		if (cScreen != "credits") {
+			currentScreen = cScreen;
+		}
 	}
 	/*
-	else if (currentScreen == "load_level") loadLevel.mouseRelease(button);
 	else if (currentScreen == "game") scene.mouseRelease(button);
-	else if (currentScreen == "credits") credits.mouseRelease(button);*/
+	;*/
 }
 
 bool Game::getKey(int key) const
