@@ -21,6 +21,7 @@ void Item::init(const glm::ivec2& tileMapPos, ShaderProgram& shaderProgram)
 {
 	bLeft = false;
 	bVisible = false;
+	bUsed = false;
 	currentTime = 0;
 	sizeItem = glm::ivec2(32, 32);
 	
@@ -79,6 +80,11 @@ bool Item::isVisible()
 	return bVisible;
 }
 
+bool Item::isUsed()
+{
+	return bUsed;
+}
+
 void Item::show()
 {
 	bVisible = true;
@@ -114,7 +120,8 @@ void Mushroom::update(int deltaTime)
 	Item::update(deltaTime);
 	if (Player::instance().collisionRight(posItem, sizeItem) || Player::instance().collisionLeft(posItem, sizeItem) || Player::instance().collisionDown(posItem, sizeItem, true) || Player::instance().collisionUp(posItem, sizeItem)) {
 		Player::instance().giveMushroom();
-		bVisible = false;	
+		bVisible = false;
+		bUsed = true;
 	}
 }
 
@@ -141,6 +148,7 @@ void Star::update(int deltaTime)
 	if (Player::instance().collisionRight(posItem, sizeItem) || Player::instance().collisionLeft(posItem, sizeItem) || Player::instance().collisionDown(posItem, sizeItem, true) || Player::instance().collisionUp(posItem, sizeItem)) {
 		Player::instance().giveStar();
 		bVisible = false;
+		bUsed = true;
 	}
 }
 
@@ -167,6 +175,7 @@ void Coin::update(int deltaTime)
 	if (Player::instance().collision(posItem, sizeItem)) {
 		GameManager::instance().addCoin();
 		bVisible = false;
+		bUsed = true;
 	}
 }
 

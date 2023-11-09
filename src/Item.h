@@ -16,6 +16,7 @@ public:
 	void die();
 	void render();
 	bool isVisible();
+	bool isUsed();
 	void show();
 
 	void setTileMap(TileMap* tileMap);
@@ -25,6 +26,7 @@ protected:
 	bool bFalling;
 	bool bLeft;
 	bool bVisible;
+	bool bUsed;
 	int currentTime;
 	glm::ivec2 posItem, sizeItem;
 	int jumpAngle, startY;

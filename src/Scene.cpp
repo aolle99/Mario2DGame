@@ -27,12 +27,26 @@ Scene::Scene(int lvl)
 {
 	this->level = lvl;
 	map = NULL;
+	mapDecoration = NULL;
 }
 
 Scene::~Scene()
 {
 	if(map != NULL)
 		delete map;
+
+	if (mapDecoration != NULL)
+		delete mapDecoration;
+
+	for (auto& enemy : enemies) {
+		delete enemy;
+	}
+	enemies.clear();
+
+	for (auto& item : items) {
+		delete item;
+	}
+	items.clear();
 }
 
 
@@ -44,21 +58,20 @@ void Scene::init()
 	initShaders();
 	buildLevel("res/levels/Level_" + to_string(level) + ".ldtkl");
 	cameraX = 0.f;
+	
 	projection = glm::ortho(0.f, float(SCREEN_WIDTH - 1), float(SCREEN_HEIGHT - 1), 0.f);
 	GameManager::instance().setScrollX(SCREEN_WIDTH);
+	
 	currentTime = 0.0f;
 
 	for (auto& item : items) {
 		item->setTileMap(map);
 	}
 
-	if (!text.init("res/Fonts/main_font.ttf"))
-		cout << "Could not load font!!!" << endl;
+	text.init("res/Fonts/main_font.ttf");
 
 	//engine = SoundManager::instance().getSoundEngine();
 	//engine->play2D("res/Music/overworld.ogg");
-
-
 
 }
 
@@ -68,47 +81,15 @@ void Scene::update(int deltaTime)
 		currentTime += deltaTime;
 		Player::instance().update(deltaTime);
 		GameManager::instance().update(deltaTime);
+		PunctuationDisplay::instance().update(deltaTime);
 
-		if (calculateCameraPosition()) {
-			projection = glm::ortho(cameraX, float(SCREEN_WIDTH - 1) + cameraX, float(SCREEN_HEIGHT - 1), 0.f);
-			this->map->setLeftBound(cameraX);
-		}
+		updateCamera();
 
+		updateEnemies(deltaTime);
 
-		for (auto& enemy : enemies) {
-			if(enemy->isDead())
-				enemies.erase(std::remove_if(enemies.begin(), enemies.end(), [](Enemy* enemy) {return enemy->isDead(); }), enemies.end());
-			else {
-				enemy->update(deltaTime);
-				if (enemy->isKoopaShellMove()) {
-					for (auto& enemy2 : enemies) {
-						if (enemy != enemy2) {
-							if (enemy->collisionEnemies(enemy2->getPosition(), enemy2->getSize())) enemy2->collisionDeath();
-						}
-					}
-				}
-				else if (enemy->isModeTurtle()) {
-					for (auto& enemy2 : enemies) {
-						if (enemy != enemy2) {
-							if (enemy2->isModeTurtle()) {
-								if (enemy->collisionEnemies(enemy2->getPosition(), enemy2->getSize())) {
-									enemy->changeDirection();
-									enemy2->changeDirection();
-								}
-							}
-						}
-					}
-				}
-			}
-		}
+		updateItems(deltaTime);
 
 		map->update(deltaTime);
-
-		for (auto& item : items) {
-			item->update(deltaTime);
-		}
-
-		PunctuationDisplay::instance().update(deltaTime);
 	}
 }
 
@@ -127,54 +108,16 @@ void Scene::render()
 	map->render();
 
 	if(!Player::instance().isDead())Player::instance().render();
-	//else restart();
 
 	for (auto& enemy : enemies) {
-		if(!enemy->isDead())enemy->render();
-		/*else {
-			text.render("100", glm::vec2(enemy->getPosition().x, enemy->getPosition().y - 10), 16, glm::vec4(1, 1, 1, 1));
-		}*/
+		enemy->render();
 	}
 
 	for (const auto& item : items) {
 		item->render();
 	}
 
-	string score = to_string(GameManager::instance().getScore());
-	string coins = to_string(GameManager::instance().getCoins());
-	string time = to_string(GameManager::instance().getTime());
-	string level = to_string(GameManager::instance().getLevel());
-	string lives = to_string(GameManager::instance().getLives());
-	
-	text.render("LIVES: " + lives, glm::vec2(SCREEN_WIDTH / 5 * 0 + 30, 25), 16, glm::vec4(1, 1, 1, 1));
-	text.render("SCORE: " + score, glm::vec2(SCREEN_WIDTH / 5 * 1 + 30, 25), 16, glm::vec4(1, 1, 1, 1));
-	text.render("COINS: " + coins, glm::vec2(SCREEN_WIDTH / 5 * 2 + 30, 25), 16, glm::vec4(1, 1, 1, 1));
-	text.render("WORLD: 1-" + level, glm::vec2(SCREEN_WIDTH / 5 * 3 + 30, 25), 16, glm::vec4(1, 1, 1, 1));
-	text.render("TIME: " + time, glm::vec2(SCREEN_WIDTH / 5 * 4 + 30, 25), 16, glm::vec4(1, 1, 1, 1));
-
-	if (!bPlay && !bGameOver) {
-		text.render("Press 'SPACE' to start", glm::vec2(SCREEN_WIDTH / 2 - 180, SCREEN_HEIGHT / 2), 16, glm::vec4(1, 1, 1, 1));
-	}
-
-	if (GameManager::instance().getTime() == 0) {
-		bPlay = false;
-		bGameOver = true;
-		text.render("GAME OVER", glm::vec2(SCREEN_WIDTH / 2 - 130, SCREEN_HEIGHT / 2 - 50), 32, glm::vec4(1, 0, 0, 1));
-		text.render("you run out of time", glm::vec2(SCREEN_WIDTH / 2 - 140, SCREEN_HEIGHT / 2 -20), 16, glm::vec4(1, 0, 0, 1));
-		text.render("Press 'Q' to quit", glm::vec2(SCREEN_WIDTH / 2 - 120, SCREEN_HEIGHT / 2 + 20), 16, glm::vec4(1, 1, 1, 1));
-		text.render("Press 'R' to restart", glm::vec2(SCREEN_WIDTH / 2 - 145, SCREEN_HEIGHT / 2 + 40), 16, glm::vec4(1, 1, 1, 1));
-	}
-
-	if (GameManager::instance().getLives() == 0) {
-		bPlay = false;
-		bGameOver = true;
-		text.render("GAME OVER", glm::vec2(SCREEN_WIDTH / 2 - 130, SCREEN_HEIGHT / 2 - 50), 32, glm::vec4(1, 0, 0, 1));
-		text.render("you run out of lives", glm::vec2(SCREEN_WIDTH / 2 - 140, SCREEN_HEIGHT / 2 - 20), 16, glm::vec4(1, 0, 0, 1));
-		text.render("Press 'Q' to quit", glm::vec2(SCREEN_WIDTH / 2 - 120, SCREEN_HEIGHT / 2 + 20), 16, glm::vec4(1, 1, 1, 1));
-		text.render("Press 'R' to restart", glm::vec2(SCREEN_WIDTH / 2 - 145, SCREEN_HEIGHT / 2 + 40), 16, glm::vec4(1, 1, 1, 1));
-	}
-
-	PunctuationDisplay::instance().render();
+	textRenderer();
 }
 
 bool Scene::calculateCameraPosition()
@@ -346,6 +289,88 @@ void Scene::keyReleased(int key)
 		bPlay = true;
 	}
 	
+}
+
+void Scene::updateEnemies(int deltatime) {
+	for (auto& enemy : enemies) {
+		if (enemy->isDead())
+			enemies.erase(std::remove_if(enemies.begin(), enemies.end(), [](Enemy* enemy) {return enemy->isDead(); }), enemies.end());
+		else {
+			enemy->update(deltatime);
+			if (enemy->isKoopaShellMove()) {
+				for (auto& enemy2 : enemies) {
+					if (enemy != enemy2) {
+						if (enemy->collisionEnemies(enemy2->getPosition(), enemy2->getSize())) enemy2->collisionDeath();
+					}
+				}
+			}
+			else if (enemy->isModeTurtle()) {
+				for (auto& enemy2 : enemies) {
+					if (enemy != enemy2) {
+						if (enemy2->isModeTurtle()) {
+							if (enemy->collisionEnemies(enemy2->getPosition(), enemy2->getSize())) {
+								enemy->changeDirection();
+								enemy2->changeDirection();
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+}
+
+void Scene::updateItems(int deltaTime) {
+	for (auto& item : items) {
+		if(item->isUsed()) items.erase(std::remove_if(items.begin(), items.end(), [](Item* item) {return item->isUsed(); }), items.end());
+		else
+			item->update(deltaTime);
+	}
+}
+
+void Scene::updateCamera() {
+	if (calculateCameraPosition()) {
+		projection = glm::ortho(cameraX, float(SCREEN_WIDTH - 1) + cameraX, float(SCREEN_HEIGHT - 1), 0.f);
+		this->map->setLeftBound(cameraX);
+	}
+}
+
+void Scene::textRenderer() {
+	string score = to_string(GameManager::instance().getScore());
+	string coins = to_string(GameManager::instance().getCoins());
+	string time = to_string(GameManager::instance().getTime());
+	string level = to_string(GameManager::instance().getLevel());
+	string lives = to_string(GameManager::instance().getLives());
+
+	text.render("LIVES: " + lives, glm::vec2(SCREEN_WIDTH / 5 * 0 + 30, 25), 16, glm::vec4(1, 1, 1, 1));
+	text.render("SCORE: " + score, glm::vec2(SCREEN_WIDTH / 5 * 1 + 30, 25), 16, glm::vec4(1, 1, 1, 1));
+	text.render("COINS: " + coins, glm::vec2(SCREEN_WIDTH / 5 * 2 + 30, 25), 16, glm::vec4(1, 1, 1, 1));
+	text.render("WORLD: 1-" + level, glm::vec2(SCREEN_WIDTH / 5 * 3 + 30, 25), 16, glm::vec4(1, 1, 1, 1));
+	text.render("TIME: " + time, glm::vec2(SCREEN_WIDTH / 5 * 4 + 30, 25), 16, glm::vec4(1, 1, 1, 1));
+
+	if (!bPlay && !bGameOver) {
+		text.render("Press 'SPACE' to start", glm::vec2(SCREEN_WIDTH / 2 - 180, SCREEN_HEIGHT / 2), 16, glm::vec4(1, 1, 1, 1));
+	}
+
+	if (GameManager::instance().getTime() == 0) {
+		bPlay = false;
+		bGameOver = true;
+		text.render("GAME OVER", glm::vec2(SCREEN_WIDTH / 2 - 130, SCREEN_HEIGHT / 2 - 50), 32, glm::vec4(1, 0, 0, 1));
+		text.render("you run out of time", glm::vec2(SCREEN_WIDTH / 2 - 140, SCREEN_HEIGHT / 2 - 20), 16, glm::vec4(1, 0, 0, 1));
+		text.render("Press 'Q' to quit", glm::vec2(SCREEN_WIDTH / 2 - 120, SCREEN_HEIGHT / 2 + 20), 16, glm::vec4(1, 1, 1, 1));
+		text.render("Press 'R' to restart", glm::vec2(SCREEN_WIDTH / 2 - 145, SCREEN_HEIGHT / 2 + 40), 16, glm::vec4(1, 1, 1, 1));
+	}
+
+	if (GameManager::instance().getLives() == 0) {
+		bPlay = false;
+		bGameOver = true;
+		text.render("GAME OVER", glm::vec2(SCREEN_WIDTH / 2 - 130, SCREEN_HEIGHT / 2 - 50), 32, glm::vec4(1, 0, 0, 1));
+		text.render("you run out of lives", glm::vec2(SCREEN_WIDTH / 2 - 140, SCREEN_HEIGHT / 2 - 20), 16, glm::vec4(1, 0, 0, 1));
+		text.render("Press 'Q' to quit", glm::vec2(SCREEN_WIDTH / 2 - 120, SCREEN_HEIGHT / 2 + 20), 16, glm::vec4(1, 1, 1, 1));
+		text.render("Press 'R' to restart", glm::vec2(SCREEN_WIDTH / 2 - 145, SCREEN_HEIGHT / 2 + 40), 16, glm::vec4(1, 1, 1, 1));
+	}
+
+	PunctuationDisplay::instance().render();
 }
 
 void Scene::quit()

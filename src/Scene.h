@@ -29,6 +29,18 @@ public:
 	void update(int deltaTime);
 	void render();
 
+	vector<Enemy*>* getEnemies();
+
+	void quit();
+	void pause();
+	void resume();
+	void restart();
+
+
+
+	
+private:
+	void initShaders();
 	bool calculateCameraPosition();
 
 	void buildLevel(const string& levelFile);
@@ -37,16 +49,13 @@ public:
 	void createItemsMap(const Json::Value items_map);
 	void keyReleased(int key);
 
-	void quit();
-	void pause();
-	void resume();
-	void restart();
+	void updateEnemies(int deltatime);
 
-	vector<Enemy*>* getEnemies();
+	void updateItems(int deltaTime);
 
-	
-private:
-	void initShaders();
+	void updateCamera();
+
+	void textRenderer();
 
 private:
 	bool bPlay; 
