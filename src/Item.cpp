@@ -7,6 +7,7 @@
 #include "Player.h"
 #include "GameManager.h"
 #include "PunctuationDisplay.h"
+#include "SoundManager.h"
 
 
 #define JUMP_ANGLE_STEP 4
@@ -78,7 +79,6 @@ void Item::die()
 	sprite->changeAnimation(DIE);
 }
 
-
 bool Item::isVisible()
 {
 	return bVisible;
@@ -92,6 +92,11 @@ bool Item::isUsed()
 void Item::show()
 {
 	bVisible = true;
+}
+
+bool Item::isCoin()
+{
+	return false;
 }
 
 void Item::setTileMap(TileMap* tileMap)
@@ -126,6 +131,7 @@ void Mushroom::update(int deltaTime)
 		Player::instance().giveMushroom();
 		GameManager::instance().addScore(PUNCT_MUSHROOM);
 		PunctuationDisplay::instance().addDisplay(to_string(PUNCT_MUSHROOM), Player::instance().getPosition());
+		SoundManager::instance().playSound("res/Sounds/powerup.wav");
 		bVisible = false;
 		bUsed = true;
 	}
@@ -183,9 +189,15 @@ void Coin::update(int deltaTime)
 	if (Player::instance().collision(posItem, sizeItem)) {
 		GameManager::instance().addCoin();
 		GameManager::instance().addScore(PUNCT_COIN);
+		SoundManager::instance().playSound("res/Sounds/coin.wav");
 		bVisible = false;
 		bUsed = true;
 	}
+}
+
+bool Coin::isCoin()
+{
+	return true;
 }
 
 void Flag::init(const glm::ivec2& tileMapPos, ShaderProgram& shaderProgram, glm::ivec2 minCoords)
@@ -267,6 +279,10 @@ void EndPivot::update(int deltaTime)
 		GameManager::instance().addScore((multiplier+1) * 10);
 		PunctuationDisplay::instance().addDisplay(to_string((multiplier + 1) * 10), pos);
 		GameManager::instance().setLevelEnd(true);
+		SoundManager::instance().stopMusic();
+		SoundManager::instance().playSound("res/Sounds/flagpole.wav");
+		SoundManager::instance().playSound("res/Sounds/fireworks.wav");
+		SoundManager::instance().playSound("res/Sounds/world_clear.wav");
 	}
 }
 

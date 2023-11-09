@@ -112,7 +112,6 @@ void Instructions::render() {
 	text.render("- Restart: 'R'", glm::vec2(30, 250), 12, glm::vec4(0, 0, 0, 1));
 	text.render("- Quit: 'Q'", glm::vec2(30, 270), 12, glm::vec4(0, 0, 0, 1));
 
-	// write the objectives next to the controls
 	text.render("OBJECTIVES:", glm::vec2(SCREEN_WIDTH / 2 + 20, 100), 14, glm::vec4(0, 0, 0, 1));
 	text.render("- Collect all the coins", glm::vec2(SCREEN_WIDTH / 2 + 30, 130), 12, glm::vec4(0, 0, 0, 1));
 	text.render("- Reach the flag", glm::vec2(SCREEN_WIDTH / 2 + 30, 150), 12, glm::vec4(0, 0, 0, 1));

@@ -275,6 +275,8 @@ void Scene::createItemsMap(const Json::Value items_map) {
 void Scene::keyReleased(int key)
 {
 	if (key == 80 || key == 112) { // P or p
+		SoundManager::instance().stopMusic();
+		SoundManager::instance().playSound("res/sounds/pause.wav");
 		bPlay = false;
 	}
 	else if (key == 82 || key == 114) {
@@ -286,6 +288,7 @@ void Scene::keyReleased(int key)
 	}
 	else if (key == 32) {
 		bPlay = true;
+		SoundManager::instance().playMusic("res/music/overworld_resumed.ogg");
 	}
 	
 }
@@ -358,6 +361,9 @@ void Scene::textRenderer() {
 		text.render("you run out of time", glm::vec2(SCREEN_WIDTH / 2 - 140, SCREEN_HEIGHT / 2 - 20), 16, glm::vec4(1, 0, 0, 1));
 		text.render("Press 'Q' to quit", glm::vec2(SCREEN_WIDTH / 2 - 120, SCREEN_HEIGHT / 2 + 20), 16, glm::vec4(1, 1, 1, 1));
 		text.render("Press 'R' to restart", glm::vec2(SCREEN_WIDTH / 2 - 145, SCREEN_HEIGHT / 2 + 40), 16, glm::vec4(1, 1, 1, 1));
+
+		SoundManager::instance().stopMusic();
+		SoundManager::instance().playSound("res/sounds/game_over.wav");
 	}
 
 	if (GameManager::instance().getLives() == 0) {
@@ -367,6 +373,9 @@ void Scene::textRenderer() {
 		text.render("you run out of lives", glm::vec2(SCREEN_WIDTH / 2 - 140, SCREEN_HEIGHT / 2 - 20), 16, glm::vec4(1, 0, 0, 1));
 		text.render("Press 'Q' to quit", glm::vec2(SCREEN_WIDTH / 2 - 120, SCREEN_HEIGHT / 2 + 20), 16, glm::vec4(1, 1, 1, 1));
 		text.render("Press 'R' to restart", glm::vec2(SCREEN_WIDTH / 2 - 145, SCREEN_HEIGHT / 2 + 40), 16, glm::vec4(1, 1, 1, 1));
+
+		SoundManager::instance().stopMusic();
+		SoundManager::instance().playSound("res/sounds/game_over.wav");
 	}
 
 	PunctuationDisplay::instance().render();

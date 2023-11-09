@@ -7,6 +7,7 @@
 #include "Player.h"
 #include "GameManager.h"
 #include "PunctuationDisplay.h"
+#include "SoundManager.h"
 
 
 #define JUMP_ANGLE_STEP 4
@@ -172,6 +173,7 @@ void Goomba::update(int deltaTime)
 			if (Player::instance().collisionRight(posEnemy, sizeEnemy) || Player::instance().collisionLeft(posEnemy, sizeEnemy)) {
 				if (Player::instance().isMarioStar()) {
 					bDying = true;
+					SoundManager::instance().playSound("res/sounds/kick.wav");
 				}
 				else {
 					Player::instance().damagePlayer();
@@ -222,9 +224,9 @@ void Goomba::smashedDeath()
 		PunctuationDisplay::instance().addDisplay(to_string(PUNCT_ENEMY), posEnemy);
 		GameManager::instance().addScore(PUNCT_ENEMY);
 		bTextRendered = true;
+		SoundManager::instance().playSound("res/sounds/stomp.wav");
 	}
 	if (currentTime == 20) {
-		
 		bDead = true;
 		currentTime = 0;
 	}
@@ -276,6 +278,7 @@ void Koopa::shellMode() {
 		if (Player::instance().collisionLeft(posEnemy, sizeEnemy) || Player::instance().collisionRight(posEnemy, sizeEnemy)) {
 			if (Player::instance().isMarioStar()) {
 				bDying = true;
+				SoundManager::instance().playSound("res/sounds/kick.wav");
 			}
 			else if (!Player::instance().isInvulnerable()) {
 				Player::instance().damagePlayer();
@@ -285,6 +288,7 @@ void Koopa::shellMode() {
 		if (Player::instance().collisionDown(posEnemy, sizeEnemy, false)) {
 			bStop = true;
 			sprite->changeAnimation(STOP);
+			SoundManager::instance().playSound("res/sounds/kick.wav");
 			return;
 		}
 	}
@@ -295,6 +299,7 @@ void Koopa::shellMode() {
 			sprite->changeAnimation(MOVE);
 			Player::instance().setInvulnerable(true);
 			Player::instance().setInvTime(50);
+			SoundManager::instance().playSound("res/sounds/kick.wav");
 		}
 
 	}
@@ -308,6 +313,7 @@ void Koopa::turtleMode()
 		if (Player::instance().collisionRight(posEnemy, sizeEnemy) || Player::instance().collisionLeft(posEnemy, sizeEnemy)) {
 			if (Player::instance().isMarioStar()) {
 				bDying = true;
+				SoundManager::instance().playSound("res/sounds/kick.wav");
 			}
 			else {
 				Player::instance().damagePlayer();
@@ -318,6 +324,7 @@ void Koopa::turtleMode()
 			bShell = true;
 			bStop = true;
 			sprite->changeAnimation(STOP);
+			SoundManager::instance().playSound("res/sounds/kick.wav");
 		}
 	}
 }

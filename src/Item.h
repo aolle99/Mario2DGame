@@ -18,6 +18,7 @@ public:
 	bool isVisible();
 	bool isUsed();
 	void show();
+	virtual bool isCoin();
 
 	void setTileMap(TileMap* tileMap);
 	void setPosition(const glm::vec2& pos);
@@ -60,6 +61,7 @@ class Coin : public Item
 public:
 	virtual void init(const glm::ivec2& tileMapPos, ShaderProgram& shaderProgram);
 	virtual void update(int deltaTime);
+	virtual bool isCoin();
 
 protected:
 };
