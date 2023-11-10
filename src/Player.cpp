@@ -529,6 +529,11 @@ bool Player::isDead()
 	return bDead;
 }
 
+bool Player::isDying()
+{
+	return bDying;
+}
+
 int Player::getHp() {
 	return hp;
 }

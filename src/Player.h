@@ -65,6 +65,8 @@ public:
 
 	bool isDead();
 
+	bool isDying();
+
 	int getHp();
 
 	void setDying(bool dying);

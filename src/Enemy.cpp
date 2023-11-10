@@ -107,12 +107,10 @@ bool Enemy::isModeTurtle()
 
 bool Enemy::collisionEnemies(const glm::vec2& pos2, const glm::ivec2& size2)
 {
-	// if collision between enemies	return true
 	if ((posEnemy.x + sizeEnemy.x >= pos2.x && posEnemy.x <= pos2.x + size2.x) && posEnemy.y + sizeEnemy.y >= pos2.y && posEnemy.y <= pos2.y + size2.y) {
 		return true;
 	}
 	return false;
-
 }
 
 glm::ivec2 Enemy::getPosition()
@@ -158,7 +156,8 @@ void Goomba::update(int deltaTime)
 	sprite->update(deltaTime);
 
 	if (bDying) {
-		if (bSmashed) {
+		if(Player::instance().isDying()) bDying = false;
+		else if (bSmashed) {
 			this->smashedDeath();
 		}
 		else {
@@ -179,7 +178,7 @@ void Goomba::update(int deltaTime)
 					Player::instance().damagePlayer();
 				}
 			}
-			else if (Player::instance().collisionDown(posEnemy, sizeEnemy, false) && !Player::instance().isDead()) {
+			else if (Player::instance().collisionDown(posEnemy, sizeEnemy, false)) {
 				bSmashed = true;
 				bDying = true;
 			}
@@ -191,8 +190,6 @@ void Goomba::update(int deltaTime)
 
 void Goomba::collisionDeath()
 {
-	if(!Player::instance().isDead())bDying = true;
-
 	if (!bTextRendered) {
 		PunctuationDisplay::instance().addDisplay(to_string(PUNCT_ENEMY), posEnemy);
 		GameManager::instance().addScore(PUNCT_ENEMY);
@@ -332,7 +329,6 @@ void Koopa::collisionDeath()
 {
 	sprite->changeAnimation(DIE);
 	bStop = true;
-	if(Player::instance().isDead()) bDying = true;
 
 	if (!bTextRendered) {
 		PunctuationDisplay::instance().addDisplay(to_string(PUNCT_ENEMY), posEnemy);
