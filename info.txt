@@ -1,0 +1,65 @@
+Integrants grup:
+  - Àlex Ollé
+  - Cristina Migó
+
+Funcionalitats implementades:
+
+  - Pantalles: el joc consta de 6 pantalles: 
+	- menú principal: des d'aquesta pantalla es pot anar a la pantalla de joc, a les instruccions, als credits o sortir del joc
+	- joc: existeixen dos nivells diferents
+	- instruccions
+	- càrrega abans d'entrar a un nivell (és una pantalla on s'indica el nivell al que es va a jugar i el número de vides que té el mario)
+	- victòria (al acabar el nivell 2 es mostra una pantalla de victòria que indica la puntuació obtinguda)
+
+  - Enemics: existeixen dos tipus d'enemics, els Goombe i els Koopa Troopa. Tots dos tenen diverses animacions per a quan es mouen i quan es moren, i pel cas del Koopa Troopa quan es converteix en closca.
+	- Goomba: es mou de dreta a esquerra. Si el Mario salta a sobre mor aplastat, si es impactat per una closca en moviment mor per col·lisió amb la closca
+	- Koopa Troopa: es mou de dreta a esquerra. Si el Mario salta a sobre la tortuga es converteix en closca i si torna a saltar a sobre la closca es posa en moviment. Si la closca en moviment col·lisiona amb un enemic o el mario aquests moren per col·lisió. Si la closca està en movoment i el Mario salta damunt la closca s'atura.
+
+  - Mario: es mou a través de les fletxes del teclat, salta si es prem l'espai i va més ràpid si es prem el shift. S'utilitzen varies animacions per donar-li vida al Mario, la de Mario petit i Super Mario, així com animacions per a quan es mou, quan es mor, quan salta o quan canvia de direcció. Si cau per un forat es mor. El seu moviment és accelerat
+
+  - Totxos: existeixen totxos de diversos tipus
+	- Bricks: aquests poden contenir items a dins. Si estan buits poden ser destruits pel mario en forma de SuperMario si els hi dona un cop per baix, si el mario està en forma de Mario petit i li dona a una Brick per baix aquest fa una animació però no es destrueix.
+  	- Interrogants: aquests contenen items (monedes i powerups) a dins i quan son impactats desde baix pel Mario fan una petita animació i deixen anar l'item que tenen emmagatzemat. També tenen una animació quan esta en pantalla aquest tipus de blocs
+
+  - Items: existeixen diversos tipus de items, les monedes, els bolets que fan creixer al mario, l'estrella que el fa invulnerable i el bolet que suma una vida a les vides del mario.
+	- Monedes: hi ha un recompte de monedes al llarg del joc i cada cop que el mario en recull una se suma una al contador.
+	- Bolets de creixement: Aquest item fa que el mario passi a ser Super Mario. Hi ha una animació per representar que el Mario està creixent o disminuint.
+	- Bolets de vida: Aquest item fa que se sumi una vida a les vides totals del Mario
+	- Estrella: Proporciona invulnerabilitat al Mario i tots els enemics amb els que col·lisiona moren col·lisionats. Hi ha una animació que mostra que el mario està en mode invulnerable (va canviant de colors)
+
+  - Interfície gràfica: en la pantalla del joc es mostren diferents coses:
+	- Les vides que li queden al Mario (inicialment comença amb 3), cada cop que es mor si li disminueix una vida i en el cas d'arribar a 0 s'acaba el joc i el jugador pot escullir si reiniciar el joc (se li tornen a reiniciar les vides) o sortir
+	- La puntuació que porta acumulada: hi ha diverses accions que proporcionen puntuació al Mario. Donen diferents puntuacions recollir monedes, bolets, l'estrella, matar a un enemic, destruir un bloc, arribar a la bandera final (depenent de l'alçada a la que arriba el mario quan salta a la bandera la puntuació donada és més o menys) i una puntuació extra per acabar el nivell abans de que el comptador de temps es posi a 0.
+	- Monedes: es mostra el nombre de monedes recollides fins el moment.
+	- Nivell: es mostra el número del món i nivell al que està jugant el jugador.
+	- Temps: es mostra un contador del temps que comença a 150 i va disminuint cada segon.
+	- Hi ha un scroll horizontal cap a la dreta
+
+  - Puntuació: cada cop que el Mario aconsegueix puntuació es mostra un sprite amb la puntuació obtinguda. El numerat apareix per tots els casos excepte per quan recull una moneda, ja que en el joc original tampoc es mostra aquest sprite quan el mario recul monedes.
+
+  - Bandera final: existeix una animació quan el mario arriba a la bandera final.
+
+  - Tecles (shortcuts):
+	- M: transforma el mario en Super Mario
+	- G: transforma el mario en Mario Star
+	- 1, 2: es pot saltar al nivell 1 o 2 pulsant les tecles respectivament.
+
+  - So: existeixen diverses músiques de fons i efectes especials per ambientar el joc.
+	- Música de fons durant el joc que canvia a una música més ràpida en el cas que el Mario estigui en Mario Star.
+	- Efectes de so quan: el mario salta, es mor, mata a un enemic, trenca un bloc, agafa un bolet (ja sigui de creixement o de vida), agafa una moneda, quan hi ha game over, quan acaba un nivell, quan el jugador posa pausa.
+	
+
+  - Altres funcionalitats:
+	- Un cop el jugador està a la pantalla del nivell ha de premer l'espai per començar a jugar.
+	- Prement la tecla 'p' mentres el joc està executant-se permet aturar el joc i es mostrà un text que diu que per continuar s'ha de premer l'espai. 
+	- S'ha fet un sistema de vides que en quant s'acaben es mostra un text de game over.
+	- Si el nivell no s'aconsegueix passar en el temps indicat al marcador tambés es mostra un text de game over.
+
+
+Instruccions del joc:
+  - Moure Mario: amb les fletxes del teclat
+  - Saltar: espai o fletxa amunt
+  - Ajupir-se: fletxa avall
+  - Pausar: 'p'
+  - Tornar a començar: 'r'
+  - Sortir: 'q'
