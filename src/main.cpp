@@ -1,7 +1,7 @@
 #include <GL/glew.h>
 #include <GL/glut.h>
 #include "Game.h"
-
+#include <windows.h>
 
 //Remove console (only works in Visual Studio)
 #pragma comment(linker, "/subsystem:\"windows\" /entry:\"mainCRTStartup\"")
@@ -12,7 +12,20 @@
 
 static int prevTime;
 
+HICON LoadIconFromFile(const char* filename) {
+	// Convertir la cadena de caracteres a una cadena de caracteres de ancho (wchar_t)
+	int len = MultiByteToWideChar(CP_ACP, 0, filename, -1, NULL, 0);
+	wchar_t* wfilename = new wchar_t[len];
+	MultiByteToWideChar(CP_ACP, 0, filename, -1, wfilename, len);
 
+	// Cargar el ícono
+	HICON icon = static_cast<HICON>(LoadImage(NULL, wfilename, IMAGE_ICON, 0, 0, LR_LOADFROMFILE | LR_DEFAULTSIZE | LR_SHARED));
+
+	// Liberar la memoria
+	delete[] wfilename;
+
+	return icon;
+}
 // If a key is pressed this callback is called
 
 static void keyboardDownCallback(unsigned char key, int x, int y)
@@ -89,7 +102,14 @@ int main(int argc, char **argv)
 	glutInitWindowSize(SCREEN_WIDTH, SCREEN_HEIGHT);
 
 	glutCreateWindow(argv[0]);
-	glutSetWindowTitle("Super Mario Bros Fib");
+
+	glutSetWindowTitle("Super Mario Bros");
+	HICON icon = LoadIconFromFile("res/images/icon.ico");
+	if(icon != nullptr) {
+		SendMessage(GetActiveWindow(), WM_SETICON, ICON_SMALL, reinterpret_cast<LPARAM>(icon));
+		SendMessage(GetActiveWindow(), WM_SETICON, ICON_BIG, reinterpret_cast<LPARAM>(icon));
+	}
+
 	glutDisplayFunc(drawCallback);
 	glutIdleFunc(idleCallback);
 	glutKeyboardFunc(keyboardDownCallback);
