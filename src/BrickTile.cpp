@@ -47,18 +47,21 @@ void BrickTile::update(int deltaTime)
 {
 	if (!bDestroyed) {
 		if (bJumping) {
-			
+			jumpAnimation();
 		}
-		if (bDestroying) {
+		else if (bDestroying) {
 			destroyAnimation();
 		}
 		else if (collisionDown()) {
 			if (item != nullptr) {
 				item->show();
+
 				if (!item->isCoin()) SoundManager::instance().playSound("res/sounds/powerup_appears.wav");
 			}
 			if (!bDestroying && Player::instance().isSuperMario()) {
-				bDestroying = true;
+				startY = position.y;
+				if(item != nullptr) destroy();
+				else bDestroying = true;
 				PunctuationDisplay::instance().addDisplay(to_string(PUNCT_BLOCK), position);
 				SoundManager::instance().playSound("res/sounds/breakblock.wav");
 				GameManager::instance().addScore(PUNCT_BLOCK);
@@ -84,8 +87,11 @@ void BrickTile::destroyAnimation() {
 		position.y += 7;
 		Tile::init();
 	}
-	else destroy();
-	
+	else {
+		bDestroying = false;
+		destroy();
+	}
+		
 }
 
 void BrickTile::jumpAnimation() {
@@ -105,7 +111,7 @@ void BrickTile::jumpAnimation() {
 
 void BrickTile::destroy() {
 	if (item == nullptr) {
-		Player::instance().removeCollisionBlock(position.x, position.y);
+		Player::instance().removeCollisionBlock(position.x, startY);
 		bDestroyed = true;
 	}
 	else {
