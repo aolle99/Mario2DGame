@@ -47,7 +47,7 @@ void Koopa::update(int deltaTime)
 		else { // Koopa en modo caparazon
 			this->shellMode();
 
-			if (posEnemy.y + sizeEnemy.y > SCREEN_HEIGHT) {
+			if (posEnemy.y + sizeEnemy.y > SCREEN_HEIGHT - 5) {
 				bDead = true;
 			}
 		}

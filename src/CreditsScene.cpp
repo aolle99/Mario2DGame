@@ -24,12 +24,9 @@ void CreditsScene::render() {
 	text.render("Game created by:", glm::vec2(20, 100), 14, glm::vec4(0, 0, 0, 1));
 	text.render("- Alex Olle and Cristina Migo", glm::vec2(30, 120), 14, glm::vec4(0, 0, 0, 1));
 	text.render("Sprites from:", glm::vec2(20, 150), 14, glm::vec4(0, 0, 0, 1));
-	text.render("- https://www.spriters-resource.com/nes/supermariobros/", glm::vec2(30, 170), 14, glm::vec4(0, 0, 0, 1));
+	text.render("- https://github.com/PfAndrey/supermariohd", glm::vec2(30, 170), 14, glm::vec4(0, 0, 0, 1));
 	text.render("Music from:", glm::vec2(20, 200), 14, glm::vec4(0, 0, 0, 1));
-	text.render("- https://www.youtube.com/watch?v=7q5VUcaDOZI", glm::vec2(30, 220), 14, glm::vec4(0, 0, 0, 1));
-	text.render("- https://www.youtube.com/watch?v=7q5VUcaDOZI", glm::vec2(30, 240), 14, glm::vec4(0, 0, 0, 1));
-
-
+	text.render("- https://github.com/PfAndrey/supermariohd", glm::vec2(30, 220), 14, glm::vec4(0, 0, 0, 1));
 
 	text.render("Return to Main Menu", glm::vec2(20, SCREEN_HEIGHT - 20), 14, glm::vec4(0, 0, 0, 1));
 }
