@@ -179,7 +179,7 @@ void Goomba::update(int deltaTime)
 					Player::instance().damagePlayer();
 				}
 			}
-			else if (Player::instance().collisionDown(posEnemy, sizeEnemy, false)) {
+			else if (Player::instance().collisionDown(posEnemy, sizeEnemy, false) && !Player::instance().isDead()) {
 				bSmashed = true;
 				bDying = true;
 			}
@@ -191,7 +191,7 @@ void Goomba::update(int deltaTime)
 
 void Goomba::collisionDeath()
 {
-	bDying = true;
+	if(!Player::instance().isDead())bDying = true;
 
 	if (!bTextRendered) {
 		PunctuationDisplay::instance().addDisplay(to_string(PUNCT_ENEMY), posEnemy);
@@ -332,7 +332,7 @@ void Koopa::collisionDeath()
 {
 	sprite->changeAnimation(DIE);
 	bStop = true;
-	bDying = true;
+	if(Player::instance().isDead()) bDying = true;
 
 	if (!bTextRendered) {
 		PunctuationDisplay::instance().addDisplay(to_string(PUNCT_ENEMY), posEnemy);

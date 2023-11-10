@@ -23,6 +23,8 @@ void Game::init()
 	GameManager::instance().init();
 	PunctuationDisplay::instance().init();
 
+	SoundManager::instance().setVolume(0.3f);
+
 	showMainMenu();
 }
 

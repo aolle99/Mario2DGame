@@ -582,7 +582,6 @@ void Player::animationEnd(int deltaTime)
 		}
 	}
 	else if (animStep==1) {
-
 		bLeft = false;
 		if (posPlayer.x < endLevelPos.x) {
 			posPlayer.x += 1;
