@@ -189,8 +189,8 @@ void Player::changeToMario() {
 	this->size = glm::vec2(32, 32);
 	this->hitbox = glm::vec2(25, 32);
 
-	posPlayer.y += 32;
 	hp = 1;
+	posPlayer.y += 32;
 
 	spritesheet.loadFromFile("res/textures/mario.png", TEXTURE_PIXEL_FORMAT_RGBA);
 	sprite = Sprite::createSprite(glm::ivec2(32, 32), glm::vec2(0.0625f, 0.25f), &spritesheet, &shaderProgram);
@@ -223,31 +223,33 @@ void Player::changeToMario() {
 void Player::changeToSuperMario() {
 	this->size = glm::vec2(32, 64);
 	this->hitbox = glm::vec2(25, 64);
-	posPlayer.y -= 32;
+
 	hp = 2;
+	posPlayer.y -= 32;
+
 	spritesheet.loadFromFile("res/textures/mario.png", TEXTURE_PIXEL_FORMAT_RGBA);
 	sprite = Sprite::createSprite(glm::ivec2(32, 64), glm::vec2(0.0625f, 0.5f), &spritesheet, &shaderProgram);
 	sprite->setNumberAnimations(8);
 
 	sprite->setAnimationSpeed(STAND, 0);
-	sprite->addKeyframe(STAND, glm::vec2(0.0625f * 0, 0.25f));
+	sprite->addKeyframe(STAND, glm::vec2(0.0625f * 0, 0.f));
 
 	sprite->setAnimationSpeed(MOVE, 7);
-	sprite->addKeyframe(MOVE, glm::vec2(0.0625f, 0.25f));
-	sprite->addKeyframe(MOVE, glm::vec2(0.0625f * 2, 0.25f));
+	sprite->addKeyframe(MOVE, glm::vec2(0.0625f, 0.f));
+	sprite->addKeyframe(MOVE, glm::vec2(0.0625f * 2, 0.f));
 
 	sprite->setAnimationSpeed(JUMP, 3);
-	sprite->addKeyframe(JUMP, glm::vec2(0.0625f * 3, 0.25f));
-	sprite->addKeyframe(JUMP, glm::vec2(0.0625f * 5, 0.25f));
+	sprite->addKeyframe(JUMP, glm::vec2(0.0625f * 3, 0.f));
+	sprite->addKeyframe(JUMP, glm::vec2(0.0625f * 5, 0.f));
 
 	sprite->setAnimationSpeed(SHIFT, 0);
-	sprite->addKeyframe(SHIFT, glm::vec2(0.0625f * 6, 0.25f));
+	sprite->addKeyframe(SHIFT, glm::vec2(0.0625f * 6, 0.f));
 
 	sprite->setAnimationSpeed(END, 8);
-	sprite->addKeyframe(END, glm::vec2(0.0625f * 9, 0.25f));
+	sprite->addKeyframe(END, glm::vec2(0.0625f * 9, 0.f));
 
 	sprite->setAnimationSpeed(CHANGE_DIR, 8);
-	sprite->addKeyframe(CHANGE_DIR, glm::vec2(0.0625f * 4, 0.25f));
+	sprite->addKeyframe(CHANGE_DIR, glm::vec2(0.0625f * 4, 0.f));
 
 }
 
@@ -532,6 +534,7 @@ void Player::giveMushroom() {
 		bChanging = true;
 		bCanMove = false;
 		bGrowing = true;
+		hp = 2;
 	}
 }
 
