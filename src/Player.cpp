@@ -473,7 +473,8 @@ bool Player::collisionLeft(const glm::ivec2& object_pos, const glm::ivec2& objec
 	int player_left = posPlayer.x;
 	int object_right = object_pos.x + object_size.x;
 
-	if ((player_left == object_right || player_left == object_right - 1 || player_left == object_right - 2) &&
+	if ((player_left == object_right || player_left == object_right - 1 || player_left == object_right - 2
+		|| player_left <= object_right && player_left >= object_right - 8) &&
 		posPlayer.y + hitbox.y >= object_pos.y &&
 		posPlayer.y <= object_pos.y + object_size.y) {
 		return true; // Colisi�n hacia la izquierda
@@ -487,7 +488,8 @@ bool Player::collisionRight(const glm::ivec2& object_pos, const glm::ivec2& obje
 	int player_right = posPlayer.x + size.x;
 	int object_left = object_pos.x;
 
-	if ((player_right == object_left || player_right == object_left+1 || player_right == object_left + 2) &&
+	if ((player_right == object_left || player_right == object_left+1 || player_right == object_left + 2 ||
+		player_right <= object_left + 8 && player_right >= object_left ) &&
 		posPlayer.y + hitbox.y >= object_pos.y &&
 		posPlayer.y <= object_pos.y + object_size.y) {
 		return true; // Colisi�n hacia la derecha
