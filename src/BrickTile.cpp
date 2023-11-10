@@ -47,18 +47,7 @@ void BrickTile::update(int deltaTime)
 {
 	if (!bDestroyed) {
 		if (bJumping) {
-			if (jumpAngle < 180.f) {
-
-				position.y = int(startY - 15 * sin(3.14159f * jumpAngle / 180.f));
-				jumpAngle += JUMP_ANGLE_STEP;
-
-			}
-			else {
-				position.y = startY;
-				bJumping = false;
-				jumpAngle = 0;
-			}
-			Tile::init();
+			
 		}
 		if (bDestroying) {
 			destroyAnimation();
@@ -97,6 +86,21 @@ void BrickTile::destroyAnimation() {
 	}
 	else destroy();
 	
+}
+
+void BrickTile::jumpAnimation() {
+	if (jumpAngle < 180.f) {
+
+		position.y = int(startY - 15 * sin(3.14159f * jumpAngle / 180.f));
+		jumpAngle += JUMP_ANGLE_STEP;
+
+	}
+	else {
+		position.y = startY;
+		bJumping = false;
+		jumpAngle = 0;
+	}
+	Tile::init();
 }
 
 void BrickTile::destroy() {
