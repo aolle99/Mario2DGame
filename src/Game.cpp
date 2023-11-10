@@ -79,8 +79,7 @@ void Game::showCredits()
 
 void Game::resetGame()
 {
-	delete scene;
-	GameManager::instance().resetLevel();
+	GameManager::instance().init();
 	showLoadLevel();
 }
 
@@ -88,7 +87,6 @@ void Game::nextLevel()
 {
 	if (GameManager::instance().hasNextLevel()) {
 		this->changeLevel(GameManager::instance().getLevel()+1);
-		showLoadLevel();
 	}
 	else {
 		GameManager::instance().init();

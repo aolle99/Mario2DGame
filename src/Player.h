@@ -77,13 +77,15 @@ public:
 
 	void removeCollisionBlock(int x, int y);
 
+	void resetCurrentTime();
+
 
 	
 private:
 	Player() {};
 	glm::ivec2 getHitboxPosition();
 
-	void animationEnd();
+	void animationEnd(int deltaTime);
 	
 private:
 	bool bJumping;

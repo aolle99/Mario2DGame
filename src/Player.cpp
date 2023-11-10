@@ -216,7 +216,7 @@ bool Player::checkJumping()
 
 void Player::marioDying() {
 	sprite->changeAnimation(DIE);
-	printf("%d\n", posPlayer.y);
+
 	if (currentTime <= 10) {
 		posPlayer.y -= 4;
 	}
@@ -230,15 +230,15 @@ void Player::marioDying() {
 	if ((!isSuperMario() && posPlayer.y > 518) || (isSuperMario() && posPlayer.y > 500)) {
 		bDead = true;
 		bDying = false;
-		GameManager::instance().substractLive();
 		currentTime = 0;
 	}
 }
 
 void Player::update(int deltaTime)
 {
+	if(bDead) return;
+
 	sprite->update(deltaTime);
-	
 	if (bInvulnerable) {
 		invTime -= 1;
 		if (invTime == 0) {
@@ -249,8 +249,8 @@ void Player::update(int deltaTime)
 	if (bDying) {
 		this->marioDying();
 	}
-	else if (GameManager::instance().isLevelEnd() || GameManager::instance().isPaused()) {
-		if(GameManager::instance().isLevelEnd()) this->animationEnd();
+	else if (GameManager::instance().isLevelCompleted() || GameManager::instance().isPaused()) {
+		if(GameManager::instance().isLevelCompleted()) this->animationEnd(deltaTime);
 	}
 	else {
 		int textureChanged = 2;
@@ -445,7 +445,7 @@ bool Player::collisionLeft(const glm::ivec2& object_pos, const glm::ivec2& objec
 {
 	int player_left = posPlayer.x;
 	int object_right = object_pos.x + object_size.x;
-	
+
 	if ((player_left == object_right || player_left == object_right - 1 || player_left == object_right - 2) &&
 		posPlayer.y + hitbox.y >= object_pos.y &&
 		posPlayer.y <= object_pos.y + object_size.y) {
@@ -459,7 +459,7 @@ bool Player::collisionRight(const glm::ivec2& object_pos, const glm::ivec2& obje
 {
 	int player_right = posPlayer.x + size.x;
 	int object_left = object_pos.x;
-	
+
 	if ((player_right == object_left || player_right == object_left+1 || player_right == object_left + 2) &&
 		posPlayer.y + hitbox.y >= object_pos.y &&
 		posPlayer.y <= object_pos.y + object_size.y) {
@@ -556,24 +556,33 @@ void Player::removeCollisionBlock(int x, int y) {
 		map->removeCollisionBlock(x, y);
 }
 
+void Player::resetCurrentTime()
+{
+		currentTime = 0;
+}
+
+
 glm::ivec2 Player::getHitboxPosition() {
 	return posPlayer + glm::ivec2(4, 0);
 }
 
-void Player::animationEnd()
+
+void Player::animationEnd(int deltaTime)
 {
+	currentTime += deltaTime;
 	if (animStep==0) {
 		sprite->changeAnimation(END);
 		if (!map->collisionMoveDown(posPlayer, size, &posPlayer.y))
 		{
-			posPlayer.y += 3;
+			posPlayer.y += 2;
 		}
 		else {
 			animStep = 1;
+			sprite->changeAnimation(MOVE);
 		}
 	}
 	else if (animStep==1) {
-		sprite->changeAnimation(MOVE);
+
 		bLeft = false;
 		if (posPlayer.x < endLevelPos.x) {
 			posPlayer.x += 1;
@@ -584,7 +593,8 @@ void Player::animationEnd()
 		else {
 			sprite->changeAnimation(STAND);
 			bShow=false;
-			GameManager::instance().setLevelCompleted(true);
+			if(currentTime > 6000)
+				Game::instance().nextLevel();
 		}
 	}
 }

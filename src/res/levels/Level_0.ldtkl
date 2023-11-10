@@ -498,7 +498,10 @@
 					"height": 32,
 					"defUid": 23,
 					"px": [6368,128],
-					"fieldInstances": [{ "__identifier": "MinCoord", "__type": "Point", "__value": null, "__tile": null, "defUid": 29, "realEditorValues": [] }]
+					"fieldInstances": [{ "__identifier": "MinCoord", "__type": "Point", "__value": { "cx": 199, "cy": 12 }, "__tile": null, "defUid": 29, "realEditorValues": [{
+						"id": "V_String",
+						"params": ["199,12"]
+					}] }]
 				}
 			]
 		},
@@ -816,18 +819,18 @@
 				},
 				{
 					"__identifier": "Koopa",
-					"__grid": [36,12],
+					"__grid": [35,12],
 					"__pivot": [0,0],
 					"__tags": [],
 					"__tile": { "tilesetUid": 8, "x": 0, "y": 32, "w": 32, "h": 32 },
 					"__smartColor": "#EAD4AA",
-					"__worldX": 1152,
+					"__worldX": 1120,
 					"__worldY": 352,
 					"iid": "c0a045a0-6280-11ee-8adc-27f9e021ad33",
 					"width": 32,
 					"height": 48,
 					"defUid": 11,
-					"px": [1152,384],
+					"px": [1120,384],
 					"fieldInstances": []
 				},
 				{

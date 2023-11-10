@@ -51,10 +51,11 @@ private:
 
 	void updateCamera();
 
+	void checkPlayerAlive();
+
 	void textRenderer();
 
 private:
-	bool bGameOver;
 	TileMap *map;
 	TileMapStatic* mapDecoration;	
 	glm::vec2 playerStartPos;
