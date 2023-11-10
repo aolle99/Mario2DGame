@@ -8,6 +8,7 @@
 #include "Star.h"
 #include "Coin.h"
 #include "Game.h"
+#include "GreenMushroom.h"
 
 #define PUNCT_BLOCK 50
 #define JUMP_ANGLE_STEP 10.f
@@ -29,6 +30,9 @@ BrickTile::BrickTile(const glm::ivec2& tileMapPos, const glm::vec2 pos, int item
 		break;
 	case 3: // Coin
 		this->item = new Coin();
+		break;
+	case 4:
+		this->item = new GreenMushroom();
 		break;
 	default:
 		this->item = nullptr;

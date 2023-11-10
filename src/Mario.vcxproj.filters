@@ -21,15 +21,6 @@
     <Filter Include="Archivos de encabezado\Helpers">
       <UniqueIdentifier>{fc70ad5a-d045-43c6-864c-8680fa190e8c}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Archivos de recursos\Shaders">
-      <UniqueIdentifier>{1a2f312e-e78a-4ad1-8b5c-fd7f1c1b4b33}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Archivos de recursos\levels">
-      <UniqueIdentifier>{09377ced-d6cd-43c5-8584-1512789121be}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Archivos de recursos\images">
-      <UniqueIdentifier>{07c79fb7-a508-4a17-86f9-26526f79c176}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Archivos de encabezado\Scenes">
       <UniqueIdentifier>{dac1b28c-98f5-4713-98f3-956a2e508a12}</UniqueIdentifier>
     </Filter>
@@ -53,6 +44,24 @@
     </Filter>
     <Filter Include="Archivos de encabezado\Enemies">
       <UniqueIdentifier>{a9bfa24b-3fc8-4347-922d-02b68e4c3b82}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Archivos de recursos\Fonts">
+      <UniqueIdentifier>{ca9ae368-dbb9-496d-a2cc-3dc4187b924f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Archivos de recursos\images">
+      <UniqueIdentifier>{862b400b-2c3c-4d28-b2b4-6e32eab1f91d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Archivos de recursos\levels">
+      <UniqueIdentifier>{7bd98b91-ec8f-4917-bc65-81cfd4cadc7d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Archivos de recursos\Music">
+      <UniqueIdentifier>{63e5cb15-e0b8-4d65-a2bb-72328049ecbc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Archivos de recursos\Sounds">
+      <UniqueIdentifier>{ac4fc198-d826-43f8-ac84-df4807a0e744}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Archivos de recursos\Textures">
+      <UniqueIdentifier>{a84ddae6-cbf5-44b2-921d-4e14ccc445b0}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -160,6 +169,12 @@
     </ClInclude>
     <ClInclude Include="WinScene.h">
       <Filter>Archivos de encabezado\Scenes</Filter>
+    </ClInclude>
+    <ClInclude Include="GreenMushroom.h">
+      <Filter>Archivos de encabezado</Filter>
+    </ClInclude>
+    <ClInclude Include="resource.h">
+      <Filter>Archivos de encabezado</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -279,48 +294,163 @@
     <None Include="..\README.md">
       <Filter>Otros</Filter>
     </None>
-    <None Include="shaders\simple.frag">
-      <Filter>Archivos de recursos\Shaders</Filter>
-    </None>
-    <None Include="shaders\simple.vert">
-      <Filter>Archivos de recursos\Shaders</Filter>
-    </None>
-    <None Include="shaders\texture.frag">
-      <Filter>Archivos de recursos\Shaders</Filter>
-    </None>
-    <None Include="shaders\texture.vert">
-      <Filter>Archivos de recursos\Shaders</Filter>
-    </None>
     <None Include="..\.gitignore">
       <Filter>Otros</Filter>
     </None>
-  </ItemGroup>
-  <ItemGroup>
-    <Text Include="res\levels\level01.txt">
+    <None Include="res\levels\Level_0.ldtkl">
       <Filter>Archivos de recursos\levels</Filter>
-    </Text>
+    </None>
+    <None Include="res\levels\Level_1.ldtkl">
+      <Filter>Archivos de recursos\levels</Filter>
+    </None>
+    <None Include="res\Music\bowsercastle.ogg">
+      <Filter>Archivos de recursos\Music</Filter>
+    </None>
+    <None Include="res\Music\invincibility.ogg">
+      <Filter>Archivos de recursos\Music</Filter>
+    </None>
+    <None Include="res\Music\overworld.ogg">
+      <Filter>Archivos de recursos\Music</Filter>
+    </None>
+    <None Include="res\Music\overworld_resumed.ogg">
+      <Filter>Archivos de recursos\Music</Filter>
+    </None>
+    <None Include="res\Music\underwater.ogg">
+      <Filter>Archivos de recursos\Music</Filter>
+    </None>
+    <None Include="res\Music\underworld.ogg">
+      <Filter>Archivos de recursos\Music</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
-    <Image Include="res\Textures\Tiles.png">
+    <Font Include="res\Fonts\arial.ttf">
+      <Filter>Archivos de recursos\Fonts</Filter>
+    </Font>
+    <Font Include="res\Fonts\main_font.ttf">
+      <Filter>Archivos de recursos\Fonts</Filter>
+    </Font>
+    <Font Include="res\Fonts\menu_font.ttf">
+      <Filter>Archivos de recursos\Fonts</Filter>
+    </Font>
+    <Font Include="res\Fonts\score_font.ttf">
+      <Filter>Archivos de recursos\Fonts</Filter>
+    </Font>
+    <Font Include="res\Fonts\some_font.ttf">
+      <Filter>Archivos de recursos\Fonts</Filter>
+    </Font>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="res\images\credits.png">
+      <Filter>Archivos de recursos\images</Filter>
+    </Image>
+    <Image Include="res\images\icon.ico">
+      <Filter>Archivos de recursos\images</Filter>
+    </Image>
+    <Image Include="res\images\instructions.png">
+      <Filter>Archivos de recursos\images</Filter>
+    </Image>
+    <Image Include="res\images\load_level.png">
+      <Filter>Archivos de recursos\images</Filter>
+    </Image>
+    <Image Include="res\images\main_menu.png">
+      <Filter>Archivos de recursos\images</Filter>
+    </Image>
+    <Image Include="res\images\win_screen.png">
       <Filter>Archivos de recursos\images</Filter>
     </Image>
     <Image Include="res\Textures\AnimTiles.png">
-      <Filter>Archivos de recursos\images</Filter>
+      <Filter>Archivos de recursos\Textures</Filter>
     </Image>
     <Image Include="res\Textures\Bowser.png">
-      <Filter>Archivos de recursos\images</Filter>
+      <Filter>Archivos de recursos\Textures</Filter>
     </Image>
     <Image Include="res\Textures\Enemies.png">
-      <Filter>Archivos de recursos\images</Filter>
+      <Filter>Archivos de recursos\Textures</Filter>
     </Image>
     <Image Include="res\Textures\Items.png">
-      <Filter>Archivos de recursos\images</Filter>
+      <Filter>Archivos de recursos\Textures</Filter>
     </Image>
     <Image Include="res\Textures\Logo.png">
-      <Filter>Archivos de recursos\images</Filter>
+      <Filter>Archivos de recursos\Textures</Filter>
     </Image>
     <Image Include="res\Textures\Mario.png">
-      <Filter>Archivos de recursos\images</Filter>
+      <Filter>Archivos de recursos\Textures</Filter>
     </Image>
+    <Image Include="res\Textures\Tiles.png">
+      <Filter>Archivos de recursos\Textures</Filter>
+    </Image>
+  </ItemGroup>
+  <ItemGroup>
+    <Media Include="res\Sounds\1-up.wav">
+      <Filter>Archivos de recursos\Sounds</Filter>
+    </Media>
+    <Media Include="res\Sounds\beep.wav">
+      <Filter>Archivos de recursos\Sounds</Filter>
+    </Media>
+    <Media Include="res\Sounds\bowser_falls.wav">
+      <Filter>Archivos de recursos\Sounds</Filter>
+    </Media>
+    <Media Include="res\Sounds\bowser_fire.wav">
+      <Filter>Archivos de recursos\Sounds</Filter>
+    </Media>
+    <Media Include="res\Sounds\breakblock.wav">
+      <Filter>Archivos de recursos\Sounds</Filter>
+    </Media>
+    <Media Include="res\Sounds\bump.wav">
+      <Filter>Archivos de recursos\Sounds</Filter>
+    </Media>
+    <Media Include="res\Sounds\coin.wav">
+      <Filter>Archivos de recursos\Sounds</Filter>
+    </Media>
+    <Media Include="res\Sounds\fireball.wav">
+      <Filter>Archivos de recursos\Sounds</Filter>
+    </Media>
+    <Media Include="res\Sounds\fireworks.wav">
+      <Filter>Archivos de recursos\Sounds</Filter>
+    </Media>
+    <Media Include="res\Sounds\flagpole.wav">
+      <Filter>Archivos de recursos\Sounds</Filter>
+    </Media>
+    <Media Include="res\Sounds\game_over.wav">
+      <Filter>Archivos de recursos\Sounds</Filter>
+    </Media>
+    <Media Include="res\Sounds\jump_super.wav">
+      <Filter>Archivos de recursos\Sounds</Filter>
+    </Media>
+    <Media Include="res\Sounds\kick.wav">
+      <Filter>Archivos de recursos\Sounds</Filter>
+    </Media>
+    <Media Include="res\Sounds\mario_die.wav">
+      <Filter>Archivos de recursos\Sounds</Filter>
+    </Media>
+    <Media Include="res\Sounds\pause.wav">
+      <Filter>Archivos de recursos\Sounds</Filter>
+    </Media>
+    <Media Include="res\Sounds\pipe.wav">
+      <Filter>Archivos de recursos\Sounds</Filter>
+    </Media>
+    <Media Include="res\Sounds\powerup.wav">
+      <Filter>Archivos de recursos\Sounds</Filter>
+    </Media>
+    <Media Include="res\Sounds\powerup_appears.wav">
+      <Filter>Archivos de recursos\Sounds</Filter>
+    </Media>
+    <Media Include="res\Sounds\stage_clear.wav">
+      <Filter>Archivos de recursos\Sounds</Filter>
+    </Media>
+    <Media Include="res\Sounds\stomp.wav">
+      <Filter>Archivos de recursos\Sounds</Filter>
+    </Media>
+    <Media Include="res\Sounds\warning.wav">
+      <Filter>Archivos de recursos\Sounds</Filter>
+    </Media>
+    <Media Include="res\Sounds\world_clear.wav">
+      <Filter>Archivos de recursos\Sounds</Filter>
+    </Media>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="Resource.rc">
+      <Filter>Archivos de recursos</Filter>
+    </ResourceCompile>
   </ItemGroup>
 </Project>

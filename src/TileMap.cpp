@@ -19,6 +19,7 @@ enum BlockTypes {
 	BRICK_STAR = 12,
 	INVISIBLE_COIN = 18,
 	INVISIBLE_MUSHROOM = 19,
+	BRICK_1UP = 20,
 	BRICK_MUSHROOM = 27,
 };
 
@@ -27,6 +28,7 @@ enum ItemTypes {
 	MUSHROOM = 1,
 	STAR = 2,
 	COIN = 3,
+	ONEUP = 4,
 };
 
 
@@ -158,6 +160,9 @@ void TileMap::createTile(const glm::ivec2& pos, const glm::ivec2& texPos, int ty
 		break;
 	case BlockTypes::BRICK_MUSHROOM:
 		blocks.push_back(new BrickTile(texPos, pos, ItemTypes::MUSHROOM));
+		break;
+	case BlockTypes::BRICK_1UP:
+		blocks.push_back(new BrickTile(texPos, pos, ItemTypes::ONEUP));
 		break;
 	default:
 		blocks.push_back(new Tile(texPos, pos));
