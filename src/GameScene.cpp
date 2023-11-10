@@ -16,6 +16,8 @@
 #include "Flag.h"
 #include "CastleFlag.h"
 #include "EndPivot.h"
+#include "Goomba.h"
+#include "Koopa.h"
 
 
 #define SCREEN_X 32

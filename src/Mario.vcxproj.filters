@@ -48,6 +48,12 @@
     <Filter Include="Archivos de encabezado\Items">
       <UniqueIdentifier>{a00fe3d8-1eaa-4b74-9b9a-b5e6c967305e}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Archivos de código fuente\Enemies">
+      <UniqueIdentifier>{9ab4c3ee-b664-4c66-b0f9-155b9439259a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Archivos de encabezado\Enemies">
+      <UniqueIdentifier>{a9bfa24b-3fc8-4347-922d-02b68e4c3b82}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Game.h">
@@ -70,9 +76,6 @@
     </ClInclude>
     <ClInclude Include="Texture.h">
       <Filter>Archivos de encabezado\Helpers</Filter>
-    </ClInclude>
-    <ClInclude Include="Enemy.h">
-      <Filter>Archivos de encabezado</Filter>
     </ClInclude>
     <ClInclude Include="TileMapStatic.h">
       <Filter>Archivos de encabezado</Filter>
@@ -146,6 +149,15 @@
     <ClInclude Include="EndPivot.h">
       <Filter>Archivos de encabezado\Items</Filter>
     </ClInclude>
+    <ClInclude Include="Enemy.h">
+      <Filter>Archivos de encabezado\Enemies</Filter>
+    </ClInclude>
+    <ClInclude Include="Koopa.h">
+      <Filter>Archivos de encabezado\Enemies</Filter>
+    </ClInclude>
+    <ClInclude Include="Goomba.h">
+      <Filter>Archivos de encabezado\Enemies</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Game.cpp">
@@ -168,9 +180,6 @@
     </ClCompile>
     <ClCompile Include="Texture.cpp">
       <Filter>Archivos de código fuente\Helpers</Filter>
-    </ClCompile>
-    <ClCompile Include="Enemy.cpp">
-      <Filter>Archivos de código fuente</Filter>
     </ClCompile>
     <ClCompile Include="TileMapStatic.cpp">
       <Filter>Archivos de código fuente</Filter>
@@ -246,6 +255,15 @@
     </ClCompile>
     <ClCompile Include="EndPivot.cpp">
       <Filter>Archivos de código fuente\Items</Filter>
+    </ClCompile>
+    <ClCompile Include="Enemy.cpp">
+      <Filter>Archivos de código fuente\Enemies</Filter>
+    </ClCompile>
+    <ClCompile Include="Koopa.cpp">
+      <Filter>Archivos de código fuente\Enemies</Filter>
+    </ClCompile>
+    <ClCompile Include="Goomba.cpp">
+      <Filter>Archivos de código fuente\Enemies</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

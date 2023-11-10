@@ -21,9 +21,11 @@
     <ClInclude Include="Flag.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="GameManager.h" />
+    <ClInclude Include="Goomba.h" />
     <ClInclude Include="InstructionsScene.h" />
     <ClInclude Include="InvisibleTile.h" />
     <ClInclude Include="Item.h" />
+    <ClInclude Include="Koopa.h" />
     <ClInclude Include="LevelLoadingScene.h" />
     <ClInclude Include="MainMenuScene.h" />
     <ClInclude Include="Mushroom.h" />
@@ -55,9 +57,11 @@
     <ClCompile Include="Flag.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="GameManager.cpp" />
+    <ClCompile Include="Goomba.cpp" />
     <ClCompile Include="InstructionsScene.cpp" />
     <ClCompile Include="InvisibleTile.cpp" />
     <ClCompile Include="Item.cpp" />
+    <ClCompile Include="Koopa.cpp" />
     <ClCompile Include="LevelLoadingScene.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="MainMenuScene.cpp" />
