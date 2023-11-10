@@ -17,7 +17,7 @@
 
 enum PlayerAnims
 {
-	STAND, MOVE, JUMP, DIE, SHIFT, END
+	STAND, MOVE, JUMP, DIE, SHIFT, END, CHANGE_DIR
 };
 
 void Player::init(glm::vec2 &startPos, ShaderProgram &shaderProgram)
@@ -55,7 +55,7 @@ void Player::changeToMario() {
 
 	spritesheet.loadFromFile("res/textures/mario.png", TEXTURE_PIXEL_FORMAT_RGBA);
 	sprite = Sprite::createSprite(glm::ivec2(32, 32), glm::vec2(0.0625f, 0.25f), &spritesheet, &shaderProgram);
-	sprite->setNumberAnimations(8);
+	sprite->setNumberAnimations(9);
 
 	sprite->setAnimationSpeed(STAND, 0);
 	sprite->addKeyframe(STAND, glm::vec2(0.0625f * 0, 0.75f));
@@ -76,6 +76,9 @@ void Player::changeToMario() {
 
 	sprite->setAnimationSpeed(END, 8);
 	sprite->addKeyframe(END, glm::vec2(0.0625f * 9, 0.75f));
+
+	sprite->setAnimationSpeed(CHANGE_DIR, 8);
+	sprite->addKeyframe(CHANGE_DIR, glm::vec2(0.0625f * 4, 0.75f));
 }
 
 void Player::changeToSuperMario() {
@@ -104,6 +107,9 @@ void Player::changeToSuperMario() {
 	sprite->setAnimationSpeed(END, 8);
 	sprite->addKeyframe(END, glm::vec2(0.0625f * 9, 0.25f));
 
+	sprite->setAnimationSpeed(CHANGE_DIR, 8);
+	sprite->addKeyframe(CHANGE_DIR, glm::vec2(0.0625f * 4, 0.25f));
+
 }
 
 void Player::move(bool direction)
@@ -113,31 +119,31 @@ void Player::move(bool direction)
 			sprite->changeAnimation(MOVE);
 	}
 
+	posPlayer.x += moveSpeed;
+	if (map->collisionMoveRight(posPlayer, size, &posPlayer.x) || map->checkOutOfBoundsRight(&posPlayer.x))
+	{
+		moveSpeed = 0;
+		sprite->changeAnimation(STAND);
+	}
+	if (map->collisionMoveLeft(posPlayer, size, &posPlayer.x) || map->checkOutOfBoundsLeft(&posPlayer.x))
+	{
+		moveSpeed = 0;
+		sprite->changeAnimation(STAND);
+	}
 	if (direction) // right
 	{
 		bLeft = false;
-		if (map->collisionMoveRight(posPlayer, size, &posPlayer.x) || map->checkOutOfBoundsRight(posPlayer.x))
-		{
-			moveSpeed = 0;
-			sprite->changeAnimation(STAND);
-		}
-		else {
-			if(moveSpeed < maxSpeed) moveSpeed += 0.1;
-		}
+		if (moveSpeed < maxSpeed) moveSpeed += 0.1;
+		if(moveSpeed < 0) sprite->changeAnimation(CHANGE_DIR);
 	}
 	else // left
 	{
 		bLeft = true;
-		if (map->collisionMoveLeft(posPlayer, size, &posPlayer.x) || map->checkOutOfBoundsLeft(posPlayer.x))
-		{
-			moveSpeed = 0;
-			sprite->changeAnimation(STAND);
-		}
-		else {
-			if (moveSpeed > -maxSpeed) moveSpeed -= 0.1;
-		}
+		if (moveSpeed > -maxSpeed) moveSpeed -= 0.1;
+		if (moveSpeed > 0) sprite->changeAnimation(CHANGE_DIR);
 	}
-	posPlayer.x += moveSpeed;
+	
+	
 
 }
 

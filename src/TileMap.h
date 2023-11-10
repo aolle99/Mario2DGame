@@ -47,9 +47,9 @@ public:
 	bool collisionMoveUp(const glm::ivec2& pos, const glm::ivec2& size, int* posY) const;
 
 	void removeCollisionBlock(int x, int y);
-	bool checkOutOfBoundsLeft(float posX);
+	bool checkOutOfBoundsLeft(int* posX) const;
 
-	bool checkOutOfBoundsRight(float posX);
+	bool checkOutOfBoundsRight(int* posX) const;
 	
 private:
 	bool loadLevel(const Json::Value layerMap, const glm::ivec2& mapSize);

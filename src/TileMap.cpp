@@ -172,14 +172,16 @@ vector<Item*> TileMap::getItems()
 	return items;
 }
 
-bool TileMap::checkOutOfBoundsLeft(float posX) {
-	if (posX < leftBound) {
+bool TileMap::checkOutOfBoundsLeft(int* posX) const  {
+	if (leftBound - *posX >0) {
+		*posX = leftBound; 
 		return true;
 	}
 	return false;
 }
-bool TileMap::checkOutOfBoundsRight(float posX) {
-	if (posX > mapSize.x * 32) {
+bool TileMap::checkOutOfBoundsRight(int* posX) const {
+	if (*posX - mapSize.x * 32 >0) {
+		*posX = mapSize.x * 32;
 		return true;
 	}
 	return false;
