@@ -9,6 +9,7 @@ public:
 	virtual void init();
 	virtual void render();
 	virtual void mouseRelease(int button, int xMouse, int yMouse);
+	void keyReleased(int key);
 };
 
 #endif // _INSTRUCTIONSSCENE_INCLUDE

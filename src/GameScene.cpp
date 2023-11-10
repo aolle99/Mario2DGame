@@ -6,11 +6,18 @@
 #include "json/json.h"
 #include <json/value.h>
 #include <fstream>
-#include "Item.h"
 #include "Player.h"
 #include "SoundManager.h"
 #include "GameManager.h"
 #include "PunctuationDisplay.h"
+#include "Mushroom.h"
+#include "Star.h"
+#include "Coin.h"
+#include "Flag.h"
+#include "CastleFlag.h"
+#include "EndPivot.h"
+#include "Goomba.h"
+#include "Koopa.h"
 
 
 #define SCREEN_X 32
@@ -145,6 +152,21 @@ void GameScene::keyReleased(int key)
 	}
 	else if (key == 50) {
 		Game::instance().changeLevel(1);
+	}
+	else if (key == 27) {
+		if (GameManager::instance().isPaused()) {
+			GameManager::instance().setPaused(false);
+			if (GameManager::instance().isLevelStarted())
+				SoundManager::instance().playMusic("res/music/overworld_resumed.ogg");
+			else
+				SoundManager::instance().playMusic("res/music/overworld.ogg");
+		}
+		else {
+			SoundManager::instance().stopMusic();
+			SoundManager::instance().playSound("res/sounds/pause.wav");
+			GameManager::instance().setPaused(true);
+		}
+			
 	}
 	
 }
@@ -418,6 +440,3 @@ vector<Enemy*>* GameScene::getEnemies()
 {
 	return &enemies;
 }
-
-
-
