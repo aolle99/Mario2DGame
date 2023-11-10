@@ -29,6 +29,7 @@ public:
 	void render();
 
 	void addScore(int score);
+	void addLive();
 	void substractLive();
 	void setTime(int time);
 	void setLevel(int level);

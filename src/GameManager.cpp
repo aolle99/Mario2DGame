@@ -48,6 +48,11 @@ void GameManager::addScore(int score)
 	this->score += score;
 }
 
+void GameManager::addLive()
+{
+	++lives;
+}
+
 void GameManager::substractLive()
 {
 	--lives;
