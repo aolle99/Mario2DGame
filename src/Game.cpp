@@ -109,8 +109,6 @@ void Game::changeLevel(int level)
 
 void Game::keyPressed(int key)
 {
-	if(key == 27) // Escape code
-		bExit = true;
 	keys[key] = true;
 }
 

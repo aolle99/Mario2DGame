@@ -48,3 +48,10 @@ void InstructionsScene::mouseRelease(int button, int xMouse, int yMouse)
 		Game::instance().showMainMenu();
 	}
 }
+
+void InstructionsScene::keyReleased(int key)
+{
+	if (key == 27) {
+		Game::instance().showMainMenu();
+	}
+}

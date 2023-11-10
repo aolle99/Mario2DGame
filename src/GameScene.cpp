@@ -146,6 +146,21 @@ void GameScene::keyReleased(int key)
 	else if (key == 50) {
 		Game::instance().changeLevel(1);
 	}
+	else if (key == 27) {
+		if (GameManager::instance().isPaused()) {
+			GameManager::instance().setPaused(false);
+			if (GameManager::instance().isLevelStarted())
+				SoundManager::instance().playMusic("res/music/overworld_resumed.ogg");
+			else
+				SoundManager::instance().playMusic("res/music/overworld.ogg");
+		}
+		else {
+			SoundManager::instance().stopMusic();
+			SoundManager::instance().playSound("res/sounds/pause.wav");
+			GameManager::instance().setPaused(true);
+		}
+			
+	}
 	
 }
 
