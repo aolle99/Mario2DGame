@@ -13,6 +13,8 @@ public:
 
 	void destroyAnimation();
 
+	void jumpAnimation();
+
 	void destroy();
 
 	virtual Item* getItem();

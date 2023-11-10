@@ -6,10 +6,15 @@
 #include "Star.h"
 #include "Coin.h"
 
+#define JUMP_ANGLE_STEP 10.f
 
 QuestionTile::QuestionTile(const glm::ivec2& tileMapPos, const glm::vec2 pos, Texture& tilesheetAnim, int item) : Tile(glm::ivec2(0, 0), pos)
 {
 	bUsed = false;
+	bJumping = false;
+	startY = 0;
+	jumpAngle = 0;
+
 	this->tilesheetAnim = tilesheetAnim;
 	switch (item)
 	{
@@ -56,12 +61,19 @@ void QuestionTile::update(int deltaTime)
 
 			bUsed = true;
 			texturePos = glm::ivec2(96, 0);
-			Tile::init(*shaderProgram, tilesheet);
 			if (item != nullptr) {
 				item->show();
 				if (!item->isCoin()) SoundManager::instance().playSound("res/sounds/powerup_appears.wav");
 			}
 
+			bJumping = true;
+			startY = position.y;
+
+		}
+	}
+	else {
+		if (bJumping) {
+			jumpAnimation();
 		}
 	}
 }
@@ -76,4 +88,19 @@ void QuestionTile::render()
 
 Item* QuestionTile::getItem() {
 	return item;
+}
+
+void QuestionTile::jumpAnimation() {
+	if (jumpAngle < 180.f) {
+
+		position.y = int(startY - 15 * sin(3.14159f * jumpAngle / 180.f));
+		jumpAngle += JUMP_ANGLE_STEP;
+
+	}
+	else {
+		position.y = startY;
+		bJumping = false;
+		jumpAngle = 0;
+	}
+	Tile::init();
 }

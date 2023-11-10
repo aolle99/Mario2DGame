@@ -12,11 +12,15 @@ public:
 	virtual void update(int deltaTime);
 	virtual void render();
 	Item* getItem();
+	void jumpAnimation();
 private:
 	Item* item;
 	Sprite* sprite;
 	bool bUsed;
 	Texture tilesheetAnim;
+	bool bJumping;
+	float startY;
+	int jumpAngle;
 };
 #endif // QUESTIONTILE_INCLUDE
 
