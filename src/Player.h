@@ -32,6 +32,7 @@ public:
 	void marioDying();
 	void update(int deltaTime);
 	void render();
+	void animateTransformationMario(bool toSupermario);
 	
 	void setTileMap(TileMap *tileMap);
 	void setPosition(const glm::vec2 &pos);
@@ -93,6 +94,9 @@ private:
 	bool bInvulnerable;
 	bool bBounce;
 	bool bShow;
+	bool bCanMove;
+	bool bChanging;
+	bool bGrowing;
 	float star;
 	int invTime;
 	int bounceTime;

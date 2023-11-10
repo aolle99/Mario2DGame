@@ -11,7 +11,7 @@
 #define JUMP_ANGLE_STEP 4.f
 #define FALL_STEP 8
 #define MAX_WALK_SPEED 2
-#define MAX_RUN_SPEED 5
+#define MAX_RUN_SPEED 4
 
 
 
@@ -29,6 +29,9 @@ void Player::init(glm::vec2 &startPos, ShaderProgram &shaderProgram)
 	bInvulnerable = false;
 	bBounce = false;
 	bShow = true;
+	bCanMove = true;
+	bChanging = false;
+	bGrowing = false;
 	bounceTime = 0;
 	invTime = 0;
 	star = 0.f;
@@ -162,6 +165,7 @@ void Player::bend()
 	}
 	
 }
+
 bool Player::checkJumping()
 {
 
@@ -212,7 +216,7 @@ bool Player::checkJumping()
 
 void Player::marioDying() {
 	sprite->changeAnimation(DIE);
-
+	printf("%d\n", posPlayer.y);
 	if (currentTime <= 10) {
 		posPlayer.y -= 4;
 	}
@@ -223,13 +227,12 @@ void Player::marioDying() {
 	}
 	currentTime += 1;
 
-	if (posPlayer.y > 518) {
+	if ((!isSuperMario() && posPlayer.y > 518) || (isSuperMario() && posPlayer.y > 500)) {
 		bDead = true;
 		bDying = false;
 		GameManager::instance().substractLive();
 		currentTime = 0;
 	}
-	
 }
 
 void Player::update(int deltaTime)
@@ -289,22 +292,24 @@ void Player::update(int deltaTime)
 			textureChanged -= 1;
 		}
 
-		if (Game::instance().getKey(32) || Game::instance().getSpecialKey(GLUT_KEY_UP)) this->jump();
-		else if (Game::instance().getSpecialKey(GLUT_KEY_DOWN)) this->bend();
-		else if (Game::instance().getSpecialKey(112)) { //shift
-			maxSpeed = MAX_RUN_SPEED;
-			sprite->setAnimationSpeed(MOVE, 10);
-		}
-		else {
-			maxSpeed = MAX_WALK_SPEED;
-			sprite->setAnimationSpeed(MOVE, 7);
-		}
+		if (bCanMove) {
+			if (Game::instance().getKey(32) || Game::instance().getSpecialKey(GLUT_KEY_UP)) this->jump();
+			else if (Game::instance().getSpecialKey(GLUT_KEY_DOWN)) this->bend();
+			else if (Game::instance().getSpecialKey(112)) { //shift
+				maxSpeed = MAX_RUN_SPEED;
+				sprite->setAnimationSpeed(MOVE, 10);
+			}
+			else {
+				maxSpeed = MAX_WALK_SPEED;
+				sprite->setAnimationSpeed(MOVE, 7);
+			}
 
-		if (Game::instance().getKey('m') || Game::instance().getKey('M')) {
-			this->giveMushroom();
-		}
-		if (Game::instance().getKey('g') || Game::instance().getKey('G')) {
-			this->giveStar();
+			if (Game::instance().getKey('m') || Game::instance().getKey('M')) {
+				this->giveMushroom();
+			}
+			if (Game::instance().getKey('g') || Game::instance().getKey('G')) {
+				this->giveStar();
+			}
 		}
 
 		if (star > 0) {
@@ -322,13 +327,27 @@ void Player::update(int deltaTime)
 			this->die();
 		}
 
+		if (bChanging) {
+			this->animateTransformationMario(bGrowing);
+		}
+
 		if (!textureChanged) sprite->changeAnimation(STAND);
 	}	
 	
-	if (!bDead && !bDying && posPlayer.y + 32 >= 511  && posPlayer.y + 32  <= 513) {
-		bDying = true;
-		SoundManager::instance().stopMusic();
-		SoundManager::instance().playSound("res/sounds/mario_die.wav");
+	if (!bDead && !bDying && !isSuperMario()){
+		if (posPlayer.y + 32 >= 511 && posPlayer.y + 32 <= 513) {
+			bDying = true;
+			SoundManager::instance().stopMusic();
+			SoundManager::instance().playSound("res/sounds/mario_die.wav");
+		}
+	}
+	else if (!bDead && !bDying && isSuperMario()) {
+		if (posPlayer.y + 64 >= 511 && posPlayer.y + 64 <= 513) {
+			bDying = true;
+			SoundManager::instance().stopMusic();
+			SoundManager::instance().playSound("res/sounds/mario_die.wav");
+			this->changeToMario();
+		}
 	}
 
 	sprite->setPosition(posPlayer);
@@ -338,6 +357,24 @@ void Player::render()
 {
 	if (bShow)
 	sprite->render(bLeft, star > 0);
+}
+
+void Player::animateTransformationMario(bool toSupermario)
+{
+	if (currentTime == 0 || currentTime == 6 || currentTime == 12 || currentTime == 18 || currentTime == 24) {
+		if(bGrowing) this->changeToSuperMario();
+		else this->changeToMario();
+	}
+	else if (currentTime == 3 || currentTime == 9 || currentTime == 15 || currentTime == 21) {
+		if(bGrowing) this->changeToMario();
+		else this->changeToSuperMario();
+	}
+	else if (currentTime == 27) {
+		bChanging = false;
+		currentTime = 0;
+		bCanMove = true;
+	}
+	currentTime += 1;
 }
 
 void Player::setTileMap(TileMap *tileMap)
@@ -408,7 +445,7 @@ bool Player::collisionLeft(const glm::ivec2& object_pos, const glm::ivec2& objec
 {
 	int player_left = posPlayer.x;
 	int object_right = object_pos.x + object_size.x;
-
+	
 	if ((player_left == object_right || player_left == object_right - 1 || player_left == object_right - 2) &&
 		posPlayer.y + hitbox.y >= object_pos.y &&
 		posPlayer.y <= object_pos.y + object_size.y) {
@@ -422,7 +459,7 @@ bool Player::collisionRight(const glm::ivec2& object_pos, const glm::ivec2& obje
 {
 	int player_right = posPlayer.x + size.x;
 	int object_left = object_pos.x;
-
+	
 	if ((player_right == object_left || player_right == object_left+1 || player_right == object_left + 2) &&
 		posPlayer.y + hitbox.y >= object_pos.y &&
 		posPlayer.y <= object_pos.y + object_size.y) {
@@ -452,7 +489,10 @@ void Player::damagePlayer() {
 	else if (hp == 2) {
 		bInvulnerable = true;
 		invTime = 50;
-		changeToMario();
+		bChanging = true;
+		bCanMove = false;
+		bGrowing = false;
+		SoundManager::instance().playSound("res/Sounds/powerup.wav");
 	}
 }
 
@@ -464,7 +504,9 @@ void Player::giveStar() {
 
 void Player::giveMushroom() {
 	if (hp == 1) {
-		changeToSuperMario();
+		bChanging = true;
+		bCanMove = false;
+		bGrowing = true;
 	}
 }
 
@@ -514,11 +556,9 @@ void Player::removeCollisionBlock(int x, int y) {
 		map->removeCollisionBlock(x, y);
 }
 
-
 glm::ivec2 Player::getHitboxPosition() {
 	return posPlayer + glm::ivec2(4, 0);
 }
-
 
 void Player::animationEnd()
 {

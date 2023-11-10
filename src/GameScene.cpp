@@ -136,8 +136,8 @@ void GameScene::keyReleased(int key)
 		GameManager::instance().setPaused(false);
 		if(GameManager::instance().isLevelStarted())
 			SoundManager::instance().playMusic("res/music/overworld_resumed.ogg");
-		else
-			SoundManager::instance().playMusic("res/music/overworld.ogg");
+		//else
+			//SoundManager::instance().playMusic("res/music/overworld.ogg");
 	}
 	else if (key == 49) {
 		Game::instance().changeLevel(0);
@@ -354,7 +354,7 @@ void GameScene::textRenderer() {
 	string score = to_string(GameManager::instance().getScore());
 	string coins = to_string(GameManager::instance().getCoins());
 	string time = to_string(GameManager::instance().getTime());
-	string level = to_string(GameManager::instance().getLevel());
+	string level = to_string(GameManager::instance().getLevel() + 1);
 	string lives = to_string(GameManager::instance().getLives());
 
 	text.render("LIVES: " + lives, glm::vec2(SCREEN_WIDTH / 5 * 0 + 30, 25), 16, glm::vec4(1, 1, 1, 1));

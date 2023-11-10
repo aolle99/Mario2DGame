@@ -251,7 +251,7 @@ void Koopa::init(const glm::ivec2& tileMapPos, ShaderProgram& shaderProgram)
 
 void Koopa::update(int deltaTime)
 {
-	if (GameManager::instance().getMaxScrollX() + 50 < posEnemy.x || GameManager::instance().getMinScrollX() - 50 > posEnemy.x) return;
+	if (GameManager::instance().getMaxScrollX() + 200 < posEnemy.x || GameManager::instance().getMinScrollX() - 50 > posEnemy.x) return;
 	sprite->update(deltaTime);
 
 	if (bDying) { // Koopa morint
@@ -301,7 +301,6 @@ void Koopa::shellMode() {
 			Player::instance().setInvTime(50);
 			SoundManager::instance().playSound("res/sounds/kick.wav");
 		}
-
 	}
 }
 
