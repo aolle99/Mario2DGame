@@ -5,6 +5,9 @@
 #include "TileMap.h"
 #include <json/json.h>
 #include <memory>
+#include "BrickTile.h"
+#include "QuestionTile.h"
+#include "InvisibleTile.h"
 
 using namespace std;
 

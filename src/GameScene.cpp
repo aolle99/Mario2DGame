@@ -6,11 +6,16 @@
 #include "json/json.h"
 #include <json/value.h>
 #include <fstream>
-#include "Item.h"
 #include "Player.h"
 #include "SoundManager.h"
 #include "GameManager.h"
 #include "PunctuationDisplay.h"
+#include "Mushroom.h"
+#include "Star.h"
+#include "Coin.h"
+#include "Flag.h"
+#include "CastleFlag.h"
+#include "EndPivot.h"
 
 
 #define SCREEN_X 32
@@ -430,6 +435,3 @@ vector<Enemy*>* GameScene::getEnemies()
 {
 	return &enemies;
 }
-
-
-

@@ -38,59 +38,16 @@ protected:
 
 
 
-class Mushroom : public Item
-{
-public:
-	virtual void init(const glm::ivec2& tileMapPos, ShaderProgram& shaderProgram);
-	virtual void update(int deltaTime);
 
-private:
-};
 
-class Star : public Item
-{
-public:
-	virtual void init(const glm::ivec2& tileMapPos, ShaderProgram& shaderProgram);
-	virtual void update(int deltaTime);
 
-protected:
-};
 
-class Coin : public Item
-{
-public:
-	virtual void init(const glm::ivec2& tileMapPos, ShaderProgram& shaderProgram);
-	virtual void update(int deltaTime);
-	virtual bool isCoin();
 
-protected:
-};
 
-class Flag : public Item
-{
-public:
-	virtual void init(const glm::ivec2& tileMapPos, ShaderProgram& shaderProgram, glm::ivec2 minCoords);
-	virtual void update(int deltaTime);
-private:
-	glm::ivec2 minCoords;
-};
 
-class CastleFlag : public Item
-{
-public:
-	virtual void init(const glm::ivec2& tileMapPos, ShaderProgram& shaderProgram);
-	virtual void update(int deltaTime);
-protected:
-};
 
-class EndPivot : public Item
-{
-public:
-	virtual void init(const glm::ivec2& tileMapPos, ShaderProgram& shaderProgram, int multiplier);
-	virtual void update(int deltaTime);
-protected:
-	int multiplier = 10;
-};
+
+
 
 
 #endif // _ITEM_INCLUDE

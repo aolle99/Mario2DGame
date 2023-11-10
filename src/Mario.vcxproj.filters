@@ -36,6 +36,18 @@
     <Filter Include="Archivos de código fuente\Scenes">
       <UniqueIdentifier>{c4912947-f977-4696-8e5b-fa5c9cb92a02}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Archivos de código fuente\Tiles">
+      <UniqueIdentifier>{aecf4fa2-a6bf-4798-83b8-ff6e7809d320}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Archivos de encabezado\Tiles">
+      <UniqueIdentifier>{ba24819f-57ad-4977-ba78-95853e17a62f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Archivos de código fuente\Items">
+      <UniqueIdentifier>{0246cf58-361b-4134-a5b8-7297f38264a2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Archivos de encabezado\Items">
+      <UniqueIdentifier>{a00fe3d8-1eaa-4b74-9b9a-b5e6c967305e}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Game.h">
@@ -62,13 +74,7 @@
     <ClInclude Include="Enemy.h">
       <Filter>Archivos de encabezado</Filter>
     </ClInclude>
-    <ClInclude Include="Tile.h">
-      <Filter>Archivos de encabezado</Filter>
-    </ClInclude>
     <ClInclude Include="TileMapStatic.h">
-      <Filter>Archivos de encabezado</Filter>
-    </ClInclude>
-    <ClInclude Include="Item.h">
       <Filter>Archivos de encabezado</Filter>
     </ClInclude>
     <ClInclude Include="Text.h">
@@ -107,6 +113,39 @@
     <ClInclude Include="LevelLoadingScene.h">
       <Filter>Archivos de encabezado\Scenes</Filter>
     </ClInclude>
+    <ClInclude Include="Tile.h">
+      <Filter>Archivos de encabezado\Tiles</Filter>
+    </ClInclude>
+    <ClInclude Include="BrickTile.h">
+      <Filter>Archivos de encabezado\Tiles</Filter>
+    </ClInclude>
+    <ClInclude Include="QuestionTile.h">
+      <Filter>Archivos de encabezado\Tiles</Filter>
+    </ClInclude>
+    <ClInclude Include="InvisibleTile.h">
+      <Filter>Archivos de encabezado\Tiles</Filter>
+    </ClInclude>
+    <ClInclude Include="Item.h">
+      <Filter>Archivos de encabezado\Items</Filter>
+    </ClInclude>
+    <ClInclude Include="Mushroom.h">
+      <Filter>Archivos de encabezado\Items</Filter>
+    </ClInclude>
+    <ClInclude Include="Star.h">
+      <Filter>Archivos de encabezado\Items</Filter>
+    </ClInclude>
+    <ClInclude Include="Coin.h">
+      <Filter>Archivos de encabezado\Items</Filter>
+    </ClInclude>
+    <ClInclude Include="Flag.h">
+      <Filter>Archivos de encabezado\Items</Filter>
+    </ClInclude>
+    <ClInclude Include="CastleFlag.h">
+      <Filter>Archivos de encabezado\Items</Filter>
+    </ClInclude>
+    <ClInclude Include="EndPivot.h">
+      <Filter>Archivos de encabezado\Items</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Game.cpp">
@@ -133,16 +172,7 @@
     <ClCompile Include="Enemy.cpp">
       <Filter>Archivos de código fuente</Filter>
     </ClCompile>
-    <ClCompile Include="Tile.cpp">
-      <Filter>Archivos de código fuente</Filter>
-    </ClCompile>
-    <ClCompile Include="..\libs\json\dist\jsoncpp.cpp">
-      <Filter>Archivos de código fuente</Filter>
-    </ClCompile>
     <ClCompile Include="TileMapStatic.cpp">
-      <Filter>Archivos de código fuente</Filter>
-    </ClCompile>
-    <ClCompile Include="Item.cpp">
       <Filter>Archivos de código fuente</Filter>
     </ClCompile>
     <ClCompile Include="Text.cpp">
@@ -180,6 +210,42 @@
     </ClCompile>
     <ClCompile Include="LevelLoadingScene.cpp">
       <Filter>Archivos de código fuente\Scenes</Filter>
+    </ClCompile>
+    <ClCompile Include="Tile.cpp">
+      <Filter>Archivos de código fuente\Tiles</Filter>
+    </ClCompile>
+    <ClCompile Include="BrickTile.cpp">
+      <Filter>Archivos de código fuente\Tiles</Filter>
+    </ClCompile>
+    <ClCompile Include="QuestionTile.cpp">
+      <Filter>Archivos de código fuente\Tiles</Filter>
+    </ClCompile>
+    <ClCompile Include="InvisibleTile.cpp">
+      <Filter>Archivos de código fuente\Tiles</Filter>
+    </ClCompile>
+    <ClCompile Include="..\libs\json\dist\jsoncpp.cpp">
+      <Filter>Archivos de código fuente\Helpers</Filter>
+    </ClCompile>
+    <ClCompile Include="Item.cpp">
+      <Filter>Archivos de código fuente\Items</Filter>
+    </ClCompile>
+    <ClCompile Include="Mushroom.cpp">
+      <Filter>Archivos de código fuente\Items</Filter>
+    </ClCompile>
+    <ClCompile Include="Star.cpp">
+      <Filter>Archivos de código fuente\Items</Filter>
+    </ClCompile>
+    <ClCompile Include="Coin.cpp">
+      <Filter>Archivos de código fuente\Items</Filter>
+    </ClCompile>
+    <ClCompile Include="Flag.cpp">
+      <Filter>Archivos de código fuente\Items</Filter>
+    </ClCompile>
+    <ClCompile Include="CastleFlag.cpp">
+      <Filter>Archivos de código fuente\Items</Filter>
+    </ClCompile>
+    <ClCompile Include="EndPivot.cpp">
+      <Filter>Archivos de código fuente\Items</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
