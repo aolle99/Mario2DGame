@@ -35,7 +35,6 @@ void Enemy::move()
 {
 	posEnemy.y += FALL_STEP;
 	
-	
 		if (map->collisionMoveDown(posEnemy, sizeEnemy, &posEnemy.y)) {
 			if (this->isModeTurtle()) {
 				if (map->nearFall(posEnemy, sizeEnemy, bLeft)) {
@@ -47,7 +46,6 @@ void Enemy::move()
 			return;
 		}
 		
-
 	if (bLeft) { // left
 		posEnemy.x += speed;
 		if (map->collisionMoveRight(posEnemy, sizeEnemy, &posEnemy.x))
