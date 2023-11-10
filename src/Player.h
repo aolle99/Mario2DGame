@@ -113,6 +113,7 @@ private:
 	glm::ivec2 endLevelPos;
 	float moveSpeed;
 	int maxSpeed;
+	int jumpTimer;
 };
 
 

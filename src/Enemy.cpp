@@ -50,7 +50,7 @@ void Enemy::move()
 
 	if (bLeft) { // left
 		posEnemy.x += speed;
-		if (map->collisionMoveRight(posEnemy, sizeEnemy))
+		if (map->collisionMoveRight(posEnemy, sizeEnemy, &posEnemy.x))
 		{
 			bLeft = !bLeft;
 		}
@@ -58,7 +58,7 @@ void Enemy::move()
 	}
 	else { // right
 		posEnemy.x -= speed;
-		if (map->collisionMoveLeft(posEnemy, sizeEnemy)) // mira si hi ha colisio a l'esquerra
+		if (map->collisionMoveLeft(posEnemy, sizeEnemy, &posEnemy.x)) // mira si hi ha colisio a l'esquerra
 		{
 			bLeft = !bLeft;
 		}

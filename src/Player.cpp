@@ -12,7 +12,7 @@
 #define FALL_STEP 8
 #define MAX_WALK_SPEED 2
 #define MAX_RUN_SPEED 5
-
+#define MIN_JUMP_INTERVAL 500
 
 
 enum PlayerAnims
@@ -37,6 +37,7 @@ void Player::init(glm::vec2 &startPos, ShaderProgram &shaderProgram)
 	score = 0;
 	posPlayer = startPos;
 	animStep = 0;
+	jumpTimer = 0;
 	this->shaderProgram = shaderProgram;
 	this->changeToMario();
 	sprite->changeAnimation(0);
@@ -115,7 +116,7 @@ void Player::move(bool direction)
 	if (direction) // right
 	{
 		bLeft = false;
-		if (map->collisionMoveRight(posPlayer, size) || map->checkOutOfBoundsRight(posPlayer.x))
+		if (map->collisionMoveRight(posPlayer, size, &posPlayer.x) || map->checkOutOfBoundsRight(posPlayer.x))
 		{
 			moveSpeed = 0;
 			sprite->changeAnimation(STAND);
@@ -127,7 +128,7 @@ void Player::move(bool direction)
 	else // left
 	{
 		bLeft = true;
-		if (map->collisionMoveLeft(posPlayer, size) || map->checkOutOfBoundsLeft(posPlayer.x))
+		if (map->collisionMoveLeft(posPlayer, size, &posPlayer.x) || map->checkOutOfBoundsLeft(posPlayer.x))
 		{
 			moveSpeed = 0;
 			sprite->changeAnimation(STAND);
@@ -147,11 +148,12 @@ void Player::die()
 
 void Player::jump()
 {
-	if (bJumping) return;
+	if (bJumping || jumpTimer < MIN_JUMP_INTERVAL) return;
 	bJumping = true;
 	jumpAngle = 0;
 	startY = posPlayer.y;
 	sprite->changeAnimation(JUMP);
+	jumpTimer = 0;
 	SoundManager::instance().playSound("res/sounds/jump_super.wav");
 }
 
@@ -164,7 +166,6 @@ void Player::bend()
 }
 bool Player::checkJumping()
 {
-
 	if (bJumping && !bFalling)
 	{
 		jumpAngle += JUMP_ANGLE_STEP;
@@ -173,7 +174,7 @@ bool Player::checkJumping()
 			bFalling = true;
 			posPlayer.y = startY;
 		}
-		else if (map->collisionMoveUp(getHitboxPosition(), hitbox))
+		else if (map->collisionMoveUp(getHitboxPosition(), hitbox, &posPlayer.y))
 		{
 			bFalling = true;
 		}
@@ -236,6 +237,8 @@ void Player::update(int deltaTime)
 	if(bDead) return;
 
 	sprite->update(deltaTime);
+
+
 	if (bInvulnerable) {
 		invTime -= 1;
 		if (invTime == 0) {
@@ -251,10 +254,11 @@ void Player::update(int deltaTime)
 	}
 	else {
 		int textureChanged = 2;
+		jumpTimer += deltaTime;
 
 		if (bBounce) {
 			if (bounceTime < 8) {
-				if (!map->collisionMoveUp(posPlayer, size)) {
+				if (!map->collisionMoveUp(posPlayer, size, &posPlayer.y)) {
 					posPlayer.y -= FALL_STEP - bounceTime / 8.f * FALL_STEP;
 					bounceTime += 1;
 				}				
@@ -277,16 +281,24 @@ void Player::update(int deltaTime)
 		else if (Game::instance().getSpecialKey(GLUT_KEY_RIGHT)) this->move(true);
 		else {
 			if (moveSpeed > 1) {
+				if (moveSpeed > MAX_WALK_SPEED)
+				{
+					moveSpeed -= 0.05;
+				}
 				moveSpeed -= 0.1;
 			}
 			else if (moveSpeed < -1) {
+				if (moveSpeed < -MAX_WALK_SPEED)
+				{
+					moveSpeed += 0.05;
+				}
 				moveSpeed += 0.1;
 			}
 			else {
 				moveSpeed = 0;
+				textureChanged -= 1;
 			}
 			posPlayer.x += moveSpeed;
-			textureChanged -= 1;
 		}
 
 		if (Game::instance().getKey(32) || Game::instance().getSpecialKey(GLUT_KEY_UP)) this->jump();

@@ -39,12 +39,13 @@ public:
 
 	vector<Item*> getItems();
 
-	bool collisionMoveLeft(const glm::ivec2 &pos, const glm::ivec2 &size) const;
-	bool collisionMoveRight(const glm::ivec2 &pos, const glm::ivec2 &size) const;
+	bool collisionMoveLeft(const glm::ivec2 &pos, const glm::ivec2 &size, int* posX) const;
+	bool collisionMoveRight(const glm::ivec2 &pos, const glm::ivec2 &size, int *posX) const;
 	bool nearFall(const glm::ivec2& pos, const glm::ivec2& size, bool direction) const;
 	bool collisionMoveDown(const glm::ivec2 &pos, const glm::ivec2 &size, int *posY) const;
 
-	bool collisionMoveUp(const glm::ivec2& pos, const glm::ivec2& size) const;
+	bool collisionMoveUp(const glm::ivec2& pos, const glm::ivec2& size, int* posY) const;
+
 	void removeCollisionBlock(int x, int y);
 	bool checkOutOfBoundsLeft(float posX);
 

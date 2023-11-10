@@ -59,7 +59,7 @@ void Item::move(bool direction)
 
 	if (direction) { // left
 		posItem.x += 2;
-		if (map->collisionMoveRight(posItem, sizeItem))
+		if (map->collisionMoveRight(posItem, sizeItem, &posItem.x))
 		{
 			bLeft = !bLeft;
 		}
@@ -67,7 +67,7 @@ void Item::move(bool direction)
 	}
 	else { // right
 		posItem.x -= 2;
-		if (map->collisionMoveLeft(posItem, sizeItem)) // mira si hi ha colisio a l'esquerra
+		if (map->collisionMoveLeft(posItem, sizeItem, &posItem.x)) // mira si hi ha colisio a l'esquerra
 		{
 			bLeft = !bLeft;
 		}
