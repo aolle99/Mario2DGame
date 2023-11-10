@@ -3,6 +3,7 @@
 #include "GameManager.h"
 #include "PunctuationDisplay.h"
 #include "SoundManager.h"
+#include "Game.h"
 
 
 #define PUNCT_ENEMY 100
@@ -45,6 +46,10 @@ void Koopa::update(int deltaTime)
 
 		else { // Koopa en modo caparazon
 			this->shellMode();
+
+			if (posEnemy.y + sizeEnemy.y > SCREEN_HEIGHT) {
+				bDead = true;
+			}
 		}
 	}
 

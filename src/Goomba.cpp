@@ -3,6 +3,7 @@
 #include "GameManager.h"
 #include "PunctuationDisplay.h"
 #include "SoundManager.h"
+#include "Game.h"
 
 #define PUNCT_ENEMY 100
 
@@ -71,6 +72,10 @@ void Goomba::update(int deltaTime)
 				bSmashed = true;
 				bDying = true;
 			}
+		}
+
+		if (posEnemy.y + sizeEnemy.y > SCREEN_HEIGHT - 5) {
+			bDead = true;
 		}
 	}
 
