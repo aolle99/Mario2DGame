@@ -30,6 +30,14 @@ void GameManager::update(int deltaTime)
 			startTime = std::chrono::high_resolution_clock::now();
 		}
 	}
+	else if (bLevelCompleted) {
+		if (time > 0) {
+			--time;
+			++score;
+		}
+		
+
+	}
 }
 
 void GameManager::render()

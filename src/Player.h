@@ -32,6 +32,7 @@ public:
 	void marioDying();
 	void update(int deltaTime);
 	void render();
+	void animateTransformationMario(bool toSupermario);
 	
 	void setTileMap(TileMap *tileMap);
 	void setPosition(const glm::vec2 &pos);
@@ -64,6 +65,8 @@ public:
 
 	bool isDead();
 
+	bool isDying();
+
 	int getHp();
 
 	void setDying(bool dying);
@@ -95,6 +98,9 @@ private:
 	bool bInvulnerable;
 	bool bBounce;
 	bool bShow;
+	bool bCanMove;
+	bool bChanging;
+	bool bGrowing;
 	float star;
 	int invTime;
 	int bounceTime;

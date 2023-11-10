@@ -67,9 +67,6 @@ void GameScene::init()
 	}
 
 	text.init("res/Fonts/main_font.ttf");
-
-
-
 }
 
 void GameScene::update(int deltaTime)
@@ -365,7 +362,7 @@ void GameScene::checkPlayerAlive()
 			GameManager::instance().setGameOver(true);
 		}
 	}
-	else if (GameManager::instance().getTime() <= 0) {
+	else if (GameManager::instance().getTime() <= 0 && !GameManager::instance().isLevelCompleted()) {
 		GameManager::instance().setGameOver(2);
 	}
 }
@@ -374,7 +371,7 @@ void GameScene::textRenderer() {
 	string score = to_string(GameManager::instance().getScore());
 	string coins = to_string(GameManager::instance().getCoins());
 	string time = to_string(GameManager::instance().getTime());
-	string level = to_string(GameManager::instance().getLevel());
+	string level = to_string(GameManager::instance().getLevel() + 1);
 	string lives = to_string(GameManager::instance().getLives());
 
 	text.render("LIVES: " + lives, glm::vec2(SCREEN_WIDTH / 5 * 0 + 30, 25), 16, glm::vec4(1, 1, 1, 1));

@@ -107,12 +107,10 @@ bool Enemy::isModeTurtle()
 
 bool Enemy::collisionEnemies(const glm::vec2& pos2, const glm::ivec2& size2)
 {
-	// if collision between enemies	return true
 	if ((posEnemy.x + sizeEnemy.x >= pos2.x && posEnemy.x <= pos2.x + size2.x) && posEnemy.y + sizeEnemy.y >= pos2.y && posEnemy.y <= pos2.y + size2.y) {
 		return true;
 	}
 	return false;
-
 }
 
 glm::ivec2 Enemy::getPosition()
@@ -158,7 +156,8 @@ void Goomba::update(int deltaTime)
 	sprite->update(deltaTime);
 
 	if (bDying) {
-		if (bSmashed) {
+		if(Player::instance().isDying()) bDying = false;
+		else if (bSmashed) {
 			this->smashedDeath();
 		}
 		else {
@@ -191,8 +190,6 @@ void Goomba::update(int deltaTime)
 
 void Goomba::collisionDeath()
 {
-	bDying = true;
-
 	if (!bTextRendered) {
 		PunctuationDisplay::instance().addDisplay(to_string(PUNCT_ENEMY), posEnemy);
 		GameManager::instance().addScore(PUNCT_ENEMY);
@@ -251,7 +248,7 @@ void Koopa::init(const glm::ivec2& tileMapPos, ShaderProgram& shaderProgram)
 
 void Koopa::update(int deltaTime)
 {
-	if (GameManager::instance().getMaxScrollX() + 50 < posEnemy.x || GameManager::instance().getMinScrollX() - 50 > posEnemy.x) return;
+	if (GameManager::instance().getMaxScrollX() + 200 < posEnemy.x || GameManager::instance().getMinScrollX() - 50 > posEnemy.x) return;
 	sprite->update(deltaTime);
 
 	if (bDying) { // Koopa morint
@@ -301,7 +298,6 @@ void Koopa::shellMode() {
 			Player::instance().setInvTime(50);
 			SoundManager::instance().playSound("res/sounds/kick.wav");
 		}
-
 	}
 }
 
@@ -333,7 +329,6 @@ void Koopa::collisionDeath()
 {
 	sprite->changeAnimation(DIE);
 	bStop = true;
-	bDying = true;
 
 	if (!bTextRendered) {
 		PunctuationDisplay::instance().addDisplay(to_string(PUNCT_ENEMY), posEnemy);
