@@ -99,7 +99,6 @@ void Game::nextLevel()
 		this->changeLevel(GameManager::instance().getLevel()+1);
 	}
 	else {
-		GameManager::instance().init();
 		showWinScene();
 	}
 

@@ -32,5 +32,6 @@ void WinScene::render()
 
 void WinScene::keyReleased(int key)
 {
+	GameManager::instance().init();
 	Game::instance().showCredits();
 }
