@@ -16,6 +16,7 @@ public:
 	~Tile();
 
 	virtual void init(ShaderProgram &shaderProgram,Texture &tilesheet);
+	void init();
 	virtual void update(int deltaTime){};
 	virtual void render();
 
@@ -36,5 +37,7 @@ protected:
 	glm::vec2 position;
 	glm::ivec2 texturePos;
 	ShaderProgram* shaderProgram;
+
+
 };
 #endif // _PLAYER_INCLUDE

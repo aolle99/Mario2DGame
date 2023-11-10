@@ -265,6 +265,9 @@
     <ClCompile Include="Goomba.cpp">
       <Filter>Archivos de código fuente\Enemies</Filter>
     </ClCompile>
+    <ClCompile Include="GreenMushroom.cpp">
+      <Filter>Archivos de código fuente\Items</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\README.md">

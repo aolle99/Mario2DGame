@@ -11,6 +11,8 @@ public:
 	virtual void update(int deltaTime);
 	virtual void render();
 
+	void destroyAnimation();
+
 	void destroy();
 
 	virtual Item* getItem();
@@ -20,5 +22,7 @@ private:
 	bool bJumping;
 	float startY;
 	bool bDestroyed;
+	bool bDestroying;
+	int jumpAngle;
 };
 #endif // BRICKTILE_INCLUDE
