@@ -107,6 +107,9 @@
     <ClInclude Include="LevelLoadingScene.h">
       <Filter>Archivos de encabezado\Scenes</Filter>
     </ClInclude>
+    <ClInclude Include="WinScene.h">
+      <Filter>Archivos de encabezado\Scenes</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Game.cpp">
@@ -179,6 +182,9 @@
       <Filter>Archivos de código fuente\Scenes</Filter>
     </ClCompile>
     <ClCompile Include="LevelLoadingScene.cpp">
+      <Filter>Archivos de código fuente\Scenes</Filter>
+    </ClCompile>
+    <ClCompile Include="WinScene.cpp">
       <Filter>Archivos de código fuente\Scenes</Filter>
     </ClCompile>
   </ItemGroup>

@@ -404,8 +404,11 @@ void GameScene::textRenderer() {
 		text.render("you run out of lives", glm::vec2(SCREEN_WIDTH / 2 - 140, SCREEN_HEIGHT / 2 - 20), 16, glm::vec4(1, 0, 0, 1));
 		text.render("Press 'Q' to quit", glm::vec2(SCREEN_WIDTH / 2 - 120, SCREEN_HEIGHT / 2 + 20), 16, glm::vec4(1, 1, 1, 1));
 		text.render("Press 'R' to restart", glm::vec2(SCREEN_WIDTH / 2 - 145, SCREEN_HEIGHT / 2 + 40), 16, glm::vec4(1, 1, 1, 1));
-        SoundManager::instance().stopMusic();
-        SoundManager::instance().playSound("res/sounds/game_over.wav");
+		if (!GameManager::instance().isGameOverSoundPlayed()) {
+			SoundManager::instance().stopMusic();
+			SoundManager::instance().playSound("res/sounds/game_over.wav");
+			GameManager::instance().setGameOverSoundPlayed(true);
+		}
 	}
 
 	PunctuationDisplay::instance().render();

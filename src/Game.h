@@ -37,6 +37,7 @@ public:
 	void showLoadLevel();
 	void showGame();
 	void showCredits();
+	void showWinScene();
 
 
 	// Game state management

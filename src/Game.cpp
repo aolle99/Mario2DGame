@@ -8,6 +8,7 @@
 #include "InstructionsScene.h"
 #include "CreditsScene.h"
 #include "LevelLoadingScene.h"
+#include "WinScene.h"
 #include "GameScene.h"
 
 #define LOAD_LEVEL_TIME 80
@@ -79,6 +80,13 @@ void Game::showCredits()
 	scene->init();
 }
 
+void Game::showWinScene()
+{
+	delete scene;
+	scene = new WinScene();
+	scene->init();
+}
+
 void Game::resetGame()
 {
 	GameManager::instance().init();
@@ -92,7 +100,7 @@ void Game::nextLevel()
 	}
 	else {
 		GameManager::instance().init();
-		showMainMenu();
+		showWinScene();
 	}
 
 }

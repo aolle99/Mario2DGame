@@ -2,7 +2,7 @@
 
 
 #define GAME_LEVELS 2
-#define LEVEL_TIME 151
+#define LEVEL_TIME 150
 #define START_LIVES 3
 
 void GameManager::init()
@@ -16,6 +16,7 @@ void GameManager::init()
 	bPaused = true;
 	bGameOver = false;
 	bLevelCompleted = false;
+	bGameOverSoundPlayed = false;
 	scrollXmin = 0;
 }
 
@@ -35,8 +36,6 @@ void GameManager::update(int deltaTime)
 			--time;
 			++score;
 		}
-		
-
 	}
 }
 
@@ -85,6 +84,11 @@ void GameManager::setGameOver(int bEnd)
 void GameManager::setLevelCompleted(bool bCompleted)
 {
 	bLevelCompleted = bCompleted;
+}
+
+void GameManager::setGameOverSoundPlayed(bool bPlayed)
+{
+	bGameOverSoundPlayed = bPlayed;
 }
 
 void GameManager::setPaused(bool bPaused)
@@ -176,4 +180,9 @@ bool GameManager::hasNextLevel()
 bool GameManager::levelExists(int level)
 {
 	return level < GAME_LEVELS;
+}
+
+bool GameManager::isGameOverSoundPlayed()
+{
+	return bGameOverSoundPlayed;
 }

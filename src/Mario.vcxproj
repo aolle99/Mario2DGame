@@ -34,6 +34,7 @@
     <ClInclude Include="Tile.h" />
     <ClInclude Include="TileMap.h" />
     <ClInclude Include="TileMapStatic.h" />
+    <ClInclude Include="WinScene.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\libs\json\dist\jsoncpp.cpp" />
@@ -60,6 +61,7 @@
     <ClCompile Include="Tile.cpp" />
     <ClCompile Include="TileMap.cpp" />
     <ClCompile Include="TileMapStatic.cpp" />
+    <ClCompile Include="WinScene.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\.gitignore" />

@@ -437,8 +437,8 @@ bool Player::collisionDown(const glm::ivec2& object_pos, const glm::ivec2& objec
 	int player_bottom = posPlayer.y + size.y;
 	int object_top = object_pos.y;
 
-	if ((player_bottom == object_top || player_bottom == object_top + 1 || player_bottom == object_top + 2) &&
-		posPlayer.x + size.x >= object_pos.x &&
+	if ((player_bottom == object_top || player_bottom == object_top + 1 || player_bottom == object_top + 2 || player_bottom == object_top + 4) &&
+  		posPlayer.x + size.x >= object_pos.x &&
 		posPlayer.x <= object_pos.x + object_size.x) {
 		if (!isItem) {
 			bJumping = false;
