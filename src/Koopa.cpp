@@ -36,7 +36,7 @@ void Koopa::update(int deltaTime)
 	sprite->update(deltaTime);
 
 	if (bDying) { // Koopa morint
-		collisionDeath();
+		this->collisionDeath();
 	}
 	else {
 		if (!bShell) { // Koopa en modo tortuga
@@ -44,7 +44,6 @@ void Koopa::update(int deltaTime)
 		}
 
 		else { // Koopa en modo caparazon
-
 			this->shellMode();
 		}
 	}
@@ -99,7 +98,7 @@ void Koopa::turtleMode()
 				Player::instance().damagePlayer();
 			}
 		}
-		else if (Player::instance().collisionDown(posEnemy, sizeEnemy, false)) {
+		else if (Player::instance().collisionDown(posEnemy, sizeEnemy, false) && !Player::instance().isDying()) {
 			change_to_shell();
 			bShell = true;
 			bStop = true;
@@ -113,6 +112,7 @@ void Koopa::collisionDeath()
 {
 	sprite->changeAnimation(DIE);
 	bStop = true;
+	bDying = true;
 
 	if (!bTextRendered) {
 		PunctuationDisplay::instance().addDisplay(to_string(PUNCT_ENEMY), posEnemy);
