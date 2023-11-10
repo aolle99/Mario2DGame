@@ -191,6 +191,10 @@ bool TileMap::checkOutOfBoundsDown(float posY) {
 	return posY > mapSize.y * 32;
 }
 
+bool TileMap::checkOutOfBounds(glm::ivec2 pos) const {
+		return pos.x < 0 || pos.x > mapSize.x * 32 || pos.y < 0 || pos.y > mapSize.y * 32;
+}
+
 // Collision tests for axis aligned bounding boxes.
 // Method collisionMoveDown also corrects Y coordinate if the box is
 // already intersecting a tile below.
@@ -209,14 +213,14 @@ bool TileMap::collisionMoveLeft(const glm::ivec2 &pos, const glm::ivec2 &size, i
 	x = pos.x / tileSize;
 	y0 = pos.y / tileSize;
 	y1 = (pos.y + size.y - 1) / tileSize;
-	if (y1 >= mapSize.y || x >= mapSize.x)
+	if (checkOutOfBounds(pos))
 		return false;
 	for(int y=y0; y<=y1; y++)
 	{
 		if (map[y * mapSize.x + x]) {
-			if (*posX - tileSize * x + tileSize >=-15)
+ 			if (*posX - tileSize * x - tileSize >=-12)
 			{
- 				*posX = tileSize * x + size.x;
+ 				*posX = tileSize * x + tileSize;
 				return true;
 			}
 		}
@@ -233,16 +237,20 @@ bool TileMap::collisionMoveRight(const glm::ivec2 &pos, const glm::ivec2 &size, 
 	x = (pos.x + size.x - 1) / tileSize;
 	y0 = pos.y / tileSize;
 	y1 = (pos.y + size.y - 1) / tileSize;
-	if (y1 >= mapSize.y || x >= mapSize.x)
+	if (checkOutOfBounds(pos))
 		return false;
 	for(int y=y0; y<=y1; y++)
 	{
-		if(map[y*mapSize.x+x] != 0)
-			if (*posX - tileSize * x + size.x <= 15)
+		if (map[y * mapSize.x + x] != 0) {
+			int calc = *posX + size.x - tileSize * x;
+			if (calc <= 12)
 			{
-				*posX = tileSize * x - size.x;
+ 				*posX = tileSize * x - size.x;
 				return true;
 			}
+		}
+
+			
 	}
 	
 	return false;
@@ -258,7 +266,7 @@ bool TileMap::nearFall(const glm::ivec2& pos, const glm::ivec2& size, bool direc
 	else
 		x = (pos.x - 1) / tileSize;
 	
-	if(y >= mapSize.y || x >= mapSize.x)
+	if (checkOutOfBounds(pos))
 		return false;
 	if (map[y * mapSize.x + x] != 0)
 		return false;
@@ -273,7 +281,7 @@ bool TileMap::collisionMoveDown(const glm::ivec2 &pos, const glm::ivec2 &size, i
 	x0 = pos.x / tileSize;
 	x1 = (pos.x + size.x - 1) / tileSize;
 	y = (pos.y + size.y - 1) / tileSize;
-	if(y >= mapSize.y || x1 >= mapSize.x)
+	if (checkOutOfBounds(pos))
 		return false;
 	for(int x=x0; x<=x1; x++)
 	{
@@ -297,7 +305,7 @@ bool TileMap::collisionMoveUp(const glm::ivec2& pos, const glm::ivec2& size, int
 	x0 = pos.x / tileSize;
 	x1 = (pos.x + size.x - 1) / tileSize;
 	y = pos.y / tileSize;
-	if (y >= mapSize.y || x1 >= mapSize.x)
+	if (checkOutOfBounds(pos))
 		return false;
 	for (int x = x0; x <= x1; x++)
 	{

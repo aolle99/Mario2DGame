@@ -35,6 +35,8 @@ public:
 
 	bool checkOutOfBoundsDown(float posX);
 
+	bool checkOutOfBounds(glm::ivec2 pos) const;
+
 	glm::ivec2 TileMap::getSize();
 
 	vector<Item*> getItems();

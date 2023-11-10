@@ -23,6 +23,7 @@ public:
 	void init(glm::vec2& startPos, ShaderProgram &shaderProgram);
 	void changeToMario();
 	void changeToSuperMario();
+	void checkMovement();
 	void move(bool direction);
 	void die();
 	void jump();

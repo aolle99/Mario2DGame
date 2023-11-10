@@ -24,6 +24,7 @@ enum PlayerAnims
 void Player::init(glm::vec2 &startPos, ShaderProgram &shaderProgram)
 {
 	bJumping = false;
+	bFalling = false;
 	bLeft = false;
 	bDying = false;
 	bDead = false;
@@ -48,6 +49,140 @@ void Player::init(glm::vec2 &startPos, ShaderProgram &shaderProgram)
 	sprite->setPosition(posPlayer);
 	moveSpeed = 0;
 	maxSpeed = MAX_WALK_SPEED;
+}
+
+void Player::update(int deltaTime)
+{
+	if (bDead) return;
+
+	sprite->update(deltaTime);
+	if (bInvulnerable) {
+		invTime -= 1;
+		if (invTime == 0) {
+			bInvulnerable = false;
+		}
+	}
+
+	if (bDying) {
+		this->marioDying();
+	}
+	else if (GameManager::instance().isLevelCompleted() || GameManager::instance().isPaused()) {
+		if (GameManager::instance().isLevelCompleted()) this->animationEnd(deltaTime);
+	}
+	else {
+		int textureChanged = 2;
+		jumpTimer += deltaTime;
+
+		if (bBounce) {
+			if (bounceTime < 8) {
+				if (!map->collisionMoveUp(posPlayer, size, &posPlayer.y)) {
+					posPlayer.y -= FALL_STEP - bounceTime / 8.f * FALL_STEP;
+					bounceTime += 1;
+				}
+			}
+			else if (bounceTime < 8) {
+				if (!map->collisionMoveDown(posPlayer, size, &posPlayer.y)) {
+					posPlayer.y += FALL_STEP - (8 - bounceTime) / 8.f * FALL_STEP;
+					bounceTime += 1;
+				}
+			}
+			else {
+				bounceTime = 0;
+				bBounce = false;
+			}
+		}
+
+		if (!this->checkJumping())  textureChanged -= 1;
+
+		this->checkMovement();
+		if (Game::instance().getSpecialKey(GLUT_KEY_LEFT)) this->move(false);
+		else if (Game::instance().getSpecialKey(GLUT_KEY_RIGHT)) this->move(true);
+		else {
+			if (moveSpeed > 1) {
+				if (moveSpeed > MAX_WALK_SPEED)
+				{
+					moveSpeed -= 0.05;
+				}
+				moveSpeed -= 0.1;
+			}
+			else if (moveSpeed < -1) {
+				if (moveSpeed < -MAX_WALK_SPEED)
+				{
+					moveSpeed += 0.05;
+				}
+				moveSpeed += 0.1;
+			}
+			else {
+				moveSpeed = 0;
+				textureChanged -= 1;
+			}
+		}
+
+		if (bCanMove) {
+			if (Game::instance().getKey(32) || Game::instance().getSpecialKey(GLUT_KEY_UP)) this->jump();
+			else if (Game::instance().getSpecialKey(GLUT_KEY_DOWN)) this->bend();
+			else if (Game::instance().getSpecialKey(112)) { //shift
+				maxSpeed = MAX_RUN_SPEED;
+				sprite->setAnimationSpeed(MOVE, 10);
+			}
+			else {
+				maxSpeed = MAX_WALK_SPEED;
+				sprite->setAnimationSpeed(MOVE, 7);
+			}
+
+			if (Game::instance().getKey('m') || Game::instance().getKey('M')) {
+				this->giveMushroom();
+			}
+			if (Game::instance().getKey('g') || Game::instance().getKey('G')) {
+				this->giveStar();
+			}
+		}
+
+		if (star > 0) {
+			// Restar 1 cada segundo
+			star -= 0.01;
+		}
+
+		if (star < 0.5 && star != 0) {
+			star = 0;
+			SoundManager::instance().stopMusic();
+			SoundManager::instance().playMusic("res/music/overworld_resumed.ogg");
+		}
+
+		if (map->checkOutOfBoundsDown(posPlayer.y)) {
+			this->die();
+		}
+
+		if (bChanging) {
+			this->animateTransformationMario(bGrowing);
+		}
+
+		if (!textureChanged) sprite->changeAnimation(STAND);
+	}
+
+	if (!bDead && !bDying && !isSuperMario()) {
+		if (posPlayer.y + 32 >= 511 && posPlayer.y + 32 <= 513) {
+			bDying = true;
+			SoundManager::instance().stopMusic();
+			SoundManager::instance().playSound("res/sounds/mario_die.wav");
+		}
+	}
+	else if (!bDead && !bDying && isSuperMario()) {
+		if (posPlayer.y + 64 >= 511 && posPlayer.y + 64 <= 513) {
+			bDying = true;
+			SoundManager::instance().stopMusic();
+			SoundManager::instance().playSound("res/sounds/mario_die.wav");
+			this->changeToMario();
+		}
+	}
+
+	sprite->setPosition(posPlayer);
+}
+
+void Player::render()
+{
+	if (bShow)
+		sprite->render(bLeft, star > 0);
 }
 
 void Player::changeToMario() {
@@ -116,13 +251,7 @@ void Player::changeToSuperMario() {
 
 }
 
-void Player::move(bool direction)
-{
-	if (!bJumping) {
-		if (sprite->animation() != MOVE)
-			sprite->changeAnimation(MOVE);
-	}
-
+void Player::checkMovement() {
 	posPlayer.x += moveSpeed;
 	if (map->collisionMoveRight(posPlayer, size, &posPlayer.x) || map->checkOutOfBoundsRight(&posPlayer.x))
 	{
@@ -134,6 +263,15 @@ void Player::move(bool direction)
 		moveSpeed = 0;
 		sprite->changeAnimation(STAND);
 	}
+}
+
+void Player::move(bool direction)
+{
+	if (!bJumping) {
+		if (sprite->animation() != MOVE)
+			sprite->changeAnimation(MOVE);
+	}
+
 	if (direction) // right
 	{
 		bLeft = false;
@@ -158,8 +296,9 @@ void Player::die()
 
 void Player::jump()
 {
-	if (bJumping || jumpTimer < MIN_JUMP_INTERVAL) return;
-	bJumping = true;
+ 	if (bJumping || jumpTimer < MIN_JUMP_INTERVAL) return;
+ 	bJumping = true;
+	bFalling = false;
 	jumpAngle = 0;
 	startY = posPlayer.y;
 	sprite->changeAnimation(JUMP);
@@ -243,139 +382,7 @@ void Player::marioDying() {
 	
 }
 
-void Player::update(int deltaTime)
-{
-	if(bDead) return;
 
-	sprite->update(deltaTime);
-	if (bInvulnerable) {
-		invTime -= 1;
-		if (invTime == 0) {
-			bInvulnerable = false;
-		}
-	}
-
-	if (bDying) {
-		this->marioDying();
-	}
-	else if (GameManager::instance().isLevelCompleted() || GameManager::instance().isPaused()) {
-		if(GameManager::instance().isLevelCompleted()) this->animationEnd(deltaTime);
-	}
-	else {
-		int textureChanged = 2;
-		jumpTimer += deltaTime;
-
-		if (bBounce) {
-			if (bounceTime < 8) {
-				if (!map->collisionMoveUp(posPlayer, size, &posPlayer.y)) {
-					posPlayer.y -= FALL_STEP - bounceTime / 8.f * FALL_STEP;
-					bounceTime += 1;
-				}				
-			}
-			else if (bounceTime < 8){
-				if (!map->collisionMoveDown(posPlayer, size, &posPlayer.y)) {
-					posPlayer.y += FALL_STEP - (8 - bounceTime) / 8.f * FALL_STEP;
-					bounceTime += 1;
-				}
-			}
-			else {
-				bounceTime = 0;
-				bBounce = false;
-			}
-		}
-
-		if (!this->checkJumping())  textureChanged -= 1;
-
-		if (Game::instance().getSpecialKey(GLUT_KEY_LEFT)) this->move(false);
-		else if (Game::instance().getSpecialKey(GLUT_KEY_RIGHT)) this->move(true);
-		else {
-			if (moveSpeed > 1) {
-				if (moveSpeed > MAX_WALK_SPEED)
-				{
-					moveSpeed -= 0.05;
-				}
-				moveSpeed -= 0.1;
-			}
-			else if (moveSpeed < -1) {
-				if (moveSpeed < -MAX_WALK_SPEED)
-				{
-					moveSpeed += 0.05;
-				}
-				moveSpeed += 0.1;
-			}
-			else {
-				moveSpeed = 0;
-				textureChanged -= 1;
-			}
-			posPlayer.x += moveSpeed;
-		}
-
-		if (bCanMove) {
-			if (Game::instance().getKey(32) || Game::instance().getSpecialKey(GLUT_KEY_UP)) this->jump();
-			else if (Game::instance().getSpecialKey(GLUT_KEY_DOWN)) this->bend();
-			else if (Game::instance().getSpecialKey(112)) { //shift
-				maxSpeed = MAX_RUN_SPEED;
-				sprite->setAnimationSpeed(MOVE, 10);
-			}
-			else {
-				maxSpeed = MAX_WALK_SPEED;
-				sprite->setAnimationSpeed(MOVE, 7);
-			}
-
-			if (Game::instance().getKey('m') || Game::instance().getKey('M')) {
-				this->giveMushroom();
-			}
-			if (Game::instance().getKey('g') || Game::instance().getKey('G')) {
-				this->giveStar();
-			}
-		}
-
-		if (star > 0) {
-			// Restar 1 cada segundo
-			star -= 0.01;
-		}
-
-		if (star < 0.5 && star != 0) {
-			star = 0;
-			SoundManager::instance().stopMusic();
-			SoundManager::instance().playMusic("res/music/overworld_resumed.ogg");
-		}
-
-		if (map->checkOutOfBoundsDown(posPlayer.y)) {
-			this->die();
-		}
-
-		if (bChanging) {
-			this->animateTransformationMario(bGrowing);
-		}
-
-		if (!textureChanged) sprite->changeAnimation(STAND);
-	}	
-	
-	if (!bDead && !bDying && !isSuperMario()){
-		if (posPlayer.y + 32 >= 511 && posPlayer.y + 32 <= 513) {
-			bDying = true;
-			SoundManager::instance().stopMusic();
-			SoundManager::instance().playSound("res/sounds/mario_die.wav");
-		}
-	}
-	else if (!bDead && !bDying && isSuperMario()) {
-		if (posPlayer.y + 64 >= 511 && posPlayer.y + 64 <= 513) {
-			bDying = true;
-			SoundManager::instance().stopMusic();
-			SoundManager::instance().playSound("res/sounds/mario_die.wav");
-			this->changeToMario();
-		}
-	}
-
-	sprite->setPosition(posPlayer);
-}
-
-void Player::render()
-{
-	if (bShow)
-	sprite->render(bLeft, star > 0);
-}
 
 void Player::animateTransformationMario(bool toSupermario)
 {
